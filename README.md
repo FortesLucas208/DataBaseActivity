@@ -1,3 +1,7 @@
+<p hidden> Alterar apenas o que tá em italico (o que está entre um único asteristico, ex: *batata doce com abobrinha*. </p>
+
+
+
 ## 1. Caracterização da Organização
 *(vale 7,5% — Dimensão Conceitual)*
 
