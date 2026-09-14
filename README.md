@@ -141,10 +141,10 @@ Se o grupo usou alguma ferramenta de IA (ChatGPT, Claude, Gemini, Perplexity etc
 
 ---
 
-## Critérios Atitudinais (20%)
+<!-- ## Critérios Atitudinais (20%)
 **Estes critérios NÃO constam explicitamente como item de entrega no README.** Eles são avaliados por meio de **Avaliação 360º entre os integrantes do grupo** (cada membro avalia os colegas de equipe) e, no caso da Colaboração, também pela **colaboração equilibrada no histórico de commits** do repositório GitHub — não pela leitura do restante do repositório nem pela apresentação:
 
 - **Participação (5%):** envolvimento nas discussões técnicas e nas decisões do grupo.
 - **Comprometimento (5%):** cumprimento de prazos e responsabilidades assumidas.
 - **Colaboração (5%):** respeito às contribuições dos colegas, cooperação na construção do projeto e colaboração equilibrada no histórico de commits do repositório GitHub.
-- **Autonomia (5%):** busca independente de soluções e proposta de melhorias.
+- **Autonomia (5%):** busca independente de soluções e proposta de melhorias. --> 
