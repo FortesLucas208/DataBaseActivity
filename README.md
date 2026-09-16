@@ -66,7 +66,28 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 
   
 - **Fluxogramas:** *represente visualmente pelo menos os processos-chave (imagens anexadas). Deve ficar claro o fluxo de cada processo e como eles se integram entre si.*
-### 2.1 Processo de Produção de Peças
+### 2.Produção de peças
+
+```mermaid
+  flowchart TD
+    A([Início]) --> B[Definição do modelo e tecido]
+    B --> C[Verificar disponibilidade da matéria-prima]
+    C --> D{Matéria-prima disponível?}
+    D -- Não --> E[Comprar tecido]
+    E --> F[Corte]
+    D -- Sim --> F
+    F --> G[Costura]
+    G --> H[Lavanderia]
+    H --> I[Acabamento]
+    I --> J[Expedição]
+    J --> K[Registrar produção]
+    K --> L[Entrada no estoque]
+    L --> M([Fim])
+...
+```
+
+
+### 2.2 Abastecimento e movimentação de estoque
 
 ```mermaid
   flowchart TD
