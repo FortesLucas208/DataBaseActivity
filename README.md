@@ -83,7 +83,6 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     J --> K[Registrar produção]
     K --> L[Entrada no estoque]
     L --> M([Fim])
-
 ```
 
 
@@ -101,8 +100,43 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     G --> I[Atualizar estoque correspondente]
     H --> I
     I --> E
-
 ```
+
+### 2.3 Venda no atacado
+
+```mermaid
+  flowchart TD
+    A([Início]) --> B[Cliente solicita produtos]
+    B --> C[Identificar modelo, cor e tamanho]
+    C --> D[Verificar disponibilidade]
+    D --> E{Produto disponível?}
+    E -- Não --> F[Informar indisponibilidade]
+    F --> G([Fim])
+    E -- Sim --> H[Definir preço de atacado]
+    H --> I[Registrar pedido]
+    I --> J[Separar produtos]
+    J --> K[Entregar ao cliente]
+    K --> L[Baixar estoque]
+    L --> G
+```
+
+### 2.4 Venda no varejo
+
+```mermaid
+  flowchart TD
+    A([Início]) --> B[Cliente realiza compra no site ou marketplace]
+    B --> C[Pedido registrado no Bling]
+    C --> D[Verificar estoque online]
+    D --> E{Produto disponível?}
+    E -- Não --> F[Informar indisponibilidade]
+    F --> G([Fim])
+    E -- Sim --> H[Separar produto]
+    H --> I[Expedição]
+    I --> J[Enviar ao cliente]
+    J --> K[Atualizar estoque]
+    K --> G
+```
+
 ---
 
 ## 3. Requisitos do Sistema
