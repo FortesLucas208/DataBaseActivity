@@ -101,7 +101,7 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     G --> I[Atualizar estoque correspondente]
     H --> I
     I --> E
-...
+
 ```
 ---
 
