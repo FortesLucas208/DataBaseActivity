@@ -66,7 +66,7 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 
   
 - **Fluxogramas:** *represente visualmente pelo menos os processos-chave (imagens anexadas). Deve ficar claro o fluxo de cada processo e como eles se integram entre si.*
-### 2.Produção de peças
+### 2.1 Produção de peças
 
 ```mermaid
   flowchart TD
@@ -83,7 +83,7 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     J --> K[Registrar produção]
     K --> L[Entrada no estoque]
     L --> M([Fim])
-...
+
 ```
 
 
