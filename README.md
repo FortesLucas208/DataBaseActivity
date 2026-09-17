@@ -147,24 +147,26 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 
 ### 3.1 Requisitos Funcionais
 <!-- *O que o sistema precisa FAZER (ex.: "o sistema deve permitir registrar uma venda").* -->
- **RF01** O sistema deve permitir cadastrar e consultar produtos/modelos.                                    
- **RF02**  O sistema deve permitir cadastrar as variações de um produto, considerando cor, tamanho e SKU.     
- **RF03**  O sistema deve permitir cadastrar e associar produtos às suas respectivas coleções.                 
- **RF04**  O sistema deve permitir cadastrar clientes e seus dados necessários para realização de pedidos.     
- **RF05**  O sistema deve permitir registrar pedidos de venda no atacado.                                      
- **RF06**  O sistema deve permitir registrar pedidos de venda no varejo.                                       
- **RF07**  O sistema deve permitir adicionar produtos, quantidades e preços aos pedidos.                       
- **RF08**  O sistema deve permitir consultar a disponibilidade de produtos em cada local de estoque.           
- **RF09**  O sistema deve permitir registrar entradas e saídas de produtos do estoque.                         
- **RF10**  O sistema deve permitir registrar transferências de produtos entre estoques.                        
- **RF11**  O sistema deve permitir registrar produtos destinados ao estoque de itens defeituosos (“defeitão”). 
- **RF12**  O sistema deve permitir registrar ordens de produção e suas respectivas quantidades produzidas.     
- **RF13**  O sistema deve permitir associar as quantidades produzidas às respectivas variações/SKUs.           
- **RF14**  O sistema deve permitir registrar a entrada de produtos acabados no estoque após a produção.        
- **RF15**  O sistema deve permitir consultar o histórico de movimentações de estoque.                          
- **RF16**  O sistema deve permitir consultar os pedidos de venda realizados.                                   
- **RF17**  O sistema deve permitir diferenciar os preços praticados no atacado e no varejo.                   
- **RF18**  O sistema deve permitir identificar o canal de venda associado a cada pedido.                       
+| ID       | Requisito                                                                                           |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| **RF01** | O sistema deve permitir cadastrar e consultar produtos/modelos.                                     |
+| **RF02** | O sistema deve permitir cadastrar as variações de um produto, considerando cor, tamanho e SKU.      |
+| **RF03** | O sistema deve permitir cadastrar e associar produtos às suas respectivas coleções.                 |
+| **RF04** | O sistema deve permitir cadastrar clientes e seus dados necessários para realização de pedidos.     |
+| **RF05** | O sistema deve permitir registrar pedidos de venda no atacado.                                      |
+| **RF06** | O sistema deve permitir registrar pedidos de venda no varejo.                                       |
+| **RF07** | O sistema deve permitir adicionar produtos, quantidades e preços aos pedidos.                       |
+| **RF08** | O sistema deve permitir consultar a disponibilidade de produtos em cada local de estoque.           |
+| **RF09** | O sistema deve permitir registrar entradas e saídas de produtos do estoque.                         |
+| **RF10** | O sistema deve permitir registrar transferências de produtos entre estoques.                        |
+| **RF11** | O sistema deve permitir registrar produtos destinados ao estoque de itens defeituosos (“defeitão”). |
+| **RF12** | O sistema deve permitir registrar ordens de produção e suas respectivas quantidades produzidas.     |
+| **RF13** | O sistema deve permitir associar as quantidades produzidas às respectivas variações/SKUs.           |
+| **RF14** | O sistema deve permitir registrar a entrada de produtos acabados no estoque após a produção.        |
+| **RF15** | O sistema deve permitir consultar o histórico de movimentações de estoque.                          |
+| **RF16** | O sistema deve permitir consultar os pedidos de venda realizados.                                   |
+| **RF17** | O sistema deve permitir diferenciar os preços praticados no atacado e no varejo.                    |
+| **RF18** | O sistema deve permitir identificar o canal de venda associado a cada pedido.                       |
 
 ### 3.2 Requisitos Não Funcionais
 <!-- *Características de qualidade (ex.: desempenho, segurança, usabilidade, disponibilidade).* -->
