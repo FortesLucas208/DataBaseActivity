@@ -37,7 +37,9 @@ Além disso, um dos integrantes do grupo possui acesso à organização, permiti
 
 O controle de produtos acabados apresenta ainda diferentes características que precisam ser consideradas pelo sistema, como modelo, coleção, cor, tamanho e SKU, além da existência de diferentes locais de estoque e canais de venda.*
 
-- **Evidências da organização:** *Namiê Brasil possui presença pública na internet por meio de seu site oficial:*
+- **Evidências da organização:**
+
+*Namiê Brasil possui presença pública na internet por meio de seu site oficial:*
 
 https://www.namiebrasil.com.br/
 
