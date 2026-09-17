@@ -197,24 +197,34 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
   
 RN01 — Identificação de produtos
 Cada produto deve ser identificado por um modelo, uma cor e um tamanho, formando uma variação específica com seu respectivo SKU.
+
 RN02 — Associação entre produto e coleção
 Um produto pode estar associado a uma coleção, sendo que a coleção é determinada de acordo com a cor utilizada no produto
+
 RN03 — Controle de estoque por localização
 Os produtos acabados devem possuir controle de estoque separado de acordo com sua localização ou finalidade: estoque geral, estoque da feira e estoque online.
+
 RN04 — Transferência para a feira
 Quando houver necessidade de abastecimento da feira, os produtos devem ser transferidos do estoque geral para o estoque da feira, reduzindo a quantidade disponível no estoque de origem e aumentando a quantidade no estoque de destino.
+
 RN05 — Disponibilidade para venda
 Um produto somente deve ser disponibilizado para venda quando houver quantidade disponível no estoque correspondente ao canal de venda.
+
 RN06 — Diferenciação de preços
 O preço de venda de um produto deve considerar o tipo de venda, diferenciando os valores praticados no atacado e no varejo.
+
 RN07 — Composição do pedido
 Um pedido deve possuir um cliente e ser composto por um ou mais itens, sendo cada item relacionado a uma variação específica de produto e sua respectiva quantidade.
+
 RN08 — Registro de produção
 Toda produção de produtos acabados deve ser registrada, informando as variações produzidas e suas respectivas quantidades.
+
 RN09 — Entrada de produtos acabados
 Após a conclusão da produção e o recebimento pela expedição, os produtos acabados devem ser registrados como entrada no estoque geral.
+
 RN10 — Produtos com defeito
 Produtos considerados defeituosos, perdidos, devolvidos com problema ou utilizados como amostras devem ser direcionados ao estoque denominado “defeitão” e não devem compor o estoque normal disponível para venda.
+
 RN11 — Devoluções do e-commerce
 Produtos devolvidos por clientes de vendas online que estejam em condições adequadas para comercialização devem retornar ao estoque online.
   
