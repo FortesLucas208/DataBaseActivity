@@ -233,8 +233,10 @@ Produtos devolvidos por clientes de vendas online que estejam em condições ade
 
 RO01 — Estoques separados por canal
 Os estoques geral, da feira e online são mantidos separadamente pela organização. Essa característica deve ser considerada no modelo para permitir o controle individual das quantidades disponíveis em cada local.
+
 RO02 — Diferentes sistemas utilizados pela organização
 A organização utiliza ferramentas distintas para diferentes operações: Omiê para processos relacionados à matéria-prima e produção, planilhas eletrônicas para determinados controles de produtos acabados e estoques, e Bling ERP para as vendas online. Essa fragmentação justifica a necessidade de um modelo que centralize as informações relevantes para os processos analisados.
+
 RO03 — Produção própria
 As etapas de corte, costura, lavanderia e acabamento são realizadas internamente pela própria fábrica. O modelo deve, portanto, representar a produção como um processo interno da organização.
 
