@@ -5,15 +5,18 @@
 ## 1. Caracterização da Organização
 <!-- *(vale 7,5% — Dimensão Conceitual)* -->
 
-- **Nome e natureza da organização:** *A organização escolhida para o desenvolvimento do projeto é a Namiê Brasil Ltda., empresa do segmento de moda feminina, com atuação na fabricação e comercialização de peças de vestuário, especialmente roupas jeans femininas. A empresa possui atuação tanto no comércio atacadista quanto no varejista. Informações públicas cadastrais classificam sua atividade principal como confecção de peças do vestuário, além de atividades de comércio atacadista e varejista de artigos do vestuário.*
+- **Nome e natureza da organização:**
+- *A organização escolhida para o desenvolvimento do projeto é a Namiê Brasil Ltda., empresa do segmento de moda feminina, com atuação na fabricação e comercialização de peças de vestuário, especialmente roupas jeans femininas. A empresa possui atuação tanto no comércio atacadista quanto no varejista. Informações públicas cadastrais classificam sua atividade principal como confecção de peças do vestuário, além de atividades de comércio atacadista e varejista de artigos do vestuário.*
   
-- **Contexto e porte:** *A Namiê Brasil está localizada no bairro do Brás, em São Paulo – SP, e possui aproximadamente 50 pessoas envolvidas em suas operações. A organização possui diferentes setores, incluindo produção, costura, acabamento, expedição, pontos de venda, e-commerce, financeiro, recursos humanos e diretoria.
+- **Contexto e porte:**
+- *A Namiê Brasil está localizada no bairro do Brás, em São Paulo – SP, e possui aproximadamente 50 pessoas envolvidas em suas operações. A organização possui diferentes setores, incluindo produção, costura, acabamento, expedição, pontos de venda, e-commerce, financeiro, recursos humanos e diretoria.
 
 A empresa trabalha com fabricação própria de roupas femininas e comercializa seus produtos em diferentes canais. No atacado, as vendas ocorrem presencialmente nos pontos de venda e também por meio do WhatsApp, tendo como público principal as revendedoras. No varejo, as vendas são realizadas por meio do site e de marketplaces, atendendo diretamente consumidores finais.
 
 O processo produtivo envolve a definição do modelo e do tecido, aquisição de matéria-prima quando necessária, corte, costura, lavanderia e acabamento. O acabamento compreende atividades como aplicação de botões, etiquetas, tags e demais aviamentos. Algumas etapas, como costura e acabamento, podem ser realizadas internamente ou por terceiros.*
 
-- **Problemas e necessidades identificados:** *Durante o levantamento realizado com a organização, foi identificada uma fragmentação no controle das informações de estoque e vendas, que atualmente são distribuídas entre diferentes ferramentas.
+- **Problemas e necessidades identificados:**
+- *Durante o levantamento realizado com a organização, foi identificada uma fragmentação no controle das informações de estoque e vendas, que atualmente são distribuídas entre diferentes ferramentas.
 
 O controle de matérias-primas, cortes, costura, acabamento e determinadas movimentações é realizado por meio do sistema Omiê. O controle dos estoques de produtos acabados, incluindo o estoque geral e o estoque destinado à feira, é realizado por meio de planilhas eletrônicas. Já as vendas realizadas pelo site e marketplaces são controladas pelo sistema Bling ERP, que também mantém o estoque destinado às vendas online.
 
@@ -23,7 +26,8 @@ Também foi identificado que, em determinadas situações, uma peça pode ser ve
 
 Outro ponto identificado é a ausência de um estoque mínimo definido, fazendo com que a necessidade de produção ou reposição seja percebida principalmente quando a quantidade disponível se torna insuficiente ou se esgota.*
 
-- **Justificativa da escolha:** *A Namiê Brasil foi escolhida por apresentar uma operação real que envolve diferentes processos relacionados à produção, controle de estoque e comercialização de produtos, proporcionando quantidade e variedade suficientes de informações para a realização da modelagem conceitual.
+- **Justificativa da escolha:**
+- *A Namiê Brasil foi escolhida por apresentar uma operação real que envolve diferentes processos relacionados à produção, controle de estoque e comercialização de produtos, proporcionando quantidade e variedade suficientes de informações para a realização da modelagem conceitual.
 
 Além disso, um dos integrantes do grupo possui acesso à organização, permitindo o levantamento de requisitos diretamente com base nos processos reais observados. A existência de diferentes ferramentas utilizadas simultaneamente para controle das operações também proporciona um problema concreto para análise e modelagem de uma possível solução integrada.
 
@@ -138,16 +142,44 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     K --> G
 ```
 
----
-
 ## 3. Requisitos do Sistema
-*(esta seção e a Seção 4 "Regras de Negócio" DIVIDEM 7,5% na dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na organização/documentação)*
+<!-- *(esta seção e a Seção 4 "Regras de Negócio" DIVIDEM 7,5% na dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na organização/documentação)* -->
 
 ### 3.1 Requisitos Funcionais
-*O que o sistema precisa FAZER (ex.: "o sistema deve permitir registrar uma venda").*
+<!-- *O que o sistema precisa FAZER (ex.: "o sistema deve permitir registrar uma venda").* -->
+ **RF01** O sistema deve permitir cadastrar e consultar produtos/modelos.                                    
+ **RF02**  O sistema deve permitir cadastrar as variações de um produto, considerando cor, tamanho e SKU.     
+ **RF03**  O sistema deve permitir cadastrar e associar produtos às suas respectivas coleções.                 
+ **RF04**  O sistema deve permitir cadastrar clientes e seus dados necessários para realização de pedidos.     
+ **RF05**  O sistema deve permitir registrar pedidos de venda no atacado.                                      
+ **RF06**  O sistema deve permitir registrar pedidos de venda no varejo.                                       
+ **RF07**  O sistema deve permitir adicionar produtos, quantidades e preços aos pedidos.                       
+ **RF08**  O sistema deve permitir consultar a disponibilidade de produtos em cada local de estoque.           
+ **RF09**  O sistema deve permitir registrar entradas e saídas de produtos do estoque.                         
+ **RF10**  O sistema deve permitir registrar transferências de produtos entre estoques.                        
+ **RF11**  O sistema deve permitir registrar produtos destinados ao estoque de itens defeituosos (“defeitão”). 
+ **RF12**  O sistema deve permitir registrar ordens de produção e suas respectivas quantidades produzidas.     
+ **RF13**  O sistema deve permitir associar as quantidades produzidas às respectivas variações/SKUs.           
+ **RF14**  O sistema deve permitir registrar a entrada de produtos acabados no estoque após a produção.        
+ **RF15**  O sistema deve permitir consultar o histórico de movimentações de estoque.                          
+ **RF16**  O sistema deve permitir consultar os pedidos de venda realizados.                                   
+ **RF17**  O sistema deve permitir diferenciar os preços praticados no atacado e no varejo.                   
+ **RF18**  O sistema deve permitir identificar o canal de venda associado a cada pedido.                       
 
 ### 3.2 Requisitos Não Funcionais
-*Características de qualidade (ex.: desempenho, segurança, usabilidade, disponibilidade).*
+<!-- *Características de qualidade (ex.: desempenho, segurança, usabilidade, disponibilidade).* -->
+| ID        | Requisito                                                                                                                                        |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **RNF01** | O sistema deve possuir interface simples e intuitiva, permitindo que os funcionários realizem as operações sem conhecimentos técnicos avançados. |
+| **RNF02** | O sistema deve garantir controle de acesso por usuário, restringindo funcionalidades de acordo com as permissões definidas.                      |
+| **RNF03** | Os dados armazenados devem possuir mecanismos de proteção contra acesso não autorizado.                                                          |
+| **RNF04** | O sistema deve manter registro das movimentações realizadas, permitindo identificar alterações de estoque e pedidos.                             |
+| **RNF05** | As consultas de produtos e estoques devem apresentar os resultados em tempo adequado para utilização durante as operações da empresa.            |
+| **RNF06** | O sistema deve possuir mecanismo de backup periódico dos dados armazenados.                                                                      |
+| **RNF07** | O sistema deve preservar a integridade dos dados, evitando registros inconsistentes de produtos, pedidos e estoques.                             |
+| **RNF08** | O sistema deve permitir utilização simultânea por diferentes usuários autorizados.                                                               |
+                                                            
+
 
 ---
 
