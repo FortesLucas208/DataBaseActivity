@@ -243,9 +243,8 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 ---
 
 ## 5. Dicionário de Dados Conceitual (Preliminar)
-*(vale 10% — Dimensão Procedimental)*
-
-Para cada entidade identificada, liste:
+<!-- *(vale 10% — Dimensão Procedimental)* -->
+<!-- Para cada entidade identificada, liste:
 
 | Atributo | Descrição | Regra de negócio associada |
 |----------|-----------|------------------------------|
@@ -253,7 +252,91 @@ Para cada entidade identificada, liste:
 
 *Mantenha o dicionário organizado e padronizado (mesmo formato de tabela para todas as entidades).*
 
-**Atenção à privacidade:** se forem usados exemplos de valores para ilustrar os atributos, esses exemplos devem ser **fictícios** — não utilize dados reais de clientes, fiéis, beneficiários, doadores ou funcionários da organização (nomes, CPFs, contatos etc.), mesmo que tenham sido observados durante a pesquisa de campo. Os exemplos devem apenas ser **coerentes com as operações reais** observadas.
+**Atenção à privacidade:** se forem usados exemplos de valores para ilustrar os atributos, esses exemplos devem ser **fictícios** — não utilize dados reais de clientes, fiéis, beneficiários, doadores ou funcionários da organização (nomes, CPFs, contatos etc.), mesmo que tenham sido observados durante a pesquisa de campo. Os exemplos devem apenas ser **coerentes com as operações reais** observadas. -->
+**COLEÇÃO**
+| Atributo   | Descrição                | Regra de negócio associada                  |
+| ---------- | ------------------------ | ------------------------------------------- |
+| id_colecao | Identificador da coleção | Deve identificar unicamente cada coleção    |
+| nome       | Nome da coleção          | Deve permitir identificar a coleção         |
+| tipo       | Classificação da coleção | Pode representar coleção normal ou especial |
+
+**PRODUTO/MODELO**
+| Atributo   | Descrição                            | Regra de negócio associada                   |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| id_produto | Identificador do modelo do produto   | Deve identificar unicamente cada modelo      |
+| nome       | Nome do modelo do produto            | Obrigatório                                  |
+| descricao  | Descrição do modelo                  | Pode ser utilizada para detalhar o produto   |
+| id_colecao | Identificação da coleção relacionada | O produto deve estar associado a uma coleção |
+
+**VARIAÇÃO/SKU**
+| Atributo    | Descrição                           | Regra de negócio associada                                        |
+| ----------- | ----------------------------------- | ----------------------------------------------------------------- |
+| id_variacao | Identificador da variação           | Deve identificar unicamente a variação                            |
+| sku         | Código de identificação da variação | Cada combinação de modelo, cor e tamanho possui um SKU específico |
+| cor         | Cor da peça                         | Obrigatória                                                       |
+| tamanho     | Tamanho da peça                     | Obrigatório                                                       |
+| id_produto  | Produto/modelo ao qual pertence     | Toda variação deve pertencer a um modelo                          |
+
+**ESTOQUE**
+| Atributo    | Descrição                      | Regra de negócio associada                                           |
+| ----------- | ------------------------------ | -------------------------------------------------------------------- |
+| id_estoque  | Identificador do estoque       | Deve identificar unicamente cada estoque                             |
+| localizacao | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira e online                   |
+| quantidade  | Quantidade disponível          | Deve representar a quantidade disponível da variação naquele estoque |
+
+**MOVIMENTAÇÃO DE ESTOQUE**
+| Atributo        | Descrição                      | Regra de negócio associada                                  |
+| --------------- | ------------------------------ | ----------------------------------------------------------- |
+| id_movimentacao | Identificador da movimentação  | Deve identificar unicamente cada movimentação               |
+| tipo            | Tipo da movimentação           | Deve indicar entrada, saída ou transferência                |
+| quantidade      | Quantidade movimentada         | Deve ser maior que zero                                     |
+| data_hora       | Data e horário da movimentação | Deve registrar quando a movimentação ocorreu                |
+| origem          | Estoque de origem              | Utilizado principalmente em transferências e saídas         |
+| destino         | Estoque de destino             | Utilizado principalmente em transferências e entradas       |
+| id_variacao     | Variação movimentada           | Toda movimentação deve estar relacionada a uma variação/SKU |
+
+**ORDEM DE PRODUÇÃO**
+| Atributo    | Descrição                          | Regra de negócio associada                          |
+| ----------- | ---------------------------------- | --------------------------------------------------- |
+| id_ordem    | Identificador da ordem de produção | Deve identificar unicamente cada ordem              |
+| data_inicio | Data de início da produção         | Registra o início da ordem                          |
+| data_fim    | Data de conclusão da produção      | Deve ser preenchida quando a produção for concluída |
+| status      | Situação da ordem                  | Deve representar a situação atual da produção       |
+
+**ITEM DA PRODUÇÃO**
+| Atributo         | Descrição                         | Regra de negócio associada                                          |
+| ---------------- | --------------------------------- | ------------------------------------------------------------------- |
+| id_item_producao | Identificador do item da produção | Deve identificar unicamente o item                                  |
+| quantidade       | Quantidade produzida              | Deve ser maior que zero                                             |
+| id_ordem         | Ordem de produção relacionada     | Todo item deve pertencer a uma ordem de produção                    |
+| id_variacao      | Variação produzida                | Permite registrar diferentes tamanhos, cores ou SKUs na mesma ordem |
+
+**CLIENTE**
+| Atributo   | Descrição                | Regra de negócio associada                                         |
+| ---------- | ------------------------ | ------------------------------------------------------------------ |
+| id_cliente | Identificador do cliente | Deve identificar unicamente cada cliente                           |
+| nome       | Nome do cliente          | Obrigatório                                                        |
+| tipo       | Tipo de cliente          | Deve diferenciar, no mínimo, revendedor/empresa e consumidor final |
+
+**PEDIDO**
+| Atributo   | Descrição                | Regra de negócio associada                    |
+| ---------- | ------------------------ | --------------------------------------------- |
+| id_pedido  | Identificador do pedido  | Deve identificar unicamente cada pedido       |
+| data_hora  | Data e horário do pedido | Registra quando o pedido foi realizado        |
+| canal      | Canal de venda           | Deve diferenciar atacado e varejo             |
+| id_cliente | Cliente relacionado      | Todo pedido deve estar associado a um cliente |
+
+**ITEM DO PEDIDO**
+| Atributo       | Descrição               | Regra de negócio associada                          |
+| -------------- | ----------------------- | --------------------------------------------------- |
+| id_item_pedido | Identificador do item   | Deve identificar unicamente o item                  |
+| quantidade     | Quantidade solicitada   | Deve ser maior que zero                             |
+| preco_unitario | Preço unitário aplicado | Deve considerar o tipo de venda                     |
+| id_pedido      | Pedido relacionado      | Todo item deve pertencer a um pedido                |
+| id_variacao    | Variação comercializada | Cada item deve estar relacionado a uma variação/SKU |
+
+
+
 
 ---
 
