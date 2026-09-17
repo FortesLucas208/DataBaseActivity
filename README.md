@@ -278,31 +278,40 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 | id_produto  | Produto/modelo ao qual pertence     | Toda variação deve pertencer a um modelo                          |
 
 **PREÇO**
-| Atributo      | Descrição                        | Regra de negócio associada      |
-| ------------- | -------------------------------- | ------------------------------- |
-| id_preco      | Identificador do preço           | Deve identificar o registro     |
-| preco_atacado | Preço praticado no atacado       | Aplicado ao modelo              |
-| preco_varejo  | Preço praticado no varejo/online | Baseado no preço de atacado     |
-| id_produto    | Modelo relacionado               | Cada preço pertence a um modelo |
+PREÇO
+
+| Atributo      | Descrição                             | Regra de negócio associada                                      |
+| ------------- | ------------------------------------- | --------------------------------------------------------------- |
+| id_preco      | Identificador do preço                | Deve identificar unicamente o registro de preço                 |
+| preco_atacado | Preço praticado nas vendas de atacado | Deve representar o valor utilizado para vendas de atacado       |
+| preco_varejo  | Preço praticado nas vendas de varejo  | Deve representar o valor utilizado para vendas de varejo        |
+| id_produto    | Modelo relacionado                    | Cada registro de preço deve estar associado a um produto/modelo |
 
 
 **ESTOQUE**
 | Atributo    | Descrição                      | Regra de negócio associada                                           |
 | ----------- | ------------------------------ | -------------------------------------------------------------------- |
 | id_estoque  | Identificador do estoque       | Deve identificar unicamente cada estoque                             |
-| localizacao | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira e online                   |
-| quantidade  | Quantidade disponível          | Deve representar a quantidade disponível da variação naquele estoque |
+| localização | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira, online e defeitão         |
+
+**ITEM DE ESTOQUE**
+| Atributo        | Descrição                                         | Regra de negócio associada                                 |
+| --------------- | ------------------------------------------------- | ---------------------------------------------------------- |
+| id_item_estoque | Identificador do registro de estoque              | Deve identificar unicamente o registro                     |
+| quantidade      | Quantidade disponível da variação naquele estoque | Deve ser maior ou igual a zero                             |
+| id_estoque      | Estoque relacionado                               | Todo item de estoque deve pertencer a um estoque           |
+| id_variacao     | Variação/SKU armazenada                           | Todo item de estoque deve estar relacionado a uma variação |
 
 **MOVIMENTAÇÃO DE ESTOQUE**
-| Atributo        | Descrição                      | Regra de negócio associada                                  |
-| --------------- | ------------------------------ | ----------------------------------------------------------- |
-| id_movimentacao | Identificador da movimentação  | Deve identificar unicamente cada movimentação               |
-| tipo            | Tipo da movimentação           | Deve indicar entrada, saída ou transferência                |
-| quantidade      | Quantidade movimentada         | Deve ser maior que zero                                     |
-| data_hora       | Data e horário da movimentação | Deve registrar quando a movimentação ocorreu                |
-| origem          | Estoque de origem              | Utilizado principalmente em transferências e saídas         |
-| destino         | Estoque de destino             | Utilizado principalmente em transferências e entradas       |
-| id_variacao     | Variação movimentada           | Toda movimentação deve estar relacionada a uma variação/SKU |
+| Atributo           | Descrição                          | Regra de negócio associada                                                   |
+| ------------------ | ---------------------------------- | ---------------------------------------------------------------------------- |
+| id_movimentacao    | Identificador da movimentação      | Deve identificar unicamente cada movimentação                                |
+| tipo               | Tipo da movimentação               | Deve indicar entrada, saída ou transferência                                 |
+| quantidade         | Quantidade movimentada             | Deve ser maior que zero                                                      |
+| data_hora          | Data e horário da movimentação     | Deve registrar quando a movimentação ocorreu                                 |
+| id_estoque_origem  | Estoque de origem da movimentação  | Deve referenciar o estoque de origem quando houver saída ou transferência    |
+| id_estoque_destino | Estoque de destino da movimentação | Deve referenciar o estoque de destino quando houver entrada ou transferência |
+| id_variacao        | Variação movimentada               | Toda movimentação deve estar relacionada a uma variação/SKU                  |
 
 **ORDEM DE PRODUÇÃO**
 | Atributo    | Descrição                          | Regra de negócio associada                          |
@@ -382,32 +391,45 @@ Isso está de acordo com a estrutura observada no arquivo de estoque, que possui
 
 ## 6.2 Produtos e estoques
 
-**VARIAÇÃO/SKU → ESTOQUE**
+**VARIAÇÃO/SKU ↔ ITEM DE ESTOQUE ↔ ESTOQUE**
 
-Uma variação pode possuir quantidade registrada em diferentes estoques.
-Cada registro de estoque está relacionado a uma variação.
-Os estoques são diferenciados por sua localização/finalidade, como:
-> Geral
-> Feira
-> Online
-> Defeitão
+Uma variação pode possuir registros de quantidade em diferentes estoques. Cada item de estoque relaciona uma variação específica a um estoque e registra a quantidade disponível naquele local.
 
-## 6.3 Movimentação de estoque
+Um estoque representa um local ou finalidade de armazenamento, enquanto o item de estoque representa a quantidade de uma determinada variação armazenada nesse estoque.
 
-**VARIAÇÃO/SKU → MOVIMENTAÇÃO DE ESTOQUE**
+Os estoques considerados no modelo são:
 
-Uma variação pode participar de várias movimentações.
-Cada movimentação refere-se a uma variação específica.
-Uma movimentação registra uma entrada, saída ou transferência.
-
-As movimentações também podem envolver um estoque de origem e um estoque de destino.
+- Geral
+- Feira
+- Online
+- Defeitão
 
 Exemplo:
 
-| 20 unidades do SKU X
-| Estoque Geral → Estoque Feira
+> SKU X → Estoque Geral → 20 unidades  
+> SKU X → Estoque Feira → 5 unidades
 
-Isso permite representar justamente um dos problemas identificados na organização: a necessidade de controlar as transferências entre estoques.
+Dessa forma, a mesma variação pode estar presente em diferentes estoques, com quantidades independentes.
+
+## 6.3 Movimentação de estoque
+
+VARIAÇÃO/SKU → MOVIMENTAÇÃO DE ESTOQUE
+
+Uma variação pode participar de várias movimentações. Cada movimentação refere-se a uma única variação e registra a quantidade movimentada, o tipo da movimentação e a data e horário em que ocorreu.
+
+A movimentação pode envolver um estoque de origem e um estoque de destino.
+
+- Em uma entrada, o estoque de destino é informado.
+- Em uma saída, o estoque de origem é informado.
+- Em uma transferência, os estoques de origem e destino são informados.
+
+Exemplo:
+
+> 20 unidades do SKU X | Estoque Geral → Estoque Feira
+
+Nesse caso, a movimentação reduz a quantidade do SKU X no estoque geral e aumenta sua quantidade no estoque da feira.
+
+Essa estrutura permite registrar o histórico das movimentações e manter o controle das transferências entre os diferentes estoques.
 
 ## 6.4 Produção
 
@@ -426,7 +448,7 @@ Portanto:
 
 **ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO → VARIAÇÃO/SKU**
 
-Isso resolve o problema que discutimos anteriormente: uma mesma ordem pode produzir diferentes tamanhos.
+Essa estrutura permite que uma mesma ordem de produção registre diferentes variações/SKUs, inclusive diferentes combinações de cor e tamanho.
 
 ## 6.5 Clientes e pedidos
 
@@ -437,7 +459,7 @@ Cada pedido pertence a um cliente.
 
 **PEDIDO → ITEM DO PEDIDO**
 
-Um pedido possui um ou vários itens.
+Cada item do pedido registra a quantidade e o preço unitário efetivamente aplicado naquela venda. Dessa forma, o pedido mantém o valor praticado no momento da venda, independentemente de alterações posteriores nos preços cadastrados do produto.
 Cada item pertence a um único pedido.
 
 **ITEM DO PEDIDO → VARIAÇÃO/SKU**
@@ -459,9 +481,10 @@ Pedido 001
 
 ## 6.6 Estrutura conceitual preliminar
 
-Juntando tudo, temos:
+Juntando as entidades e relacionamentos apresentados:
 
 ```
+
                     COLEÇÃO
                        │
                        │
@@ -470,25 +493,27 @@ Juntando tudo, temos:
                     │       └──── PREÇO
                     │
                     ▼
-              VARIAÇÃO / SKU
-                │     │     │
-                │     │     └──── ITEM DO PEDIDO
-                │     │                 │
-                │     │               PEDIDO
-                │     │                 │
-                │     │               CLIENTE
-                │     │
-                │     └──── ITEM DA PRODUÇÃO
-                │                    │
-                │             ORDEM DE PRODUÇÃO
-                │
-                └──── ITEM DE ESTOQUE
-                            │
-                          ESTOQUE
-                            │
-                    ┌───────┴───────┐
-                    │               │
-              ORIGEM/DESTINO   MOVIMENTAÇÃO
+                VARIAÇÃO/SKU
+              /      |       \
+             /       |        \
+            ▼        ▼         ▼
+   ITEM DE ESTOQUE  ITEM DA   ITEM DO PEDIDO
+        │           PRODUÇÃO       │
+        │              │           │
+        ▼              ▼           ▼
+     ESTOQUE      ORDEM DE       PEDIDO
+                      PRODUÇÃO      │
+                                    ▼
+                                  CLIENTE
+
+VARIAÇÃO/SKU
+      │
+      ▼
+MOVIMENTAÇÃO DE ESTOQUE
+      │
+      ├──── ESTOQUE DE ORIGEM
+      │
+      └──── ESTOQUE DE DESTINO
    ```      
 ---
 
