@@ -198,7 +198,7 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 RN01 — Identificação de produtos
 Cada produto deve ser identificado por um modelo, uma cor e um tamanho, formando uma variação específica com seu respectivo SKU.
 RN02 — Associação entre produto e coleção
-Um produto pode estar associado a uma coleção, sendo que a coleção é determinada de acordo com a cor utilizada no produto.
+Um produto pode estar associado a uma coleção, sendo que a coleção é determinada de acordo com a cor utilizada no produto
 RN03 — Controle de estoque por localização
 Os produtos acabados devem possuir controle de estoque separado de acordo com sua localização ou finalidade: estoque geral, estoque da feira e estoque online.
 RN04 — Transferência para a feira
@@ -227,6 +227,7 @@ RO02 — Diferentes sistemas utilizados pela organização
 A organização utiliza ferramentas distintas para diferentes operações: Omiê para processos relacionados à matéria-prima e produção, planilhas eletrônicas para determinados controles de produtos acabados e estoques, e Bling ERP para as vendas online. Essa fragmentação justifica a necessidade de um modelo que centralize as informações relevantes para os processos analisados.
 RO03 — Produção própria
 As etapas de corte, costura, lavanderia e acabamento são realizadas internamente pela própria fábrica. O modelo deve, portanto, representar a produção como um processo interno da organização.
+
 ---
 
 ## 5. Dicionário de Dados Conceitual (Preliminar)
