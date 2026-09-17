@@ -341,12 +341,114 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 ---
 
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
-*(vale 7,5% na dimensão conceitual)*
-
+<!-- *(vale 7,5% na dimensão conceitual)*
 - **Entidades reconhecidas:** *liste e justifique brevemente cada uma.*
 - **Atributos e classificações:** *quais atributos pertencem a cada entidade.*
 - **Relacionamentos pertinentes:** *como as entidades se conectam.*
-- **Restrições e políticas organizacionais aplicadas ao modelo.**
+- **Restrições e políticas organizacionais aplicadas ao modelo.** -->
+
+O modelo conceitual proposto para a Namiê Brasil representa os principais dados envolvidos nos processos de produção, controle de estoque e comercialização de produtos.
+
+## 6.1 Entidades e relacionamentos
+
+**COLEÇÃO → PRODUTO/MODELO**
+
+Uma coleção pode possuir um ou vários produtos.
+Cada produto/modelo pertence a uma coleção.
+
+**PRODUTO/MODELO → VARIAÇÃO/SKU**
+
+Um produto pode possuir uma ou várias variações.
+Cada variação pertence a um único produto.
+A variação representa a combinação de cor e tamanho, identificada por um SKU.
+
+Exemplo:
+
+Produto: Cropped Faixa Elástico
+| -→ Off White / P
+| -→ Off White / M
+| -→ Off White / G
+
+Isso está de acordo com a estrutura observada no arquivo de estoque, que possui produtos-pai e suas respectivas variações.
+
+## 6.2 Produtos e estoques
+
+**VARIAÇÃO/SKU → ESTOQUE**
+
+Uma variação pode possuir quantidade registrada em diferentes estoques.
+Cada registro de estoque está relacionado a uma variação.
+Os estoques são diferenciados por sua localização/finalidade, como:
+> Geral
+> Feira
+> Online
+> Defeitão
+
+## 6.3 Movimentação de estoque
+
+**VARIAÇÃO/SKU → MOVIMENTAÇÃO DE ESTOQUE**
+
+Uma variação pode participar de várias movimentações.
+Cada movimentação refere-se a uma variação específica.
+Uma movimentação registra uma entrada, saída ou transferência.
+
+As movimentações também podem envolver um estoque de origem e um estoque de destino.
+
+Exemplo:
+
+| 20 unidades do SKU X
+| Estoque Geral → Estoque Feira
+
+Isso permite representar justamente um dos problemas identificados na organização: a necessidade de controlar as transferências entre estoques.
+
+## 6.4 Produção
+
+**ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO**
+
+Uma ordem de produção pode possuir um ou vários itens.
+Cada item pertence a uma única ordem de produção.
+
+**ITEM DA PRODUÇÃO → VARIAÇÃO/SKU**
+
+Uma variação pode aparecer em diferentes ordens de produção.
+Cada item da produção corresponde a uma única variação.
+O item registra a quantidade produzida daquela variação.
+
+Portanto:
+
+**ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO → VARIAÇÃO/SKU**
+
+Isso resolve o problema que discutimos anteriormente: uma mesma ordem pode produzir diferentes tamanhos.
+
+## 6.5 Clientes e pedidos
+
+**CLIENTE → PEDIDO**
+
+Um cliente pode realizar zero ou vários pedidos.
+Cada pedido pertence a um cliente.
+
+**PEDIDO → ITEM DO PEDIDO**
+
+Um pedido possui um ou vários itens.
+Cada item pertence a um único pedido.
+
+**ITEM DO PEDIDO → VARIAÇÃO/SKU**
+
+Uma variação pode aparecer em vários itens de pedidos.
+Cada item do pedido corresponde a uma única variação.
+
+Assim:
+
+**CLIENTE → PEDIDO → ITEM DO PEDIDO → VARIAÇÃO/SKU**
+
+Isso permite registrar, por exemplo:
+
+Cliente X
+Pedido 001
+| -→ 5 × Calça modelo A / 38
+| -→ 3 × Calça modelo A / 40
+| -→ 2 × Cropped modelo B / M
+
+
 
 ---
 
