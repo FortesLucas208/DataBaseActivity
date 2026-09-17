@@ -277,6 +277,15 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 | tamanho     | Tamanho da peça                     | Obrigatório                                                       |
 | id_produto  | Produto/modelo ao qual pertence     | Toda variação deve pertencer a um modelo                          |
 
+**PREÇO**
+| Atributo      | Descrição                        | Regra de negócio associada      |
+| ------------- | -------------------------------- | ------------------------------- |
+| id_preco      | Identificador do preço           | Deve identificar o registro     |
+| preco_atacado | Preço praticado no atacado       | Aplicado ao modelo              |
+| preco_varejo  | Preço praticado no varejo/online | Baseado no preço de atacado     |
+| id_produto    | Modelo relacionado               | Cada preço pertence a um modelo |
+
+
 **ESTOQUE**
 | Atributo    | Descrição                      | Regra de negócio associada                                           |
 | ----------- | ------------------------------ | -------------------------------------------------------------------- |
@@ -351,7 +360,7 @@ O modelo conceitual proposto para a Namiê Brasil representa os principais dados
 
 ## 6.1 Entidades e relacionamentos
 
-**COLEÇÃO → PRODUTO/MODELO**
+*COLEÇÃO ↔ PRODUTO/MODELO**
 
 Uma coleção pode possuir um ou vários produtos.
 Cada produto/modelo pertence a uma coleção.
@@ -448,8 +457,39 @@ Pedido 001
 | -→ 3 × Calça modelo A / 40
 | -→ 2 × Cropped modelo B / M
 
+## 6.6 Estrutura conceitual preliminar
 
+Juntando tudo, temos:
 
+```
+                    COLEÇÃO
+                       │
+                       │
+                 PRODUTO/MODELO
+                    │       │
+                    │       └──── PREÇO
+                    │
+                    ▼
+              VARIAÇÃO / SKU
+                │     │     │
+                │     │     └──── ITEM DO PEDIDO
+                │     │                 │
+                │     │               PEDIDO
+                │     │                 │
+                │     │               CLIENTE
+                │     │
+                │     └──── ITEM DA PRODUÇÃO
+                │                    │
+                │             ORDEM DE PRODUÇÃO
+                │
+                └──── ITEM DE ESTOQUE
+                            │
+                          ESTOQUE
+                            │
+                    ┌───────┴───────┐
+                    │               │
+              ORIGEM/DESTINO   MOVIMENTAÇÃO
+   ```      
 ---
 
 ## 7. Diagrama Entidade-Relacionamento (DER)
