@@ -141,7 +141,7 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
     J --> K[Atualizar estoque]
     K --> G
 ```
-
+---
 ## 3. Requisitos do Sistema
 <!-- *(esta seção e a Seção 4 "Regras de Negócio" DIVIDEM 7,5% na dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na organização/documentação)* -->
 
@@ -173,24 +173,54 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 | ID        | Requisito                                                                                                                                        |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **RNF01** | O sistema deve possuir interface simples e intuitiva, permitindo que os funcionários realizem as operações sem conhecimentos técnicos avançados. |
-| **RNF02** | O sistema deve garantir controle de acesso por usuário, restringindo funcionalidades de acordo com as permissões definidas.                      |
-| **RNF03** | Os dados armazenados devem possuir mecanismos de proteção contra acesso não autorizado.                                                          |
-| **RNF04** | O sistema deve manter registro das movimentações realizadas, permitindo identificar alterações de estoque e pedidos.                             |
-| **RNF05** | As consultas de produtos e estoques devem apresentar os resultados em tempo adequado para utilização durante as operações da empresa.            |
-| **RNF06** | O sistema deve possuir mecanismo de backup periódico dos dados armazenados.                                                                      |
-| **RNF07** | O sistema deve preservar a integridade dos dados, evitando registros inconsistentes de produtos, pedidos e estoques.                             |
-| **RNF08** | O sistema deve permitir utilização simultânea por diferentes usuários autorizados.                                                               |
+| **RNF02** | Os dados armazenados devem possuir mecanismos de proteção contra acesso não autorizado.                                                          |
+| **RNF03** | O sistema deve manter registro das movimentações realizadas, permitindo identificar alterações de estoque e pedidos.                             |
+| **RNF04** | As consultas de produtos e estoques devem apresentar os resultados em tempo adequado para utilização durante as operações da empresa.            |
+| **RNF05** | O sistema deve possuir mecanismo de backup periódico dos dados armazenados.                                                                      |
+| **RNF06** | O sistema deve preservar a integridade dos dados, evitando registros inconsistentes de produtos, pedidos e estoques.                             |
+| **RNF07** | O sistema deve permitir utilização simultânea por diferentes usuários autorizados.                                                               |
                                                             
 
 
 ---
 
 ## 4. Regras de Negócio
-*(esta seção DIVIDE com a Seção 3 "Requisitos do Sistema" os mesmos 7,5% da dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na documentação. "Regras de negócio" é o termo técnico usado em modelagem de dados para as regras de funcionamento de qualquer organização, com ou sem fins lucrativos)*
+<!-- *(esta seção DIVIDE com a Seção 3 "Requisitos do Sistema" os mesmos 7,5% da dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na documentação. "Regras de negócio" é o termo técnico usado em modelagem de dados para as regras de funcionamento de qualquer organização, com ou sem fins lucrativos)* -->
+- **Regras operacionais:**
+  <!-- *condições que a organização impõe (ex.: "um pedido só pode ser fechado se houver estoque disponível", "uma doação só pode ser registrada com identificação do doador", "um ritual só pode ser agendado se o espaço estiver disponível").* -->
+  
+RN01 — Identificação de produtos
+Cada produto deve ser identificado por um modelo, uma cor e um tamanho, formando uma variação específica com seu respectivo SKU.
+RN02 — Associação entre produto e coleção
+Um produto pode estar associado a uma coleção, sendo que a coleção é determinada de acordo com a cor utilizada no produto.
+RN03 — Controle de estoque por localização
+Os produtos acabados devem possuir controle de estoque separado de acordo com sua localização ou finalidade: estoque geral, estoque da feira e estoque online.
+RN04 — Transferência para a feira
+Quando houver necessidade de abastecimento da feira, os produtos devem ser transferidos do estoque geral para o estoque da feira, reduzindo a quantidade disponível no estoque de origem e aumentando a quantidade no estoque de destino.
+RN05 — Disponibilidade para venda
+Um produto somente deve ser disponibilizado para venda quando houver quantidade disponível no estoque correspondente ao canal de venda.
+RN06 — Diferenciação de preços
+O preço de venda de um produto deve considerar o tipo de venda, diferenciando os valores praticados no atacado e no varejo.
+RN07 — Composição do pedido
+Um pedido deve possuir um cliente e ser composto por um ou mais itens, sendo cada item relacionado a uma variação específica de produto e sua respectiva quantidade.
+RN08 — Registro de produção
+Toda produção de produtos acabados deve ser registrada, informando as variações produzidas e suas respectivas quantidades.
+RN09 — Entrada de produtos acabados
+Após a conclusão da produção e o recebimento pela expedição, os produtos acabados devem ser registrados como entrada no estoque geral.
+RN10 — Produtos com defeito
+Produtos considerados defeituosos, perdidos, devolvidos com problema ou utilizados como amostras devem ser direcionados ao estoque denominado “defeitão” e não devem compor o estoque normal disponível para venda.
+RN11 — Devoluções do e-commerce
+Produtos devolvidos por clientes de vendas online que estejam em condições adequadas para comercialização devem retornar ao estoque online.
+  
+- **Restrições organizacionais:**
+  <!-- *limitações que afetam o modelo (ex.: políticas internas, prazos, exigências legais, normas religiosas ou estatutárias) — e por que elas importam.* -->
 
-- **Regras operacionais:** *condições que a organização impõe (ex.: "um pedido só pode ser fechado se houver estoque disponível", "uma doação só pode ser registrada com identificação do doador", "um ritual só pode ser agendado se o espaço estiver disponível").*
-- **Restrições organizacionais:** *limitações que afetam o modelo (ex.: políticas internas, prazos, exigências legais, normas religiosas ou estatutárias) — e por que elas importam.*
-
+RO01 — Estoques separados por canal
+Os estoques geral, da feira e online são mantidos separadamente pela organização. Essa característica deve ser considerada no modelo para permitir o controle individual das quantidades disponíveis em cada local.
+RO02 — Diferentes sistemas utilizados pela organização
+A organização utiliza ferramentas distintas para diferentes operações: Omiê para processos relacionados à matéria-prima e produção, planilhas eletrônicas para determinados controles de produtos acabados e estoques, e Bling ERP para as vendas online. Essa fragmentação justifica a necessidade de um modelo que centralize as informações relevantes para os processos analisados.
+RO03 — Produção própria
+As etapas de corte, costura, lavanderia e acabamento são realizadas internamente pela própria fábrica. O modelo deve, portanto, representar a produção como um processo interno da organização.
 ---
 
 ## 5. Dicionário de Dados Conceitual (Preliminar)
