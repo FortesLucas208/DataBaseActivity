@@ -514,7 +514,10 @@ MOVIMENTAÇÃO DE ESTOQUE
       ├──── ESTOQUE DE ORIGEM
       │
       └──── ESTOQUE DE DESTINO
-   ```      
+   ```
+
+A estrutura representa a relação entre os produtos, suas variações, preços, estoques, produção e vendas. A entidade ITEM DE ESTOQUE permite controlar a quantidade de cada variação em diferentes estoques, enquanto MOVIMENTAÇÃO DE ESTOQUE registra as entradas, saídas e transferências realizadas.
+
 ---
 
 ## 7. Diagrama Entidade-Relacionamento (DER)
