@@ -309,7 +309,6 @@ Para cada entidade identificada, liste:
 | id_produto  | Produto/modelo ao qual pertence     | Toda variação deve pertencer a um modelo                          |
 
 **PREÇO**
-PREÇO
 
 | Atributo      | Descrição                             | Regra de negócio associada                                      |
 | ------------- | ------------------------------------- | --------------------------------------------------------------- |
@@ -395,8 +394,6 @@ PREÇO
 - **Atributos e classificações:** *quais atributos pertencem a cada entidade.*
 - **Relacionamentos pertinentes:** *como as entidades se conectam.*
 - **Restrições e políticas organizacionais aplicadas ao modelo.**
-
-## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
 
 O modelo conceitual proposto para a Namiê Brasil representa os principais dados envolvidos nos processos de produção, controle de estoque e comercialização de produtos.
 
