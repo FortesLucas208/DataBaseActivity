@@ -1,6 +1,28 @@
+# Entrega 1 — Modelo Conceitual (DER)
+### Modelagem de um sistema de gestão de informações para uma organização de pequeno porte
+
+> Este arquivo é o esqueleto do **README.md** do repositório GitHub do seu grupo.
+> Preencha cada seção abaixo. Não apague os títulos — apenas substitua as instruções em *itálico* pelo conteúdo do seu projeto.
+> O **DER** é anexado separadamente ao repositório (em imagem), mas sua justificativa entra neste README.
+>
+> **A organização escolhida pode ser de qualquer natureza:** empresa com fins lucrativos (livraria, lanchonete, pet shop), ONG, associação comunitária, cooperativa, instituições religiosas/comunitárias como igrejas, terreiros de religiões de matriz africana (candomblé, umbanda) ou outras. O que muda de um tipo para outro são os processos e as regras específicas — a estrutura do trabalho (levantamento de requisitos, modelagem conceitual, DER) é a mesma para todas. Termos como "empresa" e "negócio" usados abaixo devem ser lidos de forma ampla, no sentido técnico de modelagem de dados (ex.: "regras de negócio" = regras de funcionamento da organização, seja ela comercial, religiosa ou social).
+>
+> **Importante:** a organização precisa **existir de fato** — não é permitido inventar uma organização fictícia. O levantamento de requisitos e regras de negócio deve ser feito por meio de **pesquisa de campo na própria organização** (visitas, entrevistas com responsáveis, observação dos processos reais), então o grupo só deve escolher uma organização à qual **realmente tenha acesso**. Ao escolher, tomem cuidado com o porte: **nem tão pequena** que não gere dados suficiente para o trabalho (poucos processos, poucas entidades), **nem tão grande/complexa** que fique inviável de modelar nesta primeira etapa do curso.
+
+
 <!-- Alterar apenas o que tá em italico (o que está entre um único asteristico, ex: *batata doce com abobrinha*. -->
 
+## Metadados
 
+- **Nomes dos alunos e RGM**
+
+| Nome                            | RGM      | 
+|---------------------------------|----------|
+| Anthony Werick Eloi de França   | 47017228 |
+| Gustavo Batista do Canto        | 46898000 |
+| Lucas Fortes de Melo            | 46781977 |
+| Victor Alves Rodrigues Braulino | 48216305 |
+| Vinicius Passos Macedo          | 47116871 |
 
 ## 1. Caracterização da Organização
 <!-- *(vale 7,5% — Dimensão Conceitual)* -->
