@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dicionário de Dados Conceitual — Namiê Brasil</title>
+<meta name="description" content="Dicionário de dados conceitual do sistema da Namiê Brasil: produção, estoque e comercialização.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --paper:#ffffff;
+  --paper-soft:#F7F5F2;
+  --ink:#211A17;
+  --ink-soft:#6E6259;
+  --line:#E4DED6;
+  --wine:#7A2E3A;
+  --wine-soft:#F4E7E9;
+  --gold:#A9863E;
+  --gold-soft:#F6EFDE;
+  --teal:#2F5D5A;
+  --teal-soft:#E7F0EF;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top: 24px;}
+body{
+  margin:0;
+  background:var(--paper-soft);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{color:var(--wine); text-decoration:none;}
+a:hover{text-decoration:underline;}
+a:focus-visible, button:focus-visible{outline:2px solid var(--wine); outline-offset:2px;}
+
+code{
+  font-family:var(--mono);
+  font-size:0.86em;
+  background:var(--paper-soft);
+}
+
+/* ---------- Masthead ---------- */
+.masthead{
+  background: linear-gradient(155deg, var(--wine) 0%, #5C222B 100%);
+  color:#F9F1EE;
+  padding: 56px 28px 44px;
+}
+.masthead-inner{max-width:1180px; margin:0 auto;}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:0.78rem;
+  letter-spacing:0.02em;
+  color:#E9C9B8;
+  margin:0 0 14px;
+}
+.masthead h1{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:clamp(2rem, 4.2vw, 3.1rem);
+  line-height:1.08;
+  margin:0 0 14px;
+  max-width:16ch;
+}
+.masthead-sub{
+  font-size:1.08rem;
+  color:#F0DCD5;
+  max-width:56ch;
+  margin:0 0 28px;
+}
+.masthead-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px 40px;
+  margin:0;
+  padding-top:20px;
+  border-top:1px solid rgba(249,241,238,0.22);
+}
+.masthead-meta dt{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  color:#D9A896;
+  margin-bottom:4px;
+}
+.masthead-meta dd{margin:0; font-size:0.98rem; color:#FBF3F0;}
+
+/* ---------- Layout ---------- */
+.layout{
+  max-width:1180px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 240px minmax(0,1fr);
+  gap:48px;
+  padding: 40px 28px 80px;
+}
+@media (max-width: 880px){
+  .layout{grid-template-columns: 1fr; padding-top:24px;}
+  .sidebar{position:static; order:2; border-top:1px solid var(--line); margin-top:40px; padding-top:24px;}
+}
+
+.sidebar{position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto;}
+.sidebar-home{
+  display:inline-block;
+  font-size:0.85rem;
+  color:var(--ink-soft);
+  margin-bottom:18px;
+}
+.sidebar-title{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--ink-soft);
+  margin:0 0 10px;
+}
+.toc{list-style:none; margin:0; padding:0; font-size:0.92rem;}
+.toc > li{margin-bottom:2px;}
+.toc > li > a{
+  display:block;
+  padding:6px 0;
+  color:var(--ink);
+  font-weight:500;
+}
+.toc-group{margin-top:14px; padding-top:10px; border-top:1px solid var(--line);}
+.toc-group:first-child{margin-top:0; border-top:none; padding-top:0;}
+.toc-domain{
+  display:block;
+  font-family:var(--mono);
+  font-size:0.7rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--wine);
+  margin-bottom:4px;
+}
+.toc-group ul{list-style:none; margin:0; padding:0;}
+.toc-group li a{
+  display:block;
+  padding:4px 0 4px 2px;
+  font-size:0.87rem;
+  color:var(--ink-soft);
+  border-left:2px solid transparent;
+  padding-left:10px;
+}
+.toc-group li a:hover, .toc-group li a.active{
+  color:var(--wine);
+  border-left-color:var(--wine);
+  text-decoration:none;
+}
+
+main{min-width:0;}
+
+.intro{
+  font-family:var(--serif);
+  font-size:1.28rem;
+  line-height:1.5;
+  color:#3A2E29;
+  max-width:70ch;
+  margin: 4px 0 52px;
+}
+.intro strong{color:var(--wine);}
+
+.section{margin-bottom:60px; scroll-margin-top:24px;}
+.section-title{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.7rem;
+  margin:0 0 18px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.section-num{
+  font-family:var(--mono);
+  font-size:0.85rem;
+  color:var(--wine);
+  border:1px solid var(--wine);
+  border-radius:100px;
+  padding:2px 9px;
+}
+.subheading{
+  font-family:var(--serif);
+  font-size:1.15rem;
+  font-weight:600;
+  margin:28px 0 12px;
+}
+.section p{max-width:74ch;}
+.note{
+  font-size:0.92rem;
+  color:var(--ink-soft);
+  border-left:3px solid var(--gold);
+  background:var(--gold-soft);
+  padding:12px 16px;
+  border-radius:0 6px 6px 0;
+  max-width:70ch;
+}
+
+/* ---------- Diagram ---------- */
+.diagram-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:20px;
+  margin:22px 0 30px;
+  overflow-x:auto;
+}
+.flow-svg{width:100%; min-width:640px; height:auto;}
+.node{fill:var(--paper); stroke-width:1.4;}
+.node-catalogo{stroke:var(--wine);}
+.node-producao{stroke:var(--gold);}
+.node-estoque{stroke:var(--teal);}
+.node-comercial{stroke:var(--wine);}
+.node-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:15px;
+  text-anchor:middle;
+  fill:var(--ink);
+}
+.node-sub{
+  font-family:var(--mono);
+  font-size:9.5px;
+  text-anchor:middle;
+  fill:var(--ink-soft);
+}
+.flow-arrow{fill:none; stroke:var(--ink-soft); stroke-width:1.4;}
+.flow-arrow-return{stroke-dasharray:4 3; stroke:var(--wine);}
+.flow-label{
+  font-family:var(--mono);
+  font-size:9.5px;
+  fill:var(--ink-soft);
+  text-anchor:middle;
+}
+
+.stock-list{
+  max-width:70ch;
+  padding-left:0;
+  list-style:none;
+  display:grid;
+  gap:8px;
+}
+.stock-list li{
+  padding:10px 14px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:6px;
+  font-size:0.94rem;
+}
+
+/* ---------- Legend ---------- */
+.legend{display:grid; gap:10px; max-width:70ch; margin:18px 0;}
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:0.92rem;
+  color:var(--ink-soft);
+}
+
+.badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:0.68rem;
+  font-weight:500;
+  letter-spacing:0.02em;
+  padding:1px 6px;
+  border-radius:4px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.badge-pk{background:var(--wine); color:#fff;}
+.badge-fk{background:var(--teal-soft); color:var(--teal); border:1px solid var(--teal);}
+.badge-fk-opt{background:var(--gold-soft); color:#7A611F; border:1px solid var(--gold);}
+
+/* ---------- Domain / entity ---------- */
+.domain{margin-bottom:56px; scroll-margin-top:24px;}
+.domain-head{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  margin-bottom:22px;
+  padding-bottom:14px;
+  border-bottom:2px solid var(--wine);
+}
+.domain-head h2{
+  font-family:var(--serif);
+  font-size:1.55rem;
+  margin:0;
+}
+.domain-head p{
+  margin:0;
+  color:var(--ink-soft);
+  font-size:0.95rem;
+}
+
+.entity{
+  scroll-margin-top:24px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:22px 24px 8px;
+  margin-bottom:22px;
+}
+.entity-head{display:flex; align-items:baseline; gap:10px; margin-bottom:6px;}
+.entity-num{font-family:var(--mono); font-size:0.75rem; color:var(--ink-soft);}
+.entity-head h3{font-family:var(--serif); font-size:1.2rem; margin:0;}
+.entity-desc{color:var(--ink-soft); font-size:0.92rem; margin:0 0 16px; max-width:72ch;}
+
+.table-wrap{overflow-x:auto; margin-bottom:14px;}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.88rem;
+  min-width:560px;
+}
+thead th{
+  text-align:left;
+  font-family:var(--mono);
+  font-size:0.7rem;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  color:var(--ink-soft);
+  border-bottom:1px solid var(--line);
+  padding:0 10px 8px 0;
+}
+tbody td{
+  padding:10px 10px 10px 0;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+tbody tr:last-child td{border-bottom:none;}
+.col-attr{white-space:nowrap; font-weight:500;}
+.col-regra{color:var(--ink-soft);}
+
+/* ---------- Rules ---------- */
+.rules-list{
+  list-style:none;
+  margin:20px 0 0;
+  padding:0;
+  max-width:76ch;
+  display:grid;
+  gap:16px;
+}
+.rules-list li{
+  display:flex;
+  gap:16px;
+  padding:14px 16px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+.rule-num{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.3rem;
+  color:var(--wine);
+  line-height:1;
+}
+.rules-list p, .rules-list div{margin:0; font-size:0.94rem;}
+
+/* ---------- Relations table ---------- */
+.rel-table td{font-size:0.88rem;}
+.col-card{text-align:center;}
+.card-badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:0.76rem;
+  background:var(--wine-soft);
+  color:var(--wine);
+  border:1px solid var(--wine);
+  border-radius:100px;
+  padding:1px 10px;
+}
+
+.page-footer{
+  margin-top:70px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  color:var(--ink-soft);
+  font-size:0.85rem;
+}
+
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">Modelagem de Dados · Trabalho Acadêmico</p>
+    <h1>Dicionário de Dados Conceitual</h1>
+    <p class="masthead-sub">Namiê Brasil — confecção com produção, controle de estoque e comercialização de produtos.</p>
+    <dl class="masthead-meta">
+      <div><dt>Autor</dt><dd>Victor</dd></div>
+      <div><dt>Escopo</dt><dd>Catálogo, produção, estoque e vendas</dd></div>
+      <div><dt>Nível</dt><dd>Conceitual (independente de SGBD)</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Sumário">
+    <div class="sidebar-inner">
+      <a class="sidebar-home" href="#top">↑ Início</a>
+      <p class="sidebar-title">Sumário</p>
+      <ul class="toc">
+        <li><a href="#visao-geral" data-nav>Visão geral</a></li>
+        <li><a href="#convencoes" data-nav>Convenções</a></li>
+        
+        <li class="toc-group">
+          <span class="toc-domain">Catálogo</span>
+          <ul><li><a href="#colecao" data-nav>Coleção</a></li><li><a href="#marca" data-nav>Marca</a></li><li><a href="#categoria" data-nav>Categoria</a></li><li><a href="#produto" data-nav>Produto / Modelo</a></li><li><a href="#cor" data-nav>Cor</a></li><li><a href="#tamanho" data-nav>Tamanho</a></li><li><a href="#variacao" data-nav>Variação / SKU</a></li><li><a href="#preco" data-nav>Preço</a></li></ul>
+        </li>
+        <li class="toc-group">
+          <span class="toc-domain">Produção</span>
+          <ul><li><a href="#faccao" data-nav>Facção</a></li><li><a href="#ordem_producao" data-nav>Ordem de Produção</a></li><li><a href="#item_producao" data-nav>Item da Produção</a></li></ul>
+        </li>
+        <li class="toc-group">
+          <span class="toc-domain">Estoque</span>
+          <ul><li><a href="#estoque" data-nav>Estoque</a></li><li><a href="#item_estoque" data-nav>Item de Estoque</a></li><li><a href="#movimentacao" data-nav>Movimentação de Estoque</a></li></ul>
+        </li>
+        <li class="toc-group">
+          <span class="toc-domain">Comercial</span>
+          <ul><li><a href="#cliente" data-nav>Cliente</a></li><li><a href="#endereco" data-nav>Endereço</a></li><li><a href="#usuario" data-nav>Usuário</a></li><li><a href="#pedido" data-nav>Pedido</a></li><li><a href="#item_pedido" data-nav>Item do Pedido</a></li><li><a href="#devolucao" data-nav>Devolução</a></li><li><a href="#item_devolucao" data-nav>Item da Devolução</a></li></ul>
+        </li>
+        <li><a href="#regras" data-nav>Regras de negócio gerais</a></li>
+        <li><a href="#relacionamentos" data-nav>Relacionamentos</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <section class="intro">
+      <p>O dicionário de dados apresenta as principais entidades, atributos e regras utilizadas na modelagem conceitual do sistema da <strong>Namiê Brasil</strong>. A estrutura foi definida considerando os processos de produção, controle de estoque e comercialização dos produtos, além das informações observadas no arquivo de estoque utilizado pela organização.</p>
+    </section>
+
+    <section id="visao-geral" class="section">
+      <h2 class="section-title"><span class="section-num">01</span>Visão geral do modelo</h2>
+      <p>O modelo é organizado em quatro domínios que conversam entre si ao longo do ciclo de vida de uma peça: o <strong>catálogo</strong> define o que pode existir; a <strong>produção</strong> e o <strong>catálogo</strong> alimentam o <strong>estoque</strong>; e o estoque sustenta o domínio <strong>comercial</strong>, que pode devolver peças ao estoque.</p>
+      <div class="diagram-card">
+        
+<svg viewBox="0 0 960 300" role="img" aria-labelledby="diagTitle diagDesc" class="flow-svg">
+  <title id="diagTitle">Fluxo conceitual entre os domínios do modelo</title>
+  <desc id="diagDesc">Catálogo e Produção alimentam o Estoque; o Estoque sustenta o domínio Comercial; Comercial pode gerar devoluções que retornam ao Estoque.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"></path>
+    </marker>
+  </defs>
+
+  <!-- Catálogo -->
+  <g transform="translate(20,30)">
+    <rect class="node node-catalogo" width="190" height="80" rx="6"></rect>
+    <text x="95" y="34" class="node-title">Catálogo</text>
+    <text x="95" y="54" class="node-sub">marca · categoria · coleção</text>
+    <text x="95" y="70" class="node-sub">produto · variação/SKU · preço</text>
+  </g>
+
+  <!-- Produção -->
+  <g transform="translate(20,190)">
+    <rect class="node node-producao" width="190" height="80" rx="6"></rect>
+    <text x="95" y="34" class="node-title">Produção</text>
+    <text x="95" y="54" class="node-sub">facção · ordem de produção</text>
+    <text x="95" y="70" class="node-sub">item da produção</text>
+  </g>
+
+  <!-- Estoque -->
+  <g transform="translate(385,110)">
+    <rect class="node node-estoque" width="190" height="80" rx="6"></rect>
+    <text x="95" y="34" class="node-title">Estoque</text>
+    <text x="95" y="54" class="node-sub">geral · feira · online · defeitão</text>
+    <text x="95" y="70" class="node-sub">item de estoque · movimentação</text>
+  </g>
+
+  <!-- Comercial -->
+  <g transform="translate(750,110)">
+    <rect class="node node-comercial" width="190" height="80" rx="6"></rect>
+    <text x="95" y="34" class="node-title">Comercial</text>
+    <text x="95" y="54" class="node-sub">cliente · pedido · item do pedido</text>
+    <text x="95" y="70" class="node-sub">devolução</text>
+  </g>
+
+  <!-- setas -->
+  <path d="M210,90 C 300,90 300,140 383,148" class="flow-arrow" marker-end="url(#arrow)"></path>
+  <path d="M210,220 C 300,220 300,175 383,168" class="flow-arrow" marker-end="url(#arrow)"></path>
+  <path d="M575,150 L 748,150" class="flow-arrow" marker-end="url(#arrow)"></path>
+  <path d="M748,175 C 660,205 560,205 577,175" class="flow-arrow flow-arrow-return" marker-end="url(#arrow)"></path>
+
+  <text x="298" y="118" class="flow-label">entrada (compra/produção)</text>
+  <text x="298" y="256" class="flow-label">entrada (fabricação)</text>
+  <text x="661" y="138" class="flow-label">baixa na confirmação do pedido</text>
+  <text x="661" y="222" class="flow-label">estorno / devolução</text>
+</svg>
+
+      </div>
+
+      <h3 class="subheading">Estoques considerados no modelo</h3>
+      <ul class="stock-list">
+        <li><strong>Geral</strong> — Estoque físico principal, de peças novas.</li><li><strong>Feira</strong> — Estoque físico destinado a eventos e feiras.</li><li><strong>Online</strong> — Estoque reservado às vendas realizadas pelos canais digitais.</li><li><strong>Defeitão</strong> — Estoque lógico de peças avariadas, não disponíveis para venda regular.</li>
+      </ul>
+    </section>
+
+    <section id="convencoes" class="section">
+      <h2 class="section-title"><span class="section-num">02</span>Convenções do dicionário</h2>
+      <p>Cada entidade é descrita por uma tabela com três colunas — <em>atributo</em>, <em>descrição</em> e <em>regra de negócio associada</em> — na mesma estrutura do dicionário de dados original. Os selos abaixo foram adicionados nesta versão em HTML para tornar as chaves explícitas a partir do que já está descrito em cada regra de negócio:</p>
+      <div class="legend">
+        <div class="legend-item"><span class="badge badge-pk">PK</span> Chave primária — identificador único da própria entidade.</div>
+        <div class="legend-item"><span class="badge badge-fk">FK</span> Chave estrangeira obrigatória — referencia outra entidade.</div>
+        <div class="legend-item"><span class="badge badge-fk badge-fk-opt">FK opc.</span> Chave estrangeira condicional — obrigatória apenas em certas situações, conforme a regra de negócio.</div>
+      </div>
+      <p class="note">Dicionário em nível <strong>conceitual</strong>: propositalmente não define tipos físicos de coluna (varchar, integer etc.), pois essa decisão pertence à etapa de modelagem física, específica do SGBD escolhido.</p>
+    </section>
+
+    
+  <section class="domain" id="dom-catalogo">
+    <div class="domain-head">
+      <h2>Catálogo</h2>
+      <p>Marca, categoria, coleção, produto e suas variações comercializáveis.</p>
+    </div>
+    
+    <article class="entity" id="colecao" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.1</span>
+        <h3>Coleção</h3>
+      </div>
+      <p class="entity-desc">Agrupa produtos por temporada/linha, permitindo organizar o catálogo cronologicamente.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_colecao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da coleção.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada coleção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome utilizado para identificar a coleção.</td>
+          <td class="col-regra">Deve ser informado para permitir a identificação da coleção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Classificação da coleção.</td>
+          <td class="col-regra">Pode representar uma coleção normal, especial ou de linha permanente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ano</code></td>
+          <td>Ano de referência da coleção.</td>
+          <td class="col-regra">Deve ser informado para permitir a ordenação temporal das coleções.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>estacao</code></td>
+          <td>Estação à qual a coleção se refere.</td>
+          <td class="col-regra">Deve representar a temporada de comercialização, quando aplicável.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="marca" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.2</span>
+        <h3>Marca</h3>
+      </div>
+      <p class="entity-desc">Identifica a marca sob a qual um produto é comercializado.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_marca</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da marca.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada marca.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome da marca.</td>
+          <td class="col-regra">Deve ser único e obrigatório.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="categoria" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.3</span>
+        <h3>Categoria</h3>
+      </div>
+      <p class="entity-desc">Classifica produtos hierarquicamente (categorias e subcategorias).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_categoria</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da categoria.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada categoria.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome da categoria.</td>
+          <td class="col-regra">Deve ser único e obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_categoria_pai</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador da categoria superior.</td>
+          <td class="col-regra">Permite a organização hierárquica das categorias. Pode não ser informado para categorias de primeiro nível.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="produto" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.4</span>
+        <h3>Produto / Modelo</h3>
+      </div>
+      <p class="entity-desc">Modelo abstrato do produto, antes de sua quebra em variações de cor e tamanho.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_produto</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do modelo do produto.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada modelo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome do modelo do produto.</td>
+          <td class="col-regra">É obrigatório para identificação do modelo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>descricao</code></td>
+          <td>Descrição geral do produto/modelo.</td>
+          <td class="col-regra">Pode ser utilizada para complementar a identificação do modelo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo_producao</code></td>
+          <td>Indica a forma de produção do produto.</td>
+          <td class="col-regra">Deve diferenciar a produção própria da produção terceirizada.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_marca</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da marca do produto.</td>
+          <td class="col-regra">Todo produto deve estar associado a uma marca.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_categoria</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da categoria do produto.</td>
+          <td class="col-regra">Todo produto deve estar associado a uma categoria.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_colecao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da coleção à qual o produto pertence.</td>
+          <td class="col-regra">Todo produto deve estar associado a uma coleção. Produtos atemporais devem ser vinculados à coleção de linha permanente.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="cor" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.5</span>
+        <h3>Cor</h3>
+      </div>
+      <p class="entity-desc">Domínio de cores disponíveis para compor as variações de um produto.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_cor</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da cor.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada cor.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome da cor.</td>
+          <td class="col-regra">Deve ser único, evitando registros duplicados com grafias diferentes.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="tamanho" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.6</span>
+        <h3>Tamanho</h3>
+      </div>
+      <p class="entity-desc">Domínio de tamanhos/grade disponíveis para compor as variações de um produto.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_tamanho</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do tamanho.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada tamanho.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>sigla</code></td>
+          <td>Sigla utilizada para representar o tamanho.</td>
+          <td class="col-regra">Deve ser única.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ordem</code></td>
+          <td>Posição do tamanho na sequência de grade.</td>
+          <td class="col-regra">Deve permitir a ordenação correta da grade, independentemente da ordem alfabética.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="variacao" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.7</span>
+        <h3>Variação / SKU</h3>
+      </div>
+      <p class="entity-desc">Combinação comercializável de modelo, cor e tamanho — a unidade real de venda e estoque.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da variação do produto.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada variação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>sku</code></td>
+          <td>Código utilizado para identificar comercialmente uma variação específica.</td>
+          <td class="col-regra">Deve ser único. Cada combinação de modelo, cor e tamanho deve possuir um SKU específico.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>gtin_ean</code></td>
+          <td>Código GTIN/EAN utilizado para identificação comercial do produto.</td>
+          <td class="col-regra">Quando existente, deve ser único e identificar a variação comercial correspondente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>peso_liquido</code></td>
+          <td>Peso do produto sem embalagem.</td>
+          <td class="col-regra">Deve representar o peso líquido da variação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>peso_bruto</code></td>
+          <td>Peso do produto considerando a embalagem.</td>
+          <td class="col-regra">Deve ser maior ou igual ao peso líquido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_produto</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do modelo ao qual a variação pertence.</td>
+          <td class="col-regra">Toda variação deve estar associada a um único produto/modelo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_cor</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da cor da variação.</td>
+          <td class="col-regra">É obrigatório para identificação da variação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_tamanho</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do tamanho da variação.</td>
+          <td class="col-regra">É obrigatório para identificação da variação.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="preco" data-domain="catalogo">
+      <div class="entity-head">
+        <span class="entity-num">5.8</span>
+        <h3>Preço</h3>
+      </div>
+      <p class="entity-desc">Histórico de valores praticados por variação, com vigência e diferenciação por canal.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_preco</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do registro de preço.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada registro de preço.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>preco_atacado</code></td>
+          <td>Valor praticado nas vendas realizadas no atacado.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>preco_varejo</code></td>
+          <td>Valor praticado nas vendas realizadas no varejo.</td>
+          <td class="col-regra">Deve ser maior ou igual ao preço de atacado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_inicio</code></td>
+          <td>Data de início da vigência do preço.</td>
+          <td class="col-regra">Deve ser informada obrigatoriamente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_fim</code></td>
+          <td>Data de término da vigência do preço.</td>
+          <td class="col-regra">Quando não informada, indica que o preço está vigente. Não podem existir períodos sobrepostos para a mesma variação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da variação relacionada ao preço.</td>
+          <td class="col-regra">O preço deve estar associado à respectiva variação, permitindo valores distintos por cor e tamanho.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+  <section class="domain" id="dom-producao">
+    <div class="domain-head">
+      <h2>Produção</h2>
+      <p>Facções, ordens de produção e os itens efetivamente fabricados.</p>
+    </div>
+    
+    <article class="entity" id="faccao" data-domain="producao">
+      <div class="entity-head">
+        <span class="entity-num">5.12</span>
+        <h3>Facção</h3>
+      </div>
+      <p class="entity-desc">Terceiro responsável pela confecção quando a produção não é própria.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_faccao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da facção.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada facção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome ou razão social da facção.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>telefone</code></td>
+          <td>Contato principal da facção.</td>
+          <td class="col-regra">Deve permitir o acompanhamento da produção terceirizada.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="ordem_producao" data-domain="producao">
+      <div class="entity-head">
+        <span class="entity-num">5.13</span>
+        <h3>Ordem de Produção</h3>
+      </div>
+      <p class="entity-desc">Encomenda de fabricação, própria ou terceirizada, que origina entradas em estoque.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_ordem</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da ordem de produção.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada ordem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_inicio</code></td>
+          <td>Data em que a produção foi iniciada.</td>
+          <td class="col-regra">Deve registrar o início da ordem de produção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_prevista</code></td>
+          <td>Data prevista para a conclusão da produção.</td>
+          <td class="col-regra">Deve permitir o acompanhamento de atrasos.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_fim</code></td>
+          <td>Data em que a produção foi concluída.</td>
+          <td class="col-regra">Deve ser preenchida quando a produção for finalizada e não pode ser anterior à data de início.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>status</code></td>
+          <td>Situação atual da ordem de produção.</td>
+          <td class="col-regra">Deve representar, no mínimo, os estados aberta, em produção, concluída e cancelada.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>custo_total</code></td>
+          <td>Custo total associado à ordem de produção.</td>
+          <td class="col-regra">Deve ser maior ou igual a zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_faccao</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador da facção responsável pela produção.</td>
+          <td class="col-regra">Deve ser informado apenas nas ordens de produção terceirizada.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="item_producao" data-domain="producao">
+      <div class="entity-head">
+        <span class="entity-num">5.14</span>
+        <h3>Item da Produção</h3>
+      </div>
+      <p class="entity-desc">Detalha, por variação, o que foi efetivamente fabricado em uma ordem de produção.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_item_producao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do item da produção.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada item.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td>
+          <td>Quantidade produzida da variação.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_ordem</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da ordem de produção relacionada.</td>
+          <td class="col-regra">Todo item deve pertencer a uma ordem de produção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da variação/SKU produzida.</td>
+          <td class="col-regra">Cada item deve estar relacionado a uma única variação.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+  <section class="domain" id="dom-estoque">
+    <div class="domain-head">
+      <h2>Estoque</h2>
+      <p>Saldos por depósito e o histórico de movimentações.</p>
+    </div>
+    
+    <article class="entity" id="estoque" data-domain="estoque">
+      <div class="entity-head">
+        <span class="entity-num">5.9</span>
+        <h3>Estoque</h3>
+      </div>
+      <p class="entity-desc">Depósito lógico ou físico onde os saldos das variações são mantidos.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_estoque</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do estoque.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada estoque.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome utilizado para identificar o estoque.</td>
+          <td class="col-regra">Deve diferenciar, no mínimo, os estoques geral, feira, online e defeitão.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Natureza do estoque.</td>
+          <td class="col-regra">Deve diferenciar estoques físicos, de evento e virtuais.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>condicao</code></td>
+          <td>Condição das peças armazenadas no estoque.</td>
+          <td class="col-regra">Deve diferenciar peças novas de peças avariadas, isolando o estoque de defeitão como condição e não como local físico.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>permite_venda</code></td>
+          <td>Indica se o saldo do estoque pode ser comercializado.</td>
+          <td class="col-regra">Define quais estoques compõem a quantidade disponível para venda.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="item_estoque" data-domain="estoque">
+      <div class="entity-head">
+        <span class="entity-num">5.10</span>
+        <h3>Item de Estoque</h3>
+      </div>
+      <p class="entity-desc">Saldo consolidado de uma variação em um estoque específico.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_item_estoque</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do registro de estoque.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada registro.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td>
+          <td>Quantidade disponível de determinada variação em um estoque.</td>
+          <td class="col-regra">Deve ser maior ou igual a zero e corresponder ao somatório das movimentações de entrada subtraído das movimentações de saída.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_estoque</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do estoque relacionado.</td>
+          <td class="col-regra">Todo item de estoque deve pertencer a um estoque.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da variação/SKU armazenada.</td>
+          <td class="col-regra">Todo item de estoque deve estar relacionado a uma variação específica. Não pode existir mais de um registro para o mesmo par estoque e variação.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="movimentacao" data-domain="estoque">
+      <div class="entity-head">
+        <span class="entity-num">5.11</span>
+        <h3>Movimentação de Estoque</h3>
+      </div>
+      <p class="entity-desc">Registro histórico e auditável de toda entrada, saída ou transferência de estoque.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_movimentacao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da movimentação.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada movimentação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Indica o tipo de movimentação realizada.</td>
+          <td class="col-regra">Deve representar entrada, saída ou transferência.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td>
+          <td>Quantidade de unidades movimentadas.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_hora</code></td>
+          <td>Data e horário em que a movimentação ocorreu.</td>
+          <td class="col-regra">Deve registrar o momento da movimentação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>motivo</code></td>
+          <td>Justificativa da movimentação.</td>
+          <td class="col-regra">É obrigatório quando a movimentação não possui documento de origem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_estoque_origem</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador do estoque de origem.</td>
+          <td class="col-regra">Deve ser informado em operações de saída ou transferência e não informado em operações de entrada.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_estoque_destino</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador do estoque de destino.</td>
+          <td class="col-regra">Deve ser informado em operações de entrada ou transferência e não informado em operações de saída. Em transferências, deve ser diferente do estoque de origem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da variação/SKU movimentada.</td>
+          <td class="col-regra">Toda movimentação deve estar relacionada a uma variação específica.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador do pedido que originou a movimentação.</td>
+          <td class="col-regra">Deve ser informado nas saídas decorrentes de venda. Não pode ser informado simultaneamente com a ordem de produção.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_ordem</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td>Identificador da ordem de produção que originou a movimentação.</td>
+          <td class="col-regra">Deve ser informado nas entradas decorrentes de produção. Não pode ser informado simultaneamente com o pedido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do usuário responsável pela movimentação.</td>
+          <td class="col-regra">Deve ser registrado para fins de auditoria.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+  <section class="domain" id="dom-comercial">
+    <div class="domain-head">
+      <h2>Comercial</h2>
+      <p>Clientes, pedidos, itens vendidos e devoluções.</p>
+    </div>
+    
+    <article class="entity" id="cliente" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.15</span>
+        <h3>Cliente</h3>
+      </div>
+      <p class="entity-desc">Pessoa física ou jurídica que compra da Namiê Brasil, no atacado ou no varejo.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_cliente</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do cliente.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada cliente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome ou razão social do cliente.</td>
+          <td class="col-regra">É obrigatório para identificação do cliente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Classificação do cliente.</td>
+          <td class="col-regra">Deve diferenciar, no mínimo, revendedor/empresa e consumidor final.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>documento</code></td>
+          <td>Documento de identificação do cliente.</td>
+          <td class="col-regra">Deve ser único e compatível com o tipo do cliente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>telefone</code></td>
+          <td>Contato telefônico do cliente.</td>
+          <td class="col-regra">É obrigatório para clientes de atacado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>email</code></td>
+          <td>Contato eletrônico do cliente.</td>
+          <td class="col-regra">Pode ser utilizado para comunicação e envio de pedidos.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="endereco" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.16</span>
+        <h3>Endereço</h3>
+      </div>
+      <p class="entity-desc">Endereços de entrega e/ou cobrança vinculados a um cliente.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_endereco</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do endereço.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada endereço.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>logradouro</code></td>
+          <td>Nome da rua ou avenida.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero</code></td>
+          <td>Número do imóvel.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>complemento</code></td>
+          <td>Informação complementar do endereço.</td>
+          <td class="col-regra">Pode não ser informado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>bairro</code></td>
+          <td>Bairro do endereço.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cidade</code></td>
+          <td>Cidade do endereço.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>uf</code></td>
+          <td>Unidade federativa.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cep</code></td>
+          <td>Código de endereçamento postal.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Finalidade do endereço.</td>
+          <td class="col-regra">Deve diferenciar endereço de entrega e de cobrança.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do cliente proprietário do endereço.</td>
+          <td class="col-regra">Todo endereço deve pertencer a um cliente.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="usuario" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.17</span>
+        <h3>Usuário</h3>
+      </div>
+      <p class="entity-desc">Operador do sistema, responsável por vendas e/ou movimentações, para fins de rastreabilidade.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do usuário.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada usuário.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome do usuário do sistema.</td>
+          <td class="col-regra">É obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>perfil</code></td>
+          <td>Perfil de acesso do usuário.</td>
+          <td class="col-regra">Deve diferenciar, no mínimo, os perfis administrativo, de vendas e de estoque.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ativo</code></td>
+          <td>Indica se o usuário está habilitado.</td>
+          <td class="col-regra">Usuários inativos não podem registrar novas operações.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="pedido" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.18</span>
+        <h3>Pedido</h3>
+      </div>
+      <p class="entity-desc">Venda realizada por um cliente em um canal específico (atacado, varejo, feira ou online).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do pedido.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada pedido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_hora</code></td>
+          <td>Data e horário em que o pedido foi realizado.</td>
+          <td class="col-regra">Deve registrar o momento da realização do pedido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>canal</code></td>
+          <td>Canal utilizado para realização da venda.</td>
+          <td class="col-regra">Deve diferenciar os canais de venda, incluindo atacado, varejo, feira e online. Determina a tabela de preço aplicada.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>status</code></td>
+          <td>Situação atual do pedido.</td>
+          <td class="col-regra">Deve representar, no mínimo, os estados rascunho, confirmado, separado, faturado, entregue e cancelado. A baixa de estoque somente ocorre a partir da confirmação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>desconto</code></td>
+          <td>Valor de desconto concedido sobre o total.</td>
+          <td class="col-regra">Deve ser maior ou igual a zero e não pode superar o valor dos itens.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_frete</code></td>
+          <td>Valor do frete cobrado no pedido.</td>
+          <td class="col-regra">Deve ser maior ou igual a zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do cliente responsável pelo pedido.</td>
+          <td class="col-regra">Todo pedido deve estar associado a um cliente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do usuário que registrou o pedido.</td>
+          <td class="col-regra">Todo pedido deve estar associado a um responsável pela venda.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="item_pedido" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.19</span>
+        <h3>Item do Pedido</h3>
+      </div>
+      <p class="entity-desc">Cada variação vendida dentro de um pedido, com o preço praticado no momento da venda.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_item_pedido</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do item do pedido.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada item.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td>
+          <td>Quantidade da variação solicitada no pedido.</td>
+          <td class="col-regra">Deve ser maior que zero e não pode exceder a quantidade disponível em estoque.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>preco_unitario</code></td>
+          <td>Preço efetivamente aplicado para uma unidade do produto no momento da venda.</td>
+          <td class="col-regra">Deve considerar o tipo de venda, atacado ou varejo, e permanece inalterado mesmo que o preço vigente seja atualizado posteriormente.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do pedido ao qual o item pertence.</td>
+          <td class="col-regra">Todo item deve pertencer a um único pedido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da variação/SKU comercializada.</td>
+          <td class="col-regra">Cada item deve estar relacionado a uma variação específica.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="devolucao" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.20</span>
+        <h3>Devolução</h3>
+      </div>
+      <p class="entity-desc">Registro de retorno de itens vendidos, referenciando o pedido de origem.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da devolução.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada devolução.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_hora</code></td>
+          <td>Data e horário do registro da devolução.</td>
+          <td class="col-regra">Não pode ser anterior à data do pedido de origem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>motivo</code></td>
+          <td>Justificativa da devolução.</td>
+          <td class="col-regra">Deve diferenciar, no mínimo, defeito, troca de tamanho e desistência.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do pedido de origem.</td>
+          <td class="col-regra">Toda devolução deve estar associada a um pedido já faturado ou entregue.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do usuário responsável pelo registro.</td>
+          <td class="col-regra">Deve ser registrado para fins de auditoria.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="item_devolucao" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.21</span>
+        <h3>Item da Devolução</h3>
+      </div>
+      <p class="entity-desc">Detalha, por variação, o que foi devolvido e a condição de retorno ao estoque.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_item_devolucao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do item devolvido.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada item.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td>
+          <td>Quantidade devolvida da variação.</td>
+          <td class="col-regra">Deve ser maior que zero e não pode exceder a quantidade vendida no item do pedido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>condicao_retorno</code></td>
+          <td>Condição da peça no momento do retorno.</td>
+          <td class="col-regra">Determina se a peça retorna ao estoque geral ou ao estoque de defeitão.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da devolução relacionada.</td>
+          <td class="col-regra">Todo item deve pertencer a uma devolução.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_item_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do item do pedido que originou a devolução.</td>
+          <td class="col-regra">Cada item devolvido deve referenciar o item vendido correspondente.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+    <section id="regras" class="section">
+      <h2 class="section-title"><span class="section-num">03</span>Regras de negócio gerais</h2>
+      <p>Além das regras associadas a cada atributo, o modelo considera as seguintes definições de caráter geral:</p>
+      <ol class="rules-list">
+        
+        <li>
+          <span class="rule-num">01</span>
+          <div>
+            <strong>Precedência na aplicação do preço.</strong> O canal informado no pedido determina qual valor será aplicado — atacado ou varejo. O tipo do cliente funciona apenas como sugestão padrão no momento da criação do pedido.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">02</span>
+          <div>
+            <strong>Consistência do saldo de estoque.</strong> A quantidade registrada em item de estoque deve sempre corresponder ao somatório das movimentações de entrada subtraído das movimentações de saída para o mesmo par de estoque e variação. Trata-se de um saldo consolidado mantido por motivos de desempenho.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">03</span>
+          <div>
+            <strong>Momento da baixa de estoque.</strong> Nenhuma movimentação de saída é gerada enquanto o pedido estiver em rascunho. A saída ocorre na transição do pedido para o estado confirmado, e o cancelamento posterior exige movimentação de estorno.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">04</span>
+          <div>
+            <strong>Rastreabilidade das movimentações.</strong> Toda movimentação deve possuir um documento de origem — pedido ou ordem de produção — ou, na ausência deste, um motivo registrado, caracterizando ajuste manual.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">05</span>
+          <div>
+            <strong>Obrigatoriedade da coleção.</strong> Produtos atemporais são vinculados a uma coleção de linha permanente, mantendo a obrigatoriedade do relacionamento e evitando ausência de vínculo.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">06</span>
+          <div>
+            <strong>Retorno de peças devolvidas.</strong> A condição de retorno registrada no item da devolução define o estoque de destino da movimentação de entrada correspondente.
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="relacionamentos" class="section">
+      <h2 class="section-title"><span class="section-num">04</span>Relacionamento entre os principais dados</h2>
+      <p>A tabela a seguir consolida os relacionamentos descritos entidade a entidade, com a cardinalidade e a regra que a justifica.</p>
+      <div class="table-wrap">
+        <table class="rel-table">
+          <thead>
+            <tr><th>Entidade A</th><th>Cardinalidade</th><th>Entidade B</th><th>Observação</th></tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td>Marca</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Produto/Modelo</td>
+          <td>Cada produto pertence a exatamente uma marca.</td>
+        </tr>
+        <tr>
+          <td>Categoria</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Produto/Modelo</td>
+          <td>Cada produto pertence a exatamente uma categoria.</td>
+        </tr>
+        <tr>
+          <td>Categoria</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Categoria</td>
+          <td>Autorrelacionamento opcional que forma a hierarquia de categorias e subcategorias.</td>
+        </tr>
+        <tr>
+          <td>Coleção</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Produto/Modelo</td>
+          <td>Cada produto pertence a uma coleção; produtos atemporais usam a coleção de linha permanente.</td>
+        </tr>
+        <tr>
+          <td>Produto/Modelo</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Variação/SKU</td>
+          <td>Um modelo se desdobra em variações por combinação de cor e tamanho.</td>
+        </tr>
+        <tr>
+          <td>Variação/SKU</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Preço</td>
+          <td>Histórico de preços com vigência, mantendo os valores praticados ao longo do tempo.</td>
+        </tr>
+        <tr>
+          <td>Estoque</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Item de Estoque</td>
+          <td>Cada estoque mantém um saldo por variação.</td>
+        </tr>
+        <tr>
+          <td>Variação/SKU</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Item de Estoque</td>
+          <td>Uma variação pode ter saldo em vários estoques (geral, feira, online, defeitão).</td>
+        </tr>
+        <tr>
+          <td>Variação/SKU</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Movimentação de Estoque</td>
+          <td>Toda entrada, saída ou transferência referencia a variação movimentada.</td>
+        </tr>
+        <tr>
+          <td>Facção</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Ordem de Produção</td>
+          <td>Uma facção pode executar várias ordens de produção terceirizada.</td>
+        </tr>
+        <tr>
+          <td>Ordem de Produção</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Item da Produção</td>
+          <td>Uma ordem agrupa a produção de uma ou mais variações.</td>
+        </tr>
+        <tr>
+          <td>Item da Produção</td>
+          <td class="col-card"><span class="card-badge">N:1</span></td>
+          <td>Variação/SKU</td>
+          <td>Cada item de produção refere-se a exatamente uma variação, gerando entrada em estoque.</td>
+        </tr>
+        <tr>
+          <td>Cliente</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Pedido</td>
+          <td>Um cliente pode realizar vários pedidos.</td>
+        </tr>
+        <tr>
+          <td>Cliente</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Endereço</td>
+          <td>Um cliente pode ter vários endereços de entrega e/ou cobrança.</td>
+        </tr>
+        <tr>
+          <td>Usuário</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Pedido</td>
+          <td>Todo pedido registra o usuário responsável pela venda.</td>
+        </tr>
+        <tr>
+          <td>Pedido</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Item do Pedido</td>
+          <td>Um pedido agrupa uma ou mais variações vendidas.</td>
+        </tr>
+        <tr>
+          <td>Item do Pedido</td>
+          <td class="col-card"><span class="card-badge">N:1</span></td>
+          <td>Variação/SKU</td>
+          <td>Cada item vendido refere-se a exatamente uma variação.</td>
+        </tr>
+        <tr>
+          <td>Pedido</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Devolução</td>
+          <td>Um pedido faturado ou entregue pode originar devoluções.</td>
+        </tr>
+        <tr>
+          <td>Devolução</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Item da Devolução</td>
+          <td>Uma devolução agrupa um ou mais itens devolvidos.</td>
+        </tr>
+        <tr>
+          <td>Item da Devolução</td>
+          <td class="col-card"><span class="card-badge">N:1</span></td>
+          <td>Item do Pedido</td>
+          <td>Cada item devolvido referencia o item de pedido correspondente.</td>
+        </tr>
+        <tr>
+          <td>Usuário</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Movimentação de Estoque</td>
+          <td>Toda movimentação registra o usuário responsável, para auditoria.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <p>Dicionário de dados conceitual — Namiê Brasil. Documento produzido para fins acadêmicos, a partir do dicionário de dados original do projeto.</p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  var targets = links.map(function(a){
+    var id = a.getAttribute('href').slice(1);
+    return document.getElementById(id);
+  });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < targets.length; i++){
+      if (targets[i] && targets[i].offsetTop <= pos) current = links[i];
+    }
+    links.forEach(function(a){ a.classList.remove('active'); });
+    if (current) current.classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+
+</script>
+</body>
+</html>
