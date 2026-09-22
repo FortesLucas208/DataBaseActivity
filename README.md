@@ -82,7 +82,7 @@ https://www.instagram.com/namiebrasil/
 Porém, possui 3 lojas físicas.
 
 As demais evidências referentes ao acesso do grupo à organização, como registros da pesquisa de campo, fotografias e identificação do responsável que forneceu as informações, serão anexadas ou apresentadas conforme a documentação disponível ao grupo.*
-<!-- Falta pegar as fotos -->
+
 ---
 
 ## 2. Processos de Negócio
@@ -221,9 +221,9 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 ---
 
 ## 4. Regras de Negócio
-<!-- *(esta seção DIVIDE com a Seção 3 "Requisitos do Sistema" os mesmos 7,5% da dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na documentação. "Regras de negócio" é o termo técnico usado em modelagem de dados para as regras de funcionamento de qualquer organização, com ou sem fins lucrativos)* -->
+*(esta seção DIVIDE com a Seção 3 "Requisitos do Sistema" os mesmos 7,5% da dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na documentação. "Regras de negócio" é o termo técnico usado em modelagem de dados para as regras de funcionamento de qualquer organização, com ou sem fins lucrativos)*
 - **Regras operacionais:**
-  <!-- *condições que a organização impõe (ex.: "um pedido só pode ser fechado se houver estoque disponível", "uma doação só pode ser registrada com identificação do doador", "um ritual só pode ser agendado se o espaço estiver disponível").* -->
+*condições que a organização impõe (ex.: "um pedido só pode ser fechado se houver estoque disponível", "uma doação só pode ser registrada com identificação do doador", "um ritual só pode ser agendado se o espaço estiver disponível").*
   
 RN01 — Identificação de produtos
 Cada produto deve ser identificado por um modelo, uma cor e um tamanho, formando uma variação específica com seu respectivo SKU.
@@ -259,7 +259,7 @@ RN11 — Devoluções do e-commerce
 Produtos devolvidos por clientes de vendas online que estejam em condições adequadas para comercialização devem retornar ao estoque online.
   
 - **Restrições organizacionais:**
-  <!-- *limitações que afetam o modelo (ex.: políticas internas, prazos, exigências legais, normas religiosas ou estatutárias) — e por que elas importam.* -->
+*limitações que afetam o modelo (ex.: políticas internas, prazos, exigências legais, normas religiosas ou estatutárias) — e por que elas importam.*
 
 RO01 — Estoques separados por canal
 Os estoques geral, da feira e online são mantidos separadamente pela organização. Essa característica deve ser considerada no modelo para permitir o controle individual das quantidades disponíveis em cada local.
@@ -274,7 +274,7 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 
 ## 5. Dicionário de Dados Conceitual (Preliminar)
 <!-- *(vale 10% — Dimensão Procedimental)* -->
-<!-- Para cada entidade identificada, liste:
+Para cada entidade identificada, liste:
 
 | Atributo | Descrição | Regra de negócio associada |
 |----------|-----------|------------------------------|
@@ -282,7 +282,8 @@ As etapas de corte, costura, lavanderia e acabamento são realizadas internament
 
 *Mantenha o dicionário organizado e padronizado (mesmo formato de tabela para todas as entidades).*
 
-**Atenção à privacidade:** se forem usados exemplos de valores para ilustrar os atributos, esses exemplos devem ser **fictícios** — não utilize dados reais de clientes, fiéis, beneficiários, doadores ou funcionários da organização (nomes, CPFs, contatos etc.), mesmo que tenham sido observados durante a pesquisa de campo. Os exemplos devem apenas ser **coerentes com as operações reais** observadas. -->
+**Atenção à privacidade:** se forem usados exemplos de valores para ilustrar os atributos, esses exemplos devem ser **fictícios** — não utilize dados reais de clientes, fiéis, beneficiários, doadores ou funcionários da organização (nomes, CPFs, contatos etc.), mesmo que tenham sido observados durante a pesquisa de campo. Os exemplos devem apenas ser **coerentes com as operações reais** observadas.
+
 **COLEÇÃO**
 | Atributo   | Descrição                | Regra de negócio associada                  |
 | ---------- | ------------------------ | ------------------------------------------- |
@@ -389,11 +390,11 @@ PREÇO
 ---
 
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
-<!-- *(vale 7,5% na dimensão conceitual)*
+<!-- *(vale 7,5% na dimensão conceitual)* -->
 - **Entidades reconhecidas:** *liste e justifique brevemente cada uma.*
 - **Atributos e classificações:** *quais atributos pertencem a cada entidade.*
 - **Relacionamentos pertinentes:** *como as entidades se conectam.*
-- **Restrições e políticas organizacionais aplicadas ao modelo.** -->
+- **Restrições e políticas organizacionais aplicadas ao modelo.**
 
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
 
@@ -611,7 +612,7 @@ A estrutura também permite a expansão do sistema nas próximas etapas do proje
 ---
 
 ## 7. Diagrama Entidade-Relacionamento (DER)
-*(vale 20% — é o item de maior peso da entrega)*
+<!--*(vale 20% — é o item de maior peso da entrega)* -->
 
 - Anexe o DER (em imagem).
 - O diagrama deve representar corretamente:
@@ -621,12 +622,37 @@ A estrutura também permite a expansão do sistema nas próximas etapas do proje
   - **Cardinalidades**
 - O modelo deve ser **consistente** e já demonstrar potencial de **escalabilidade e integração** (pensando nas próximas etapas do projeto).
 
+![DER](imagens/DER.png)
+
 ---
 
 ## 8. Justificativa Técnica
-*(vale 7,5% — sozinho, é o subcritério de maior peso dentro da Dimensão Conceitual)*
+<!-- *(vale 7,5% — sozinho, é o subcritério de maior peso dentro da Dimensão Conceitual)* -->
 
-*Explique e defenda as decisões de abstração e modelagem tomadas: por que essas entidades, esses atributos, esses relacionamentos e essas cardinalidades — e não outras alternativas possíveis?*
+<!-- *Explique e defenda as decisões de abstração e modelagem tomadas: por que essas entidades, esses atributos, esses relacionamentos e essas cardinalidades — e não outras alternativas possíveis?* -->
+
+O modelo conceitual foi elaborado com base nos processos de produção, controle de estoque e comercialização identificados durante o levantamento realizado na Namiê Brasil. As entidades foram definidas buscando representar os principais dados necessários para o funcionamento dos processos analisados, evitando concentrar informações distintas em uma única entidade.
+
+A entidade **COLEÇÃO** foi utilizada para representar a organização dos produtos em diferentes coleções. A relação com **PRODUTO/MODELO** permite representar a associação dos modelos às coleções identificadas pela organização.
+
+A entidade **PRODUTO/MODELO** representa o modelo comercial da peça e funciona como referência para suas diferentes variações. A relação `1:N` com **VARIAÇÃO/SKU** foi definida porque um modelo pode possuir várias combinações de cor e tamanho, enquanto cada variação pertence a um único modelo. Dessa forma, diferentes SKUs podem ser representados sem duplicar as informações gerais do modelo.
+
+A entidade **PREÇO** foi separada de **PRODUTO/MODELO** para representar os valores de venda de atacado e varejo. A relação `1:1` foi adotada porque, no modelo proposto, cada produto/modelo possui um registro de preço com os valores correspondentes aos diferentes tipos de venda.
+
+Para o controle de estoque, foi utilizada a entidade **ITEM DE ESTOQUE** entre **VARIAÇÃO/SKU** e **ESTOQUE**. Essa escolha permite que uma mesma variação seja armazenada em diferentes estoques, como geral, feira, online e defeitão, mantendo quantidades independentes para cada local. Assim, evita-se armazenar diretamente uma única quantidade na entidade ESTOQUE, o que não representaria corretamente a situação observada na organização.
+
+A entidade **MOVIMENTAÇÃO DE ESTOQUE** foi criada para registrar alterações nas quantidades armazenadas. Ela está relacionada às variações/SKUs e aos estoques, permitindo representar entradas, saídas e transferências de produtos. Essa estrutura também possibilita manter um histórico das movimentações realizadas.
+
+Na produção, **ORDEM DE PRODUÇÃO** e **ITEM DA PRODUÇÃO** foram separadas porque uma mesma ordem pode envolver diferentes variações de produtos e respectivas quantidades. Dessa forma, a relação `1:N` entre ordem e itens permite registrar, em uma única ordem, diferentes combinações de modelo, cor e tamanho.
+
+Para as vendas, foram utilizadas as entidades **CLIENTE**, **PEDIDO** e **ITEM DO PEDIDO**. Um cliente pode realizar nenhum ou vários pedidos, enquanto cada pedido está associado a um único cliente. Um pedido pode possuir vários itens, e cada item representa uma determinada variação/SKU, quantidade e preço unitário. A separação entre pedido e seus itens permite registrar diferentes produtos dentro de uma mesma venda.
+
+A entidade **ITEM DO PEDIDO** também armazena o preço unitário aplicado no momento da venda. Essa decisão evita que alterações futuras no cadastro de preços modifiquem o valor histórico de pedidos já realizados.
+
+As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode existir sem ainda possuir registros relacionados, enquanto `1:N` representa uma relação obrigatória com possibilidade de múltiplos registros. As cardinalidades `1:1` foram utilizadas quando cada ocorrência de uma entidade está diretamente relacionada a uma única ocorrência da outra entidade, conforme as regras identificadas no levantamento.
+
+O modelo também foi estruturado considerando a possibilidade de expansão do sistema nas próximas etapas do projeto. A separação entre modelos, variações, estoques, movimentações, produção, clientes e pedidos reduz a duplicação de informações e permite que novos registros sejam incorporados sem alterar a estrutura básica das entidades existentes.
+
 
 ---
 
