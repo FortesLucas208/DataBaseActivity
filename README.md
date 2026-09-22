@@ -37,7 +37,7 @@
 
 A empresa trabalha com fabricação própria de roupas femininas e comercializa seus produtos em diferentes canais. No atacado, as vendas ocorrem presencialmente nos pontos de venda e também por meio do WhatsApp, tendo como público principal as revendedoras. No varejo, as vendas são realizadas por meio do site e de marketplaces, atendendo diretamente consumidores finais.
 
-O processo produtivo envolve a definição do modelo e do tecido, aquisição de matéria-prima quando necessária, corte, costura, lavanderia e acabamento. O acabamento compreende atividades como aplicação de botões, etiquetas, tags e demais aviamentos. Algumas etapas, como costura e acabamento, podem ser realizadas internamente ou por terceiros.*
+O processo produtivo envolve a definição do modelo e do tecido, aquisição de matéria-prima quando necessária, corte, costura, lavanderia e acabamento. O acabamento compreende atividades como aplicação de botões, etiquetas, tags e demais aviamentos. Todas as etapas do processo produtivo são realizadas internamente pela própria fábrica.*
 
 - **Problemas e necessidades identificados:**
   
@@ -60,13 +60,13 @@ Além disso, um dos integrantes do grupo possui acesso à organização, permiti
 O controle de produtos acabados apresenta ainda diferentes características que precisam ser consideradas pelo sistema, como modelo, coleção, cor, tamanho e SKU, além da existência de diferentes locais de estoque e canais de venda.*
 
 - **Evidências da organização:**
+
 ![Reunião com a Gerencia](imagens/foto6.jpeg)
 ![Chão de Fábrica](imagens/foto1.jpeg)
 ![Chão de Fábrica](imagens/foto2.jpeg)
 ![Chão de Fábrica](imagens/foto3.jpeg)
 ![Chão de Fábrica](imagens/foto4.jpeg)
 ![Chão de Fábrica](imagens/foto5.jpeg)
-
 
 
 *Namiê Brasil possui presença pública na internet por meio de seu site oficial:*
@@ -395,158 +395,218 @@ PREÇO
 - **Relacionamentos pertinentes:** *como as entidades se conectam.*
 - **Restrições e políticas organizacionais aplicadas ao modelo.** -->
 
+## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
+
 O modelo conceitual proposto para a Namiê Brasil representa os principais dados envolvidos nos processos de produção, controle de estoque e comercialização de produtos.
 
 ## 6.1 Entidades e relacionamentos
 
-*COLEÇÃO ↔ PRODUTO/MODELO**
+**COLEÇÃO ↔ PRODUTO/MODELO**
 
-Uma coleção pode possuir um ou vários produtos.
-Cada produto/modelo pertence a uma coleção.
+Uma coleção pode possuir um ou vários produtos/modelos.
 
-**PRODUTO/MODELO → VARIAÇÃO/SKU**
+Cada produto/modelo pertence obrigatoriamente a uma única coleção.
 
-Um produto pode possuir uma ou várias variações.
-Cada variação pertence a um único produto.
-A variação representa a combinação de cor e tamanho, identificada por um SKU.
+Essa relação representa a organização dos modelos de produtos dentro das coleções utilizadas pela empresa.
+
+**PRODUTO/MODELO ↔ VARIAÇÃO/SKU**
+
+Um produto/modelo pode possuir uma ou várias variações.
+
+Cada variação/SKU pertence a um único produto/modelo.
+
+A variação representa uma combinação específica de cor e tamanho e possui um SKU próprio para sua identificação.
 
 Exemplo:
 
-Produto: Cropped Faixa Elástico
-| -→ Off White / P
-| -→ Off White / M
-| -→ Off White / G
+> Produto: Cropped Faixa Elástico
+> ├── Off White / P
+> ├── Off White / M
+> └── Off White / G
 
-Isso está de acordo com a estrutura observada no arquivo de estoque, que possui produtos-pai e suas respectivas variações.
+Essa estrutura permite representar diferentes variações de um mesmo modelo sem duplicar as informações gerais do produto.
+
+**PRODUTO/MODELO ↔ PREÇO**
+
+Cada produto/modelo possui um único registro de preço.
+
+Cada registro de preço está relacionado a um único produto/modelo.
+
+A entidade PREÇO armazena os valores praticados nas vendas de atacado e varejo, permitindo diferenciar os preços de acordo com o tipo de venda.
 
 ## 6.2 Produtos e estoques
 
-**VARIAÇÃO/SKU ↔ ITEM DE ESTOQUE ↔ ESTOQUE**
+**VARIAÇÃO/SKU ↔ ITEM DE ESTOQUE**
 
-Uma variação pode possuir registros de quantidade em diferentes estoques. Cada item de estoque relaciona uma variação específica a um estoque e registra a quantidade disponível naquele local.
+Uma variação/SKU pode possuir nenhum ou vários registros de item de estoque.
 
-Um estoque representa um local ou finalidade de armazenamento, enquanto o item de estoque representa a quantidade de uma determinada variação armazenada nesse estoque.
+Cada item de estoque está relacionado a uma única variação/SKU.
+
+Essa estrutura permite que uma mesma variação seja armazenada em diferentes estoques, mantendo registros independentes para cada local.
+
+**ITEM DE ESTOQUE ↔ ESTOQUE**
+
+Cada item de estoque pertence a um único estoque.
+
+Um estoque pode possuir nenhum ou vários itens de estoque.
 
 Os estoques considerados no modelo são:
 
-- Geral
-- Feira
-- Online
-- Defeitão
+* Geral
+* Feira
+* Online
+* Defeitão
 
 Exemplo:
 
-> SKU X → Estoque Geral → 20 unidades  
+> SKU X → Estoque Geral → 20 unidades
 > SKU X → Estoque Feira → 5 unidades
 
-Dessa forma, a mesma variação pode estar presente em diferentes estoques, com quantidades independentes.
+Dessa forma, a quantidade de uma mesma variação pode ser controlada separadamente em diferentes estoques.
 
 ## 6.3 Movimentação de estoque
 
-VARIAÇÃO/SKU → MOVIMENTAÇÃO DE ESTOQUE
+**VARIAÇÃO/SKU ↔ MOVIMENTAÇÃO DE ESTOQUE**
 
-Uma variação pode participar de várias movimentações. Cada movimentação refere-se a uma única variação e registra a quantidade movimentada, o tipo da movimentação e a data e horário em que ocorreu.
+Uma variação/SKU pode participar de nenhuma ou várias movimentações de estoque.
 
-A movimentação pode envolver um estoque de origem e um estoque de destino.
+Cada movimentação de estoque está relacionada a uma única variação/SKU.
 
-- Em uma entrada, o estoque de destino é informado.
-- Em uma saída, o estoque de origem é informado.
-- Em uma transferência, os estoques de origem e destino são informados.
+A movimentação registra informações como tipo, quantidade e data e horário da operação.
+
+**MOVIMENTAÇÃO DE ESTOQUE ↔ ESTOQUE**
+
+Uma movimentação pode estar relacionada a nenhum ou um estoque.
+
+Um estoque pode estar relacionado a nenhuma ou várias movimentações.
+
+A relação permite registrar as alterações realizadas nos estoques, considerando a movimentação de produtos.
+
+As movimentações podem representar:
+
+* Entrada de produtos;
+* Saída de produtos;
+* Transferência de produtos entre estoques.
 
 Exemplo:
 
 > 20 unidades do SKU X | Estoque Geral → Estoque Feira
 
-Nesse caso, a movimentação reduz a quantidade do SKU X no estoque geral e aumenta sua quantidade no estoque da feira.
-
-Essa estrutura permite registrar o histórico das movimentações e manter o controle das transferências entre os diferentes estoques.
+Nesse caso, a movimentação registra a alteração da quantidade do SKU X relacionada ao estoque.
 
 ## 6.4 Produção
 
-**ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO**
+**VARIAÇÃO/SKU ↔ ITEM DA PRODUÇÃO**
 
-Uma ordem de produção pode possuir um ou vários itens.
-Cada item pertence a uma única ordem de produção.
+Uma variação/SKU pode aparecer em nenhum ou vários itens de produção.
 
-**ITEM DA PRODUÇÃO → VARIAÇÃO/SKU**
+Cada item da produção corresponde a uma única variação/SKU.
 
-Uma variação pode aparecer em diferentes ordens de produção.
-Cada item da produção corresponde a uma única variação.
-O item registra a quantidade produzida daquela variação.
+O item da produção registra a quantidade produzida daquela variação.
+
+**ITEM DA PRODUÇÃO ↔ ORDEM DE PRODUÇÃO**
+
+Cada item da produção pertence a uma única ordem de produção.
+
+Uma ordem de produção possui um ou vários itens de produção.
+
+Essa estrutura permite que uma mesma ordem de produção registre diferentes variações/SKUs e suas respectivas quantidades.
 
 Portanto:
 
-**ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO → VARIAÇÃO/SKU**
-
-Essa estrutura permite que uma mesma ordem de produção registre diferentes variações/SKUs, inclusive diferentes combinações de cor e tamanho.
+> ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO → VARIAÇÃO/SKU
 
 ## 6.5 Clientes e pedidos
 
-**CLIENTE → PEDIDO**
+**VARIAÇÃO/SKU ↔ ITEM DO PEDIDO**
 
-Um cliente pode realizar zero ou vários pedidos.
-Cada pedido pertence a um cliente.
+Uma variação/SKU pode aparecer em nenhum ou vários itens de pedidos.
 
-**PEDIDO → ITEM DO PEDIDO**
+Cada item do pedido corresponde a uma única variação/SKU.
 
-Cada item do pedido registra a quantidade e o preço unitário efetivamente aplicado naquela venda. Dessa forma, o pedido mantém o valor praticado no momento da venda, independentemente de alterações posteriores nos preços cadastrados do produto.
-Cada item pertence a um único pedido.
+Essa relação permite registrar quais produtos foram comercializados em cada pedido.
 
-**ITEM DO PEDIDO → VARIAÇÃO/SKU**
+**ITEM DO PEDIDO ↔ PEDIDO**
 
-Uma variação pode aparecer em vários itens de pedidos.
-Cada item do pedido corresponde a uma única variação.
+Cada item do pedido pertence a um único pedido.
+
+Um pedido possui um ou vários itens do pedido.
+
+Cada item registra a quantidade e o preço unitário aplicado na venda.
+
+Dessa forma, o pedido pode conter diferentes produtos e quantidades.
+
+**PEDIDO ↔ CLIENTE**
+
+Cada pedido pertence a um único cliente.
+
+Um cliente pode possuir nenhum ou vários pedidos.
+
+Essa relação permite manter o histórico de compras de cada cliente e associar cada pedido ao respectivo comprador.
 
 Assim:
 
-**CLIENTE → PEDIDO → ITEM DO PEDIDO → VARIAÇÃO/SKU**
+> CLIENTE → PEDIDO → ITEM DO PEDIDO → VARIAÇÃO/SKU
 
-Isso permite registrar, por exemplo:
+Exemplo:
 
-Cliente X
-Pedido 001
-| -→ 5 × Calça modelo A / 38
-| -→ 3 × Calça modelo A / 40
-| -→ 2 × Cropped modelo B / M
+> Cliente X
+> Pedido 001
+> ├── 5 × Calça modelo A / 38
+> ├── 3 × Calça modelo A / 40
+> └── 2 × Cropped modelo B / M
 
-## 6.6 Estrutura conceitual preliminar
+## 6.6 Estrutura conceitual
 
-Juntando as entidades e relacionamentos apresentados:
+A estrutura apresentada no DER relaciona as entidades da seguinte forma:
 
 ```
-
-                    COLEÇÃO
-                       │
-                       │
-                 PRODUTO/MODELO
-                    │       │
-                    │       └──── PREÇO
-                    │
-                    ▼
-                VARIAÇÃO/SKU
-              /      |       \
-             /       |        \
-            ▼        ▼         ▼
-   ITEM DE ESTOQUE  ITEM DA   ITEM DO PEDIDO
-        │           PRODUÇÃO       │
-        │              │           │
-        ▼              ▼           ▼
-     ESTOQUE      ORDEM DE       PEDIDO
-                      PRODUÇÃO      │
-                                    ▼
+                         COLEÇÃO
+                            │
+                          1:N
+                            │
+                            ▼
+                     PRODUTO/MODELO
+                       │           │
+                     1:N          1:1
+                       │           │
+                       ▼           ▼
+                 VARIAÇÃO/SKU    PREÇO
+                  │    │    │
+                  0:N  0:N  0:N
+                    │    │    │
+                    ▼    ▼    ▼
+               ITEM DE  ITEM DA  ITEM DO
+               ESTOQUE PRODUÇÃO  PEDIDO
+                  │       │         │
+                 1:1     1:1       1:1
+                  │       │         │
+                  ▼       ▼         ▼
+               ESTOQUE  ORDEM DE  PEDIDO
+                        PRODUÇÃO     │
+                                   1:1
+                                     │
+                                     ▼
                                   CLIENTE
 
 VARIAÇÃO/SKU
       │
+     0:N
+      │
       ▼
 MOVIMENTAÇÃO DE ESTOQUE
       │
-      ├──── ESTOQUE DE ORIGEM
+     0:1
       │
-      └──── ESTOQUE DE DESTINO
-   ```
+      ▼
+   ESTOQUE
+```
 
-A estrutura representa a relação entre os produtos, suas variações, preços, estoques, produção e vendas. A entidade ITEM DE ESTOQUE permite controlar a quantidade de cada variação em diferentes estoques, enquanto MOVIMENTAÇÃO DE ESTOQUE registra as entradas, saídas e transferências realizadas.
+O modelo separa os dados de produtos, variações, preços, estoques, movimentações, produção e vendas, permitindo representar os principais processos identificados na organização.
+
+As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode não possuir registros relacionados ou pode possuir vários deles. O `1:N` representa uma relação em que uma ocorrência obrigatoriamente se relaciona com uma ou várias ocorrências da outra entidade. Já o `1:1` representa uma relação em que cada ocorrência está associada a uma única ocorrência da outra entidade, conforme definido no modelo.
+
+A estrutura também permite a expansão do sistema nas próximas etapas do projeto, mantendo separadas as informações de modelos, suas variações, estoques, movimentações, produção, clientes e pedidos.
 
 ---
 
