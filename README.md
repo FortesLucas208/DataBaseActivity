@@ -109,6 +109,8 @@ O estoque online é controlado separadamente dos demais estoques. Em caso de dev
 - **Fluxogramas:** 
 ### 2.1 Produção de peças
 
+Os fluxogramas representam os processos observados durante o levantamento e a forma como esses processos poderão ser organizados e controlados pelo sistema proposto.
+
 ```mermaid
   flowchart TD
     A([Início]) --> B[Definição do modelo e tecido]
@@ -565,39 +567,27 @@ A estrutura apresentada no DER relaciona as entidades da seguinte forma:
                             │
                             ▼
                      PRODUTO/MODELO
-                       │           │
-                     1:N          1:1
-                       │           │
-                       ▼           ▼
-                 VARIAÇÃO/SKU    PREÇO
-                  │    │    │
-                  0:N  0:N  0:N
-                    │    │    │
-                    ▼    ▼    ▼
-               ITEM DE  ITEM DA  ITEM DO
-               ESTOQUE PRODUÇÃO  PEDIDO
-                  │       │         │
-                 1:1     1:1       1:1
-                  │       │         │
-                  ▼       ▼         ▼
-               ESTOQUE  ORDEM DE  PEDIDO
-                        PRODUÇÃO     │
-                                   1:1
-                                     │
-                                     ▼
-                                  CLIENTE
-
-VARIAÇÃO/SKU
-      │
-     0:N
-      │
-      ▼
-MOVIMENTAÇÃO DE ESTOQUE
-      │
-     0:1
-      │
-      ▼
-   ESTOQUE
+                           │         \ 
+                          1:N         1:1
+                           │           │
+                           ▼           ▼
+                      VARIAÇÃO/SKU    PREÇO
+                    /    │    │    \
+                  0:N   0:N  0:N   0:N
+                 /       │    │       \
+                ▼        ▼    ▼        ▼
+      MOVIMENTAÇÃO   ITEM DE  ITEM DA  ITEM DO
+          DE         ESTOQUE  PRODUÇÃO  PEDIDO
+        ESTOQUE         │       │         │
+           \           1:1     1:1       1:1
+            0:1         │       │         │
+                \       ▼       ▼         ▼
+                  ▶ ESTOQUE  ORDEM DE  PEDIDO
+                              PRODUÇÃO     │
+                                          1:1
+                                           │
+                                           ▼
+                                        CLIENTE
 ```
 
 O modelo separa os dados de produtos, variações, preços, estoques, movimentações, produção e vendas, permitindo representar os principais processos identificados na organização.
