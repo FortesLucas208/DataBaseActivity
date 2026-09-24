@@ -81,7 +81,10 @@ https://www.instagram.com/namiebrasil/
 *A empresa está localizada no bairro do Brás, em São Paulo – SP. Informações públicas de cadastro empresarial indicam a sede na Rua Piratininga, 514, conjunto 500, Brás, São Paulo – SP, CEP 03042-000.
 Porém, possui 3 lojas físicas.
 
-As demais evidências referentes ao acesso do grupo à organização, como registros da pesquisa de campo, fotografias e identificação do responsável que forneceu as informações, serão anexadas ou apresentadas conforme a documentação disponível ao grupo.*
+Vale Ressaltar que Anthony Werick, membro do grupo, trabalha na empresa e foi por meio dele que conseguimos contato com a mesma.
+Contato disponibilizado:
+namiebrasil@gmail.com
+<!-- 11971675752 -->
 
 ---
 
