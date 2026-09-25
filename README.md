@@ -580,7 +580,7 @@ A estrutura também permite a expansão do sistema nas próximas etapas do proje
   - **Cardinalidades**
 - O modelo deve ser **consistente** e já demonstrar potencial de **escalabilidade e integração** (pensando nas próximas etapas do projeto).
 
-![DER](imagens/DER.png)
+![DER](imagens/DEER.png)
 
 ---
 
