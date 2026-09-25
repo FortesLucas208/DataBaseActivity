@@ -291,7 +291,7 @@ Para cada entidade identificada, liste:
 
 **COLEÇÃO**
 | Atributo   | Descrição                | Regra de negócio associada                  |
-| ---------- | ------------------------ | ------------------------------------------- |
+| ---------- | ------------------------ | -------------------------------------------- |
 | id_colecao | Identificador da coleção | Deve identificar unicamente cada coleção    |
 | nome       | Nome da coleção          | Deve permitir identificar a coleção         |
 | tipo       | Classificação da coleção | Pode representar coleção normal ou especial |
@@ -306,7 +306,7 @@ Para cada entidade identificada, liste:
 
 **VARIAÇÃO/SKU**
 | Atributo    | Descrição                           | Regra de negócio associada                                        |
-| ----------- | ----------------------------------- | ----------------------------------------------------------------- |
+| ----------- | ------------------------------------ | ----------------------------------------------------------------- |
 | id_variacao | Identificador da variação           | Deve identificar unicamente a variação                            |
 | sku         | Código de identificação da variação | Cada combinação de modelo, cor e tamanho possui um SKU específico |
 | cor         | Cor da peça                         | Obrigatória                                                       |
@@ -316,30 +316,29 @@ Para cada entidade identificada, liste:
 **PREÇO**
 
 | Atributo      | Descrição                             | Regra de negócio associada                                      |
-| ------------- | ------------------------------------- | --------------------------------------------------------------- |
+| ------------- | -------------------------------------- | ------------------------------------------------------------------ |
 | id_preco      | Identificador do preço                | Deve identificar unicamente o registro de preço                 |
 | preco_atacado | Preço praticado nas vendas de atacado | Deve representar o valor utilizado para vendas de atacado       |
 | preco_varejo  | Preço praticado nas vendas de varejo  | Deve representar o valor utilizado para vendas de varejo        |
 | id_produto    | Modelo relacionado                    | Cada registro de preço deve estar associado a um produto/modelo |
 
-
 **ESTOQUE**
-| Atributo    | Descrição                      | Regra de negócio associada                                           |
-| ----------- | ------------------------------ | -------------------------------------------------------------------- |
-| id_estoque  | Identificador do estoque       | Deve identificar unicamente cada estoque                             |
-| localização | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira, online e defeitão         |
+| Atributo    | Descrição                      | Regra de negócio associada                                    |
+| ----------- | ------------------------------- | -------------------------------------------------------------- |
+| id_estoque  | Identificador do estoque       | Deve identificar unicamente cada estoque                       |
+| localização | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira, online e defeitão   |
 
-**ITEM DE ESTOQUE**
-| Atributo        | Descrição                                         | Regra de negócio associada                                 |
-| --------------- | ------------------------------------------------- | ---------------------------------------------------------- |
-| id_item_estoque | Identificador do registro de estoque              | Deve identificar unicamente o registro                     |
-| quantidade      | Quantidade disponível da variação naquele estoque | Deve ser maior ou igual a zero                             |
-| id_estoque      | Estoque relacionado                               | Todo item de estoque deve pertencer a um estoque           |
-| id_variacao     | Variação/SKU armazenada                           | Todo item de estoque deve estar relacionado a uma variação |
+**Relacionamento VARIAÇÃO/SKU ↔ ESTOQUE (N:N)**
+
+Uma variação pode ter saldo em vários estoques, e um estoque pode conter várias variações. O relacionamento carrega o seguinte atributo:
+
+| Atributo   | Descrição                                          | Regra de negócio associada     |
+| ---------- | ---------------------------------------------------- | -------------------------------- |
+| quantidade | Quantidade disponível da variação naquele estoque   | Deve ser maior ou igual a zero |
 
 **MOVIMENTAÇÃO DE ESTOQUE**
 | Atributo           | Descrição                          | Regra de negócio associada                                                   |
-| ------------------ | ---------------------------------- | ---------------------------------------------------------------------------- |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
 | id_movimentacao    | Identificador da movimentação      | Deve identificar unicamente cada movimentação                                |
 | tipo               | Tipo da movimentação               | Deve indicar entrada, saída ou transferência                                 |
 | quantidade         | Quantidade movimentada             | Deve ser maior que zero                                                      |
@@ -350,48 +349,46 @@ Para cada entidade identificada, liste:
 
 **ORDEM DE PRODUÇÃO**
 | Atributo    | Descrição                          | Regra de negócio associada                          |
-| ----------- | ---------------------------------- | --------------------------------------------------- |
+| ----------- | ------------------------------------ | ------------------------------------------------------ |
 | id_ordem    | Identificador da ordem de produção | Deve identificar unicamente cada ordem              |
 | data_inicio | Data de início da produção         | Registra o início da ordem                          |
 | data_fim    | Data de conclusão da produção      | Deve ser preenchida quando a produção for concluída |
 | status      | Situação da ordem                  | Deve representar a situação atual da produção       |
 
-**ITEM DA PRODUÇÃO**
-| Atributo         | Descrição                         | Regra de negócio associada                                          |
-| ---------------- | --------------------------------- | ------------------------------------------------------------------- |
-| id_item_producao | Identificador do item da produção | Deve identificar unicamente o item                                  |
-| quantidade       | Quantidade produzida              | Deve ser maior que zero                                             |
-| id_ordem         | Ordem de produção relacionada     | Todo item deve pertencer a uma ordem de produção                    |
-| id_variacao      | Variação produzida                | Permite registrar diferentes tamanhos, cores ou SKUs na mesma ordem |
+**Relacionamento VARIAÇÃO/SKU ↔ ORDEM DE PRODUÇÃO (N:N)**
+
+Uma ordem pode produzir várias variações, e uma variação pode ser produzida em várias ordens. O relacionamento carrega o seguinte atributo:
+
+| Atributo   | Descrição             | Regra de negócio associada |
+| ---------- | ----------------------- | ----------------------------- |
+| quantidade | Quantidade produzida   | Deve ser maior que zero      |
 
 **CLIENTE**
 | Atributo   | Descrição                | Regra de negócio associada                                         |
-| ---------- | ------------------------ | ------------------------------------------------------------------ |
+| ---------- | -------------------------- | ---------------------------------------------------------------------- |
 | id_cliente | Identificador do cliente | Deve identificar unicamente cada cliente                           |
 | nome       | Nome do cliente          | Obrigatório                                                        |
 | tipo       | Tipo de cliente          | Deve diferenciar, no mínimo, revendedor/empresa e consumidor final |
 
 **PEDIDO**
 | Atributo   | Descrição                | Regra de negócio associada                    |
-| ---------- | ------------------------ | --------------------------------------------- |
+| ---------- | -------------------------- | -------------------------------------------------- |
 | id_pedido  | Identificador do pedido  | Deve identificar unicamente cada pedido       |
 | data_hora  | Data e horário do pedido | Registra quando o pedido foi realizado        |
 | canal      | Canal de venda           | Deve diferenciar atacado e varejo             |
 | id_cliente | Cliente relacionado      | Todo pedido deve estar associado a um cliente |
 
-**ITEM DO PEDIDO**
-| Atributo       | Descrição               | Regra de negócio associada                          |
-| -------------- | ----------------------- | --------------------------------------------------- |
-| id_item_pedido | Identificador do item   | Deve identificar unicamente o item                  |
-| quantidade     | Quantidade solicitada   | Deve ser maior que zero                             |
-| preco_unitario | Preço unitário aplicado | Deve considerar o tipo de venda                     |
-| id_pedido      | Pedido relacionado      | Todo item deve pertencer a um pedido                |
-| id_variacao    | Variação comercializada | Cada item deve estar relacionado a uma variação/SKU |
+**Relacionamento VARIAÇÃO/SKU ↔ PEDIDO (N:N)**
 
+Um pedido pode conter várias variações, e uma variação pode aparecer em vários pedidos. O relacionamento carrega os seguintes atributos:
 
-
+| Atributo       | Descrição                | Regra de negócio associada                                              |
+| -------------- | --------------------------- | ---------------------------------------------------------------------------- |
+| quantidade     | Quantidade solicitada    | Deve ser maior que zero                                                 |
+| preco_unitario | Preço unitário aplicado  | Deve considerar o tipo de venda e permanecer inalterado após a venda   |
 
 ---
+
 
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
 <!-- *(vale 7,5% na dimensão conceitual)* -->
@@ -439,19 +436,13 @@ A entidade PREÇO armazena os valores praticados nas vendas de atacado e varejo,
 
 ## 6.2 Produtos e estoques
 
-**VARIAÇÃO/SKU ↔ ITEM DE ESTOQUE**
+**VARIAÇÃO/SKU ↔ ESTOQUE**
 
-Uma variação/SKU pode possuir nenhum ou vários registros de item de estoque.
+Uma variação/SKU pode estar presente em nenhum, um ou vários estoques.
 
-Cada item de estoque está relacionado a uma única variação/SKU.
+Um estoque pode conter nenhuma, uma ou várias variações/SKU.
 
-Essa estrutura permite que uma mesma variação seja armazenada em diferentes estoques, mantendo registros independentes para cada local.
-
-**ITEM DE ESTOQUE ↔ ESTOQUE**
-
-Cada item de estoque pertence a um único estoque.
-
-Um estoque pode possuir nenhum ou vários itens de estoque.
+Essa relação é do tipo N:N e carrega o atributo quantidade, representando o saldo daquela variação especificamente naquele estoque.
 
 Os estoques considerados no modelo são:
 
@@ -499,45 +490,27 @@ Nesse caso, a movimentação registra a alteração da quantidade do SKU X relac
 
 ## 6.4 Produção
 
-**VARIAÇÃO/SKU ↔ ITEM DA PRODUÇÃO**
+**VARIAÇÃO/SKU ↔ ORDEM DE PRODUÇÃO**
 
-Uma variação/SKU pode aparecer em nenhum ou vários itens de produção.
+Uma variação/SKU pode ser produzida em nenhuma, uma ou várias ordens de produção.
 
-Cada item da produção corresponde a uma única variação/SKU.
+Uma ordem de produção pode produzir uma ou várias variações/SKU.
 
-O item da produção registra a quantidade produzida daquela variação.
-
-**ITEM DA PRODUÇÃO ↔ ORDEM DE PRODUÇÃO**
-
-Cada item da produção pertence a uma única ordem de produção.
-
-Uma ordem de produção possui um ou vários itens de produção.
-
-Essa estrutura permite que uma mesma ordem de produção registre diferentes variações/SKUs e suas respectivas quantidades.
+Essa relação é do tipo N:N e carrega o atributo quantidade, representando a quantidade produzida daquela variação naquela ordem.
 
 Portanto:
 
-> ORDEM DE PRODUÇÃO → ITEM DA PRODUÇÃO → VARIAÇÃO/SKU
+> ORDEM DE PRODUÇÃO ↔ VARIAÇÃO/SKU (relação N:N, com a quantidade produzida registrada no próprio relacionamento)
 
 ## 6.5 Clientes e pedidos
 
-**VARIAÇÃO/SKU ↔ ITEM DO PEDIDO**
+**VARIAÇÃO/SKU ↔ PEDIDO**
 
-Uma variação/SKU pode aparecer em nenhum ou vários itens de pedidos.
+Uma variação/SKU pode aparecer em nenhum ou vários pedidos.
 
-Cada item do pedido corresponde a uma única variação/SKU.
+Um pedido pode conter uma ou várias variações/SKU.
 
-Essa relação permite registrar quais produtos foram comercializados em cada pedido.
-
-**ITEM DO PEDIDO ↔ PEDIDO**
-
-Cada item do pedido pertence a um único pedido.
-
-Um pedido possui um ou vários itens do pedido.
-
-Cada item registra a quantidade e o preço unitário aplicado na venda.
-
-Dessa forma, o pedido pode conter diferentes produtos e quantidades.
+Essa relação é do tipo N:N e carrega os atributos quantidade e preço unitário aplicado na venda, permitindo que um mesmo pedido contenha diferentes produtos e quantidades, com o preço praticado no momento da venda preservado mesmo que o cadastro de preços seja atualizado posteriormente.
 
 **PEDIDO ↔ CLIENTE**
 
@@ -549,7 +522,7 @@ Essa relação permite manter o histórico de compras de cada cliente e associar
 
 Assim:
 
-> CLIENTE → PEDIDO → ITEM DO PEDIDO → VARIAÇÃO/SKU
+> CLIENTE → PEDIDO ↔ VARIAÇÃO/SKU (relação N:N)
 
 Exemplo:
 
@@ -576,21 +549,16 @@ A estrutura apresentada no DER relaciona as entidades da seguinte forma:
                            ▼           ▼
                       VARIAÇÃO/SKU    PREÇO
                     /    │    │    \
-                  0:N   0:N  0:N   0:N
+                  0:N   N:N  N:N   N:N
                  /       │    │       \
                 ▼        ▼    ▼        ▼
-      MOVIMENTAÇÃO   ITEM DE  ITEM DA  ITEM DO
-          DE         ESTOQUE  PRODUÇÃO  PEDIDO
-        ESTOQUE         │       │         │
-           \           1:1     1:1       1:1
-            0:1         │       │         │
-                \       ▼       ▼         ▼
-                  ▶ ESTOQUE  ORDEM DE  PEDIDO
-                              PRODUÇÃO     │
-                                          1:1
-                                           │
-                                           ▼
-                                        CLIENTE
+      MOVIMENTAÇÃO   ESTOQUE ORDEM DE  PEDIDO
+          DE                 PRODUÇÃO     │
+        ESTOQUE                          1:N
+           \                              │
+            0:1                          ▼
+                \                     CLIENTE
+                  ▶ ESTOQUE
 ```
 
 O modelo separa os dados de produtos, variações, preços, estoques, movimentações, produção e vendas, permitindo representar os principais processos identificados na organização.
@@ -629,17 +597,17 @@ A entidade **PRODUTO/MODELO** representa o modelo comercial da peça e funciona 
 
 A entidade **PREÇO** foi separada de **PRODUTO/MODELO** para representar os valores de venda de atacado e varejo. A relação `1:1` foi adotada porque, no modelo proposto, cada produto/modelo possui um registro de preço com os valores correspondentes aos diferentes tipos de venda.
 
-Para o controle de estoque, foi utilizada a entidade **ITEM DE ESTOQUE** entre **VARIAÇÃO/SKU** e **ESTOQUE**. Essa escolha permite que uma mesma variação seja armazenada em diferentes estoques, como geral, feira, online e defeitão, mantendo quantidades independentes para cada local. Assim, evita-se armazenar diretamente uma única quantidade na entidade ESTOQUE, o que não representaria corretamente a situação observada na organização.
+Para o controle de estoque, foi adotado um relacionamento `N:N` entre **VARIAÇÃO/SKU** e **ESTOQUE**. Essa escolha permite que uma mesma variação seja armazenada em diferentes estoques, como geral, feira, online e defeitão, mantendo quantidades independentes para cada local. A quantidade disponível é armazenada como atributo do próprio relacionamento, evitando concentrar uma única quantidade na entidade ESTOQUE, o que não representaria corretamente a situação observada na organização.
 
 A entidade **MOVIMENTAÇÃO DE ESTOQUE** foi criada para registrar alterações nas quantidades armazenadas. Ela está relacionada às variações/SKUs e aos estoques, permitindo representar entradas, saídas e transferências de produtos. Essa estrutura também possibilita manter um histórico das movimentações realizadas.
 
-Na produção, **ORDEM DE PRODUÇÃO** e **ITEM DA PRODUÇÃO** foram separadas porque uma mesma ordem pode envolver diferentes variações de produtos e respectivas quantidades. Dessa forma, a relação `1:N` entre ordem e itens permite registrar, em uma única ordem, diferentes combinações de modelo, cor e tamanho.
+Na produção, foi adotado um relacionamento `N:N` entre **ORDEM DE PRODUÇÃO** e **VARIAÇÃO/SKU**, porque uma mesma ordem pode envolver diferentes variações de produtos e respectivas quantidades, e uma mesma variação pode ser produzida em mais de uma ordem. A quantidade produzida é armazenada como atributo do próprio relacionamento, permitindo registrar, em uma única ordem, diferentes combinações de modelo, cor e tamanho.
 
-Para as vendas, foram utilizadas as entidades **CLIENTE**, **PEDIDO** e **ITEM DO PEDIDO**. Um cliente pode realizar nenhum ou vários pedidos, enquanto cada pedido está associado a um único cliente. Um pedido pode possuir vários itens, e cada item representa uma determinada variação/SKU, quantidade e preço unitário. A separação entre pedido e seus itens permite registrar diferentes produtos dentro de uma mesma venda.
+Para as vendas, foram utilizadas as entidades **CLIENTE** e **PEDIDO**, relacionadas a **VARIAÇÃO/SKU** por um relacionamento `N:N`. Um cliente pode realizar nenhum ou vários pedidos, enquanto cada pedido está associado a um único cliente. Um pedido pode conter várias variações, e uma mesma variação pode aparecer em vários pedidos; a quantidade solicitada é armazenada como atributo do próprio relacionamento entre PEDIDO e VARIAÇÃO/SKU, permitindo registrar diferentes produtos dentro de uma mesma venda.
 
-A entidade **ITEM DO PEDIDO** também armazena o preço unitário aplicado no momento da venda. Essa decisão evita que alterações futuras no cadastro de preços modifiquem o valor histórico de pedidos já realizados.
+O relacionamento entre **PEDIDO** e **VARIAÇÃO/SKU** também armazena o preço unitário aplicado no momento da venda. Essa decisão evita que alterações futuras no cadastro de preços modifiquem o valor histórico de pedidos já realizados.
 
-As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode existir sem ainda possuir registros relacionados, enquanto `1:N` representa uma relação obrigatória com possibilidade de múltiplos registros. As cardinalidades `1:1` foram utilizadas quando cada ocorrência de uma entidade está diretamente relacionada a uma única ocorrência da outra entidade, conforme as regras identificadas no levantamento.
+As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode existir sem ainda possuir registros relacionados, enquanto `1:N` representa uma relação obrigatória com possibilidade de múltiplos registros. O `N:N` foi utilizado entre VARIAÇÃO/SKU e ESTOQUE, ORDEM DE PRODUÇÃO e PEDIDO, situações em que ambas as entidades podem se associar a várias ocorrências da outra, com os dados específicos de cada associação armazenados no próprio relacionamento. As cardinalidades `1:1` foram utilizadas quando cada ocorrência de uma entidade está diretamente relacionada a uma única ocorrência da outra entidade, conforme as regras identificadas no levantamento.
 
 O modelo também foi estruturado considerando a possibilidade de expansão do sistema nas próximas etapas do projeto. A separação entre modelos, variações, estoques, movimentações, produção, clientes e pedidos reduz a duplicação de informações e permite que novos registros sejam incorporados sem alterar a estrutura básica das entidades existentes.
 
