@@ -79,10 +79,9 @@ https://www.instagram.com/namiebrasil/
 *A empresa está localizada no bairro do Brás, em São Paulo – SP. Informações públicas de cadastro empresarial indicam a sede na Rua Piratininga, 514, conjunto 500, Brás, São Paulo – SP, CEP 03042-000.
 Porém, possui 3 lojas físicas.
 
-Vale Ressaltar que Anthony Werick, membro do grupo, trabalha na empresa e foi por meio dele que conseguimos contato com a mesma.
-Contato disponibilizado:
+Vale Ressaltar que Anthony Werick, ex-membro do grupo (acabou fazendo transferencia de matricula para EAD), trabalha na empresa e foi por meio dele que conseguimos contato com a mesma.
 namiebrasil@gmail.com
-<!-- 11971675752 -->
+
 
 ---
 
@@ -93,93 +92,266 @@ namiebrasil@gmail.com
   
 *A produção inicia-se com a definição do modelo e do tecido pela diretoria. Após verificar a disponibilidade da matéria-prima, o tecido é adquirido quando necessário. Em seguida, o material passa pelas etapas de corte, costura, lavanderia e acabamento, todas realizadas pela própria fábrica. No acabamento são aplicados itens como botões, etiquetas, tags e demais aviamentos. Após a conclusão, as peças são encaminhadas à expedição, que registra a produção e realiza a entrada dos produtos acabados no estoque.*
   
-*Após a conclusão da produção, os produtos acabados são encaminhados à expedição, que registra sua entrada no estoque. O estoque geral é utilizado como principal estoque de produtos acabados e pode abastecer o estoque destinado à feira. Quando necessário, ocorre uma transferência do estoque geral para o estoque da feira, atualmente realizada por meio de planilhas.
-O estoque destinado às vendas online é controlado separadamente pelo Bling ERP. Dessa forma, os estoques geral, feira e online possuem controles distintos.
-Peças que apresentam defeitos, são perdidas, utilizadas como amostras ou retornam da feira são destinadas ao “defeitão”, não sendo consideradas no estoque normal. Já devoluções de vendas online que retornam sem danos podem voltar ao estoque online por meio do processo automatizado do Bling.*
+### 2.1 Grupo Vendas
+1. **Venda no Atacado (Feira da Madrugada e WhatsApp):**
+   - *Descrição:* Atendimento a revendedoras e lojistas que compram para revenda. O cliente escolhe as peças especificando modelo, cor e tamanho. O sistema valida se a quantidade total atinge o lote mínimo exigido para atacado (RN13) e se há saldo disponível no estoque do canal de venda (RN05). Aplica-se o preço de atacado tabelado (RN06). O pedido é registrado com status inicial e segue para conferência de pagamento e separação.
+   - *Dados envolvidos:* ID do pedido, data/hora, ID do cliente (revendedora), canal ('Atacado Feira' ou 'Atacado WhatsApp'), lista de itens (SKU, quantidade, preço unitário de atacado), valor total e status do pedido.
 
-*As vendas no atacado são realizadas presencialmente nos pontos de venda, principalmente na Feira da Madrugada, ou de forma online por meio do WhatsApp. O público principal é composto por revendedoras e outros clientes que adquirem produtos para revenda, embora também possam ocorrer vendas para consumidores finais.
-O cliente informa os produtos desejados, identificados principalmente por modelo, cor e tamanho. Após a definição dos produtos e quantidades, é aplicado o preço de atacado e o pedido é realizado.
-Atualmente, os pedidos de atacado não possuem o mesmo nível de estruturação das vendas online. As informações são tratadas principalmente por meio do atendimento e dos controles internos da empresa.
-Após a venda, os produtos são separados e o estoque correspondente é atualizado. Na feira, essa baixa pode ocorrer imediatamente ou posteriormente, o que pode contribuir para divergências entre o estoque registrado e o estoque físico.*
+2. **Venda no Varejo (Site Oficial e Marketplaces):**
+   - *Descrição:* Compra realizada pelo consumidor final por meio da loja virtual ou marketplaces integrados. A consulta de saldo é realizada exclusivamente no Estoque Online. O cliente seleciona os itens por variação (SKU/EAN-13), calcula o frete e realiza o checkout com preço de varejo. O pedido é registrado com status "Aguardando Pagamento".
+   - *Dados envolvidos:* ID do pedido, data/hora, canal ('Site' ou 'Marketplace'), ID do cliente, itens do pedido (SKU, quantidade, preço unitário de varejo), endereço de entrega, valor do frete e valor total.
 
-*As vendas no varejo são realizadas por meio do site da empresa e de marketplaces. Quando o cliente realiza uma compra, o pedido é registrado no Bling ERP, que também realiza o controle do estoque destinado às vendas online.
-O produto é identificado de forma mais precisa por meio do SKU ou EAN-13. Após o registro do pedido, o produto disponível é separado para expedição e posteriormente enviado ao cliente.
-O estoque online é controlado separadamente dos demais estoques. Em caso de devolução de uma peça sem danos, o produto pode retornar ao estoque online, com a entrada sendo realizada automaticamente pelo Bling.*
+3. **Cadastro de Clientes e Revendedoras:**
+   - *Descrição:* Coleta e validação cadastral antes do faturamento do primeiro pedido. O sistema diferencia perfis entre "Consumidor Final" (varejo) e "Revendedora/Lojista" (atacado). São exigidos dados fiscais e de contato obrigatórios. Em conformidade com a LGPD (RN17 / RO06), os dados são protegidos e podem ser anonimizados mediante solicitação, mantendo o histórico fiscal.
+   - *Dados envolvidos:* ID do cliente, tipo de cliente ('Consumidor Final' ou 'Revendedor'), nome/razão social, CPF ou CNPJ (único e validado), telefone, e-mail, status de crédito e endereço completo (logradouro, número, complemento, bairro, cidade, UF, CEP).
 
+4. **Recebimento e Pagamento das Vendas:**
+   - *Descrição:* Processamento financeiro do pedido. No varejo online, o recebimento ocorre via gateway (cartão de crédito com autorização imediata, Pix com liquidação instantânea ou boleto bancário compensado). No atacado presencial/WhatsApp, o pagamento é feito à vista (Pix, dinheiro ou cartão). A venda a prazo (boleto faturado ou parcelado em até 3x) é autorizada exclusivamente para revendedoras previamente cadastradas com análise de crédito aprovada pela gerência (RN14).
+   - *Dados envolvidos:* ID do pagamento/parcela, ID do pedido, valor da parcela, forma de pagamento ('Pix', 'Cartao_Credito', 'Cartao_Debito', 'Boleto', 'Dinheiro'), data de vencimento, data de liquidação e situação ('Pendente', 'Pago', 'Cancelado').
+
+5. **Separação, Emissão de Nota Fiscal e Expedição:**
+   - *Descrição:* Após a confirmação do pagamento (ou liberação de prazo pela gerência), o pedido entra em separação (picking) no estoque físico correspondente (Online, Feira ou Geral). É emitida a Nota Fiscal Eletrônica (NF-e/NFC-e) vinculada ao pedido (RN15 / RO04). Com a emissão fiscal, é efetuada a baixa definitiva de estoque. A mercadoria é embalada e despachada para retirada presencial ou entrega via Correios/transportadora com código de rastreio.
+   - *Dados envolvidos:* ID da nota fiscal, ID do pedido, número da NF, série, chave de acesso (44 dígitos), data de emissão, valor fiscal, código de rastreio, transportadora e data de envio.
+
+6. **Devoluções e Trocas (Online e Presencial):**
+   - *Descrição:* Atendimento pós-venda. No e-commerce, o consumidor possui direito de arrependimento de até 7 dias corridos após a entrega confirmada (RN16 / RO05) ou devolução por defeito no prazo de garantia. No atacado/feira, trocas ocorrem apenas mediante autorização da gerência por defeito de fábrica comprovado. As peças devolvidas passam por inspeção: peças perfeitas retornam ao estoque comercializável (RN11), enquanto peças avariadas ou com vício são destinadas ao "Defeitão" (RN10).
+   - *Dados envolvidos:* ID da devolução, ID do pedido original, SKU, quantidade, motivo da devolução, condição da peça ('Perfeita' ou 'Defeituosa'), data da solicitação, data de entrega do pedido e estoque de destino ('Online' ou 'Defeitão').
+
+### 2.2 Grupo Compras e Suprimentos
+7. **Compra de Matéria-Prima (Tecidos e Aviamentos):**
+   - *Descrição:* Aquisição de insumos necessários para a fabricação (rolos de tecido jeans denim, sarja, botões de latão, zíperes de metal, rebites, linhas de pesponto, tags de marca e etiquetas de composição). O almoxarife/comprador emite a Ordem de Compra vinculada a um fornecedor homologado. Na entrega, o material é conferido fisicamente contra o documento fiscal (DANFE) e gera a entrada no estoque de matérias-primas e o lançamento em Contas a Pagar.
+   - *Dados envolvidos:* ID da compra, ID do fornecedor, número do documento fiscal, data da compra, data de entrega, itens de insumo (ID do insumo, unidade de medida, quantidade comprada, valor unitário) e valor total.
+
+8. **Cadastro e Gestão de Fornecedores:**
+   - *Descrição:* Homologação de parceiros comerciais de suprimentos. Registra empresas fornecedoras de tecidos planos, aviamentos metálicos, químicos para lavanderia e embalagens. Permite acompanhar histórico de compras e condições de fornecimento.
+   - *Dados envolvidos:* ID do fornecedor, razão social, nome fantasia, CNPJ (único e validado), inscrição estadual, telefone, e-mail do setor comercial, contato do representante e endereço completo.
+
+9. **Contas a Pagar:**
+   - *Descrição:* Controle financeiro dos compromissos da confecção originados das compras de insumos e matérias-primas. Cada compra faturada gera um ou mais títulos a pagar com vencimentos predefinidos. O setor financeiro realiza o acompanhamento diário, efetua o pagamento na data acordada e registra a quitação.
+   - *Dados envolvidos:* ID do título a pagar, ID da compra, ID do fornecedor, valor da obrigação, data de emissão, data de vencimento, data de pagamento efetivo, forma de pagamento e status ('Aberto', 'Liquidado', 'Vencido').
+
+### 2.3 Grupo Produção
+10. **Produção Própria (Corte, Costura, Lavanderia e Acabamento):**
+    - *Descrição:* A diretoria define os modelos da coleção. Após confirmação da disponibilidade de tecido e aviamentos, abre-se uma Ordem de Produção (OP) discriminando os SKUs e quantidades a produzir. As etapas ocorrem 100% na fábrica própria: enfestamento e corte do tecido, montagem e costura nas máquinas industriais, lavanderia e estonagem, e acabamento (caseamento, aplicação de botões/rebites, etiquetagem e passadoria). As peças aprovadas no controle de qualidade são enviadas à expedição para entrada no Estoque Geral (RN08 / RN09).
+    - *Dados envolvidos:* ID da ordem de produção, data de início, data de previsão, data de término, status da OP ('Planejada', 'Em Corte', 'Em Costura', 'Em Lavanderia', 'Em Acabamento', 'Concluída'), itens produzidos (SKU e quantidade aprovada).
+
+### 2.4 Grupo Apoio e Estoque
+11. **Controle de Estoque e Transferência entre Locais:**
+    - *Descrição:* Gestão física e lógica dos saldos de cada SKU nos 4 estoques da empresa: Estoque Geral (Fábrica), Estoque Feira (Ponto de venda físico), Estoque Online (E-commerce) e Estoque Defeitão. Quando a feira ou o e-commerce precisam de reposição, realiza-se uma Transferência formal, abatendo a quantidade do Estoque Geral de origem e somando ao estoque de destino de forma atômica (RN03 / RN04). O sistema monitora o ponto de pedido através do Estoque Mínimo por SKU (RN12).
+    - *Dados envolvidos:* ID da movimentação, tipo ('Entrada', 'Saída', 'Transferência'), SKU, ID do estoque de origem, ID do estoque de destino, quantidade movimentada, data/hora do registro e usuário responsável.
+
+12. **Tratamento de Defeitos ("Defeitão"):**
+    - *Descrição:* Segregação obrigatória de peças com avarias de corte/costura, manchas irreversíveis de lavanderia, peças danificadas no manuseio da feira ou produtos devolvidos com dano pelo cliente. Essas peças são retiradas do estoque vendável e alocadas no estoque "Defeitão", impedindo sua comercialização nos canais regulares e viabilizando eventual descarte, reaproveitamento ou venda em bazares de peças não conformes (RN10).
+    - *Dados envolvidos:* ID da movimentação, SKU, quantidade avariada, motivo do defeito, data de descarte/segregação e estoque destino ('Defeitão').
   
 - **Fluxogramas:** 
 ### 2.1 Produção de peças
 
 Os fluxogramas representam os processos observados durante o levantamento e a forma como esses processos poderão ser organizados e controlados pelo sistema proposto.
 
+#### 2.1 Produção de Peças
 ```mermaid
-  flowchart TD
-    A([Início]) --> B[Definição do modelo e tecido]
-    B --> C[Verificar disponibilidade da matéria-prima]
-    C --> D{Matéria-prima disponível?}
-    D -- Não --> E[Comprar tecido]
-    E --> F[Corte]
+flowchart TD
+    A([Início]) --> B[Definição de modelo e coleção pela diretoria]
+    B --> C[Verificar saldo de tecido e aviamentos]
+    C --> D{Matéria-prima suficiente?}
+    D -- Não --> E[Disparar processo de Compra de Insumos]
+    E --> F[Abertura da Ordem de Produção - OP]
     D -- Sim --> F
-    F --> G[Costura]
-    G --> H[Lavanderia]
-    H --> I[Acabamento]
-    I --> J[Expedição]
-    J --> K[Registrar produção]
-    K --> L[Entrada no estoque]
+    F --> G[Enfestamento e Corte]
+    G --> H[Costura e Montagem]
+    H --> I[Lavanderia e Tingimento]
+    I --> J[Acabamento: Botões, Tags e Etiquetas]
+    J --> K{Inspeção de Qualidade aprovada?}
+    K -- Não --> L[Direcionar peças com vício ao Defeitão]
+    K -- Sim --> M[Expedição: Conferência final do lote]
+    L --> M
+    M --> N[Registrar entrada de produtos no Estoque Geral]
+    N --> O([Fim])
+```
+
+#### 2.2 Abastecimento e Transferência de Estoque
+```mermaid
+flowchart TD
+    A([Início]) --> B[Entrada de peças acabadas no Estoque Geral]
+    B --> C{Demanda de reposição identificada?}
+    C -- Não --> D[Manter saldo no Estoque Geral]
+    D --> Z([Fim])
+    C -- Sim --> E{Qual o destino do abastecimento?}
+    E -- Feira da Madrugada --> F[Registrar transferência: Geral -> Feira]
+    E -- Vendas Online --> G[Registrar transferência: Geral -> Online]
+    F --> H[Atualizar saldos nos estoques e registrar log de movimentação]
+    G --> H
+    H --> Z
+```
+
+#### 2.3 Tratamento de Defeitos e Peças Não Conformes ("Defeitão")
+```mermaid
+flowchart TD
+    A([Início]) --> B[Identificação de peça com defeito/avaria/mostruário]
+    B --> C{Origem da não conformidade?}
+    C -- Chão de Fábrica --> D[Registrar perda no encerramento da OP]
+    C -- Retorno da Feira --> E[Registrar retorno de peça avariada da Feira]
+    C -- Devolução com dano --> F[Registrar laudo de devolução com avaria]
+    D --> G[Transferir/Lançar saldo no Estoque Defeitão]
+    E --> G
+    F --> G
+    G --> H[Bloquear para venda nos canais normais]
+    H --> I([Fim])
+```
+
+#### 2.4 Venda no Atacado (Feira e WhatsApp)
+```mermaid
+flowchart TD
+    A([Início]) --> B[Revendedora/Lojista solicita pedido]
+    B --> C[Identificar itens por modelo, cor e tamanho]
+    C --> D{Quantidade total >= Pedido Mínimo Atacado?}
+    D -- Não --> E[Informar exigência de lote mínimo de atacado]
+    E --> Z([Fim])
+    D -- Sim --> F[Verificar saldo no estoque do canal]
+    F --> G{Saldo suficiente?}
+    G -- Não --> H[Informar itens indisponíveis ao cliente]
+    H --> Z
+    G -- Sim --> I[Aplicar tabela de Preço de Atacado]
+    I --> J[Registrar Pedido de Venda Atacado]
+    J --> K[Encaminhar para Recebimento/Pagamento]
+    K --> Z
+```
+
+#### 2.5 Venda no Varejo (Site e Marketplaces)
+```mermaid
+flowchart TD
+    A([Início]) --> B[Cliente realiza pedido na loja virtual ou marketplace]
+    B --> C[Identificação do item por SKU/EAN-13]
+    C --> D[Verificar saldo em tempo real no Estoque Online]
+    D --> E{Saldo disponível?}
+    E -- Não --> F[Indisponibilidade / Bloqueio no checkout]
+    F --> Z([Fim])
+    E -- Sim --> G[Aplicar Preço de Varejo e calcular frete]
+    G --> H[Registrar Pedido de Varejo]
+    H --> I[Encaminhar para processamento de pagamento online]
+    I --> Z
+```
+
+#### 2.6 Cadastro de Clientes e Revendedoras
+```mermaid
+flowchart TD
+    A([Início]) --> B[Cliente solicita cadastro para compra]
+    B --> C{Cliente já cadastrado na base?}
+    C -- Sim --> D[Validar e atualizar dados de contato e endereço]
+    D --> J[Liberar para realização do pedido]
+    C -- Não --> E[Coletar: Nome/Razão Social, CPF/CNPJ, Telefone, E-mail e Endereço]
+    E --> F{CPF ou CNPJ válido e não duplicado?}
+    F -- Não --> G[Solicitar correção dos dados cadastrais]
+    G --> E
+    F -- Sim --> H[Classificar perfil: Consumidor Final ou Revendedor]
+    H --> I[Salvar cadastro conforme normas da LGPD]
+    I --> J
+    J --> K([Fim])
+```
+
+#### 2.7 Recebimento e Pagamento das Vendas
+```mermaid
+flowchart TD
+    A([Início]) --> B[Pedido de Venda Registrado]
+    B --> C{Qual o canal de venda?}
+    C -- Varejo Online --> D[Processar gateway: Cartão, Pix ou Boleto]
+    D --> E{Pagamento compensado?}
+    E -- Não --> F[Aguardar prazo ou cancelar por falta de pagamento]
+    F --> Z([Fim])
+    E -- Sim --> G[Atualizar status do pedido para 'Pago']
+    C -- Atacado --> H{Modalidade de pagamento?}
+    H -- À Vista --> I[Receber via Pix, Dinheiro ou Cartão]
+    I --> G
+    H -- A Prazo / Faturado --> J{Revendedora homologada com crédito aprovado?}
+    J -- Não --> K[Exigir quitação à vista para faturar]
+    K --> I
+    J -- Sim --> L[Gerar parcelas com valores e datas de vencimento]
+    L --> M[Acompanhar quitação dos títulos até liquidação]
+    M --> G
+    G --> N[Liberar pedido para Separação e Emissão de NF]
+    N --> Z
+```
+
+#### 2.8 Separação, Emissão de Nota Fiscal e Expedição
+```mermaid
+flowchart TD
+    A([Início]) --> B[Pedido com pagamento aprovado ou faturado]
+    B --> C[Emitir Nota Fiscal Eletrônica - NF-e / NFC-e]
+    C --> D[Separar peças físicas no estoque do canal]
+    D --> E[Realizar baixa definitiva no saldo do estoque correspondente]
+    E --> F{Modalidade de entrega?}
+    F -- Retirada no Ponto de Venda --> G[Entregar mercadoria e colher assinatura]
+    F -- Envio Correios / Transportadora --> H[Embalar, etiquetar e gerar código de rastreamento]
+    H --> I[Despachar mercadoria com a transportadora]
+    G --> J[Registrar data e hora de saída do pedido]
+    I --> J
+    J --> K([Fim])
+```
+
+#### 2.9 Devoluções e Direito de Arrependimento (CDC)
+```mermaid
+flowchart TD
+    A([Início]) --> B[Cliente solicita devolução ou troca]
+    B --> C{Pedido originado no e-commerce/online?}
+    C -- Sim --> D{Data da solicitação <= 7 dias da entrega?}
+    D -- Sim --> E[Aprovar devolução com base no Direito de Arrependimento - CDC Art. 49]
+    D -- Não --> F[Avaliar solicitação apenas se houver vício/defeito de fábrica]
+    C -- Não: Atacado/Feira --> G[Submeter análise de defeito à gerência]
+    E --> H[Receber mercadoria devolvida na expedição]
+    F --> H
+    G --> H
+    H --> I{Peça íntegra e sem uso?}
+    I -- Sim --> J[Registrar reentrada no Estoque Online]
+    I -- Não --> K[Direcionar produto para o Estoque Defeitão]
+    J --> L[Processar estorno ou crédito ao cliente]
+    K --> L
     L --> M([Fim])
 ```
 
-
-### 2.2 Abastecimento e movimentação de estoque
-
+#### 2.10 Cadastro e Gestão de Fornecedores
 ```mermaid
-  flowchart TD
-    A([Início]) --> B[Produto acabado recebido pela expedição]
-    B --> C[Registrar entrada no estoque geral]
-    C --> D{Necessidade de abastecimento?}
-    D -- Não --> E([Fim])
-    D -- Sim --> F{Destino é a feira?}
-    F -- Sim --> G[Transferir para estoque da feira]
-    F -- Não --> H[Disponibilizar para venda online]
-    G --> I[Atualizar estoque correspondente]
-    H --> I
-    I --> E
+flowchart TD
+    A([Início]) --> B[Necessidade de homologação de fornecedor]
+    B --> C[Coletar Razão Social, Nome Fantasia, CNPJ, IE, E-mail, Telefone e Endereço]
+    C --> D{CNPJ regular e validado na Receita?}
+    D -- Não --> E[Solicitar regularização de dados cadastrais]
+    E --> C
+    D -- Sim --> F[Classificar insumos fornecidos: Tecidos, Aviamentos, Químicos ou Embalagens]
+    F --> G[Cadastrar fornecedor na base ativa]
+    G --> H([Fim])
 ```
 
-### 2.3 Venda no atacado
-
+#### 2.11 Compra de Matéria-Prima (Tecidos e Aviamentos)
 ```mermaid
-  flowchart TD
-    A([Início]) --> B[Cliente solicita produtos]
-    B --> C[Identificar modelo, cor e tamanho]
-    C --> D[Verificar disponibilidade]
-    D --> E{Produto disponível?}
-    E -- Não --> F[Informar indisponibilidade]
-    F --> G([Fim])
-    E -- Sim --> H[Definir preço de atacado]
-    H --> I[Registrar pedido]
-    I --> J[Separar produtos]
-    J --> K[Entregar ao cliente]
-    K --> L[Baixar estoque]
-    L --> G
+flowchart TD
+    A([Início]) --> B[Alerta de estoque baixo de insumos ou demanda de nova OP]
+    B --> C[Consultar fornecedores homologados]
+    C --> D[Emitir Ordem de Compra com insumos, quantidades e preços unitários]
+    D --> E[Aguardar entrega física dos materiais na fábrica]
+    E --> F[Conferir materiais recebidos contra a Nota Fiscal do Fornecedor]
+    F --> G{Materiais conferem com o pedido?}
+    G -- Não --> H[Registrar divergência e devolver/ajustar lote]
+    H --> E
+    G -- Sim --> I[Registrar entrada dos insumos no Almoxarifado]
+    I --> J[Gerar título no módulo de Contas a Pagar]
+    J --> K([Fim])
 ```
 
-### 2.4 Venda no varejo
-
+#### 2.12 Gestão de Contas a Pagar
 ```mermaid
-  flowchart TD
-    A([Início]) --> B[Cliente realiza compra no site ou marketplace]
-    B --> C[Pedido registrado no Bling]
-    C --> D[Verificar estoque online]
-    D --> E{Produto disponível?}
-    E -- Não --> F[Informar indisponibilidade]
-    F --> G([Fim])
-    E -- Sim --> H[Separar produto]
-    H --> I[Expedição]
-    I --> J[Enviar ao cliente]
-    J --> K[Atualizar estoque]
-    K --> G
+flowchart TD
+    A([Início]) --> B[Título a pagar gerado pela compra de matéria-prima]
+    B --> C[Registrar fornecedor, valor, vencimento e número do documento fiscal]
+    C --> D[Acompanhar cronograma de vencimentos no fluxo de caixa]
+    D --> E{Data de vencimento atingida?}
+    E -- Não --> D
+    E -- Sim --> F[Setor financeiro efetua o pagamento bancário]
+    F --> G[Registrar data de quitação e comprovante]
+    G --> H[Atualizar status do título para 'Liquidado']
+    H --> I([Fim])
 ```
+
 ---
 ## 3. Requisitos do Sistema
 <!-- *(esta seção e a Seção 4 "Regras de Negócio" DIVIDEM 7,5% na dimensão conceitual — juntas valem 7,5%, não 7,5% cada — + 4% exclusivos desta seção na organização/documentação)* -->
