@@ -403,7 +403,7 @@ tbody tr:last-child td{border-bottom:none;}
     <h1>Dicionário de Dados Conceitual</h1>
     <p class="masthead-sub">Namiê Brasil — confecção com produção, controle de estoque e comercialização de produtos.</p>
     <dl class="masthead-meta">
-      <div><dt>Autores</dt><dd>Anthony Werick<br> Gustavo Batista<br> Lucas Fortes <br> Victor Alves<br> Vinicius Passos</dd></div>
+      <div><dt>Autores</dt><dd>Felipe Piazza<br> Lucas Fortes<br> Vinicius Passos</dd></div>
       <div><dt>Escopo</dt><dd>Catálogo, produção, estoque e vendas</dd></div>
       <div><dt>Nível</dt><dd>Conceitual (independente de SGBD)</dd></div>
     </dl>
@@ -556,6 +556,16 @@ tbody tr:last-child td{border-bottom:none;}
           <td>Classificação da coleção.</td>
           <td class="col-regra">Pode representar uma coleção normal, especial ou de linha permanente.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>ano_temporada</code></td>
+          <td>Ano ou temporada de referência da coleção.</td>
+          <td class="col-regra">Deve ser informado para associar a coleção à temporada em que foi desenvolvida (RF03, RN02).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cartela_cores</code></td>
+          <td>Paleta de cores que compõe a coleção.</td>
+          <td class="col-regra">Orienta a associação dos produtos à coleção (RF03, RN02).</td>
+        </tr>
           </tbody>
         </table>
       </div>
@@ -633,6 +643,11 @@ tbody tr:last-child td{border-bottom:none;}
           <td>Identificador do modelo ao qual a variação pertence.</td>
           <td class="col-regra">Toda variação deve estar associada a um único produto/modelo.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>estoque_minimo</code></td>
+          <td>Quantidade mínima desejada da variação no Estoque Geral.</td>
+          <td class="col-regra">Quando o saldo for menor ou igual ao mínimo, deve ser emitido alerta de reposição (RN12).</td>
+        </tr>
           </tbody>
         </table>
       </div>
@@ -703,6 +718,11 @@ tbody tr:last-child td{border-bottom:none;}
           <td class="col-regra">Deve registrar o início da ordem de produção.</td>
         </tr>
         <tr>
+          <td class="col-attr"><code>data_prevista</code></td>
+          <td>Data prevista para a conclusão da produção.</td>
+          <td class="col-regra">Deve permitir o acompanhamento de prazos da ordem (RF12).</td>
+        </tr>
+        <tr>
           <td class="col-attr"><code>data_fim</code></td>
           <td>Data em que a produção foi concluída.</td>
           <td class="col-regra">Deve ser preenchida quando a produção for finalizada e não pode ser anterior à data de início.</td>
@@ -710,7 +730,7 @@ tbody tr:last-child td{border-bottom:none;}
         <tr>
           <td class="col-attr"><code>status</code></td>
           <td>Situação atual da ordem de produção.</td>
-          <td class="col-regra">Deve representar, no mínimo, os estados aberta, em produção, concluída e cancelada.</td>
+          <td class="col-regra">Deve representar as etapas da ordem: planejada, em corte, em costura, em lavanderia, em acabamento e concluída.</td>
         </tr>
           </tbody>
         </table>
@@ -796,6 +816,11 @@ tbody tr:last-child td{border-bottom:none;}
           <td>Identificador da variação/SKU movimentada.</td>
           <td class="col-regra">Toda movimentação deve estar relacionada a uma variação específica.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>justificativa</code></td>
+          <td>Motivo ou observação da movimentação.</td>
+          <td class="col-regra">Deve ser informada para registrar a justificativa de entradas, saídas e ajustes (RF09).</td>
+        </tr>
           </tbody>
         </table>
       </div>
@@ -834,6 +859,61 @@ tbody tr:last-child td{border-bottom:none;}
           <td>Classificação do cliente.</td>
           <td class="col-regra">Deve diferenciar, no mínimo, revendedor/empresa e consumidor final.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>documento</code></td>
+          <td>CPF ou CNPJ do cliente.</td>
+          <td class="col-regra">Deve ser único e validado (RF04). Sujeito à proteção de dados e anonimização a pedido do titular (RN17).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>telefone</code></td>
+          <td>Telefone de contato do cliente.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>email</code></td>
+          <td>E-mail do cliente.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>status_credito</code></td>
+          <td>Situação de crédito do cliente.</td>
+          <td class="col-regra">Define se o cliente pode comprar a prazo; exclusivo de revendedoras homologadas pela gerência (RN14).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>logradouro</code></td>
+          <td>Logradouro do endereço.</td>
+          <td class="col-regra">Obrigatório (RF04).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero</code></td>
+          <td>Número do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>complemento</code></td>
+          <td>Complemento do endereço.</td>
+          <td class="col-regra">Opcional.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>bairro</code></td>
+          <td>Bairro do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cidade</code></td>
+          <td>Cidade do endereço.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>uf</code></td>
+          <td>Unidade federativa do endereço.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cep</code></td>
+          <td>CEP do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
           </tbody>
         </table>
       </div>
@@ -863,7 +943,22 @@ tbody tr:last-child td{border-bottom:none;}
         <tr>
           <td class="col-attr"><code>canal</code></td>
           <td>Canal utilizado para realização da venda.</td>
-          <td class="col-regra">Deve diferenciar atacado e varejo. Determina qual valor de preço é aplicado.</td>
+          <td class="col-regra">Deve diferenciar Atacado Feira, Atacado WhatsApp, Site e Marketplace (RF18). Determina se o preço aplicado é o de atacado ou o de varejo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>status</code></td>
+          <td>Situação atual do pedido.</td>
+          <td class="col-regra">Permite consultar os pedidos por situação (RF16).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_frete</code></td>
+          <td>Valor do frete cobrado no pedido.</td>
+          <td class="col-regra">Aplicável às vendas de varejo (RF06). Deve ser maior ou igual a zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_total</code></td>
+          <td>Valor total do pedido.</td>
+          <td class="col-regra">Deve ser recalculado a partir dos itens (RF07). Deve ser maior ou igual a zero.</td>
         </tr>
         <tr>
           <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td>
@@ -903,6 +998,18 @@ tbody tr:last-child td{border-bottom:none;}
           <span class="rule-num">04</span>
           <div>
             <strong>Obrigatoriedade da coleção.</strong> Produtos atemporais são vinculados a uma coleção de linha permanente, mantendo a obrigatoriedade do relacionamento e evitando ausência de vínculo.
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">05</span>
+          <div>
+            <strong>Estoque mínimo por variação.</strong> Cada variação/SKU possui uma quantidade mínima para o Estoque Geral (<code>estoque_minimo</code>); quando o saldo for menor ou igual a ela, deve ser emitido alerta de reposição (RN12).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">06</span>
+          <div>
+            <strong>Pedido mínimo no atacado.</strong> Pedidos dos canais de atacado (Feira e WhatsApp) devem respeitar a quantidade mínima total de peças definida pela gerência, condição para aplicação do preço de atacado (RN13).
           </div>
         </li>
       </ol>
