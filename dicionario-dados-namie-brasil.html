@@ -223,6 +223,7 @@ main{min-width:0;}
 .node-producao{stroke:var(--gold);}
 .node-estoque{stroke:var(--teal);}
 .node-comercial{stroke:var(--wine);}
+.node-compras{stroke:var(--teal);}
 .node-title{
   font-family:var(--serif);
   font-weight:600;
@@ -404,7 +405,7 @@ tbody tr:last-child td{border-bottom:none;}
     <p class="masthead-sub">Namiê Brasil — confecção com produção, controle de estoque e comercialização de produtos.</p>
     <dl class="masthead-meta">
       <div><dt>Autores</dt><dd>Felipe Piazza<br> Lucas Fortes<br> Vinicius Passos</dd></div>
-      <div><dt>Escopo</dt><dd>Catálogo, produção, estoque e vendas</dd></div>
+      <div><dt>Escopo</dt><dd>Catálogo, produção, estoque, vendas, compras e financeiro</dd></div>
       <div><dt>Nível</dt><dd>Conceitual (independente de SGBD)</dd></div>
     </dl>
   </div>
@@ -429,11 +430,15 @@ tbody tr:last-child td{border-bottom:none;}
         </li>
         <li class="toc-group">
           <span class="toc-domain">Estoque</span>
-          <ul><li><a href="#estoque" data-nav>Estoque</a></li><li><a href="#movimentacao" data-nav>Movimentação de Estoque</a></li></ul>
+          <ul><li><a href="#estoque" data-nav>Estoque</a></li><li><a href="#movimentacao" data-nav>Movimentação de Estoque</a></li><li><a href="#usuario" data-nav>Usuário</a></li></ul>
         </li>
         <li class="toc-group">
           <span class="toc-domain">Comercial</span>
-          <ul><li><a href="#cliente" data-nav>Cliente</a></li><li><a href="#pedido" data-nav>Pedido</a></li></ul>
+          <ul><li><a href="#cliente" data-nav>Cliente</a></li><li><a href="#pedido" data-nav>Pedido</a></li><li><a href="#pagamento" data-nav>Pagamento</a></li><li><a href="#nota_fiscal" data-nav>Nota Fiscal</a></li><li><a href="#devolucao" data-nav>Devolução</a></li></ul>
+        </li>
+        <li class="toc-group">
+          <span class="toc-domain">Compras e Financeiro</span>
+          <ul><li><a href="#fornecedor" data-nav>Fornecedor</a></li><li><a href="#insumo" data-nav>Insumo</a></li><li><a href="#compra" data-nav>Compra</a></li><li><a href="#conta_pagar" data-nav>Conta a Pagar</a></li></ul>
         </li>
         <li><a href="#regras" data-nav>Regras de negócio gerais</a></li>
         <li><a href="#relacionamentos" data-nav>Relacionamentos</a></li>
@@ -449,7 +454,7 @@ tbody tr:last-child td{border-bottom:none;}
 
     <section id="visao-geral" class="section">
       <h2 class="section-title"><span class="section-num">01</span>Visão geral do modelo</h2>
-      <p>O modelo é organizado em quatro domínios que conversam entre si ao longo do ciclo de vida de uma peça: o <strong>catálogo</strong> define o que pode existir; a <strong>produção</strong> e o <strong>catálogo</strong> alimentam o <strong>estoque</strong>; e o estoque sustenta o domínio <strong>comercial</strong>.</p>
+      <p>O modelo é organizado em cinco domínios que conversam entre si ao longo do ciclo de vida de uma peça: o <strong>catálogo</strong> define o que pode existir; a <strong>produção</strong> e o <strong>catálogo</strong> alimentam o <strong>estoque</strong>; e o estoque sustenta o domínio <strong>comercial</strong>; em paralelo, o domínio de <strong>compras</strong> controla o abastecimento de insumos e as obrigações financeiras com fornecedores.</p>
       <div class="diagram-card">
         
 <svg viewBox="0 0 960 300" role="img" aria-labelledby="diagTitle diagDesc" class="flow-svg">
@@ -482,15 +487,23 @@ tbody tr:last-child td{border-bottom:none;}
     <rect class="node node-estoque" width="190" height="80" rx="6"></rect>
     <text x="95" y="34" class="node-title">Estoque</text>
     <text x="95" y="54" class="node-sub">geral · feira · online · defeitão</text>
-    <text x="95" y="70" class="node-sub">movimentação</text>
+    <text x="95" y="70" class="node-sub">movimentação · usuário</text>
   </g>
 
   <!-- Comercial -->
   <g transform="translate(750,110)">
     <rect class="node node-comercial" width="190" height="80" rx="6"></rect>
     <text x="95" y="34" class="node-title">Comercial</text>
-    <text x="95" y="54" class="node-sub">cliente · pedido</text>
-    <text x="95" y="70" class="node-sub">(N:N com variação/SKU)</text>
+    <text x="95" y="54" class="node-sub">cliente · pedido · pagamento</text>
+    <text x="95" y="70" class="node-sub">nota fiscal · devolução</text>
+  </g>
+
+  <!-- Compras -->
+  <g transform="translate(750,210)">
+    <rect class="node node-compras" width="190" height="80" rx="6"></rect>
+    <text x="95" y="34" class="node-title">Compras</text>
+    <text x="95" y="54" class="node-sub">fornecedor · insumo · compra</text>
+    <text x="95" y="70" class="node-sub">conta a pagar</text>
   </g>
 
   <!-- setas -->
@@ -500,7 +513,7 @@ tbody tr:last-child td{border-bottom:none;}
 
   <text x="298" y="118" class="flow-label">entrada (compra/produção)</text>
   <text x="298" y="256" class="flow-label">entrada (fabricação)</text>
-  <text x="661" y="138" class="flow-label">baixa na confirmação do pedido</text>
+  <text x="661" y="138" class="flow-label">baixa na emissão da NF</text>
 </svg>
 
       </div>
@@ -821,6 +834,47 @@ tbody tr:last-child td{border-bottom:none;}
           <td>Motivo ou observação da movimentação.</td>
           <td class="col-regra">Deve ser informada para registrar a justificativa de entradas, saídas e ajustes (RF09).</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do usuário responsável pela movimentação.</td>
+          <td class="col-regra">Deve ser registrado para fins de auditoria e rastreabilidade (RNF03).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="usuario" data-domain="estoque">
+      <div class="entity-head">
+        <span class="entity-num">5.8</span>
+        <h3>Usuário</h3>
+      </div>
+      <p class="entity-desc">Operador do sistema responsável pelas movimentações de estoque, com perfil de acesso.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do usuário.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada usuário.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome do usuário do sistema.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>perfil</code></td>
+          <td>Perfil de acesso do usuário.</td>
+          <td class="col-regra">Define as permissões de acesso às informações do sistema (RNF02).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ativo</code></td>
+          <td>Indica se o usuário está habilitado.</td>
+          <td class="col-regra">Usuários inativos não podem registrar novas operações.</td>
+        </tr>
           </tbody>
         </table>
       </div>
@@ -829,12 +883,12 @@ tbody tr:last-child td{border-bottom:none;}
   <section class="domain" id="dom-comercial">
     <div class="domain-head">
       <h2>Comercial</h2>
-      <p>Clientes e os pedidos realizados, com as variações vendidas em cada um.</p>
+      <p>Clientes, pedidos, pagamentos, notas fiscais e devoluções.</p>
     </div>
     
     <article class="entity" id="cliente" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.8</span>
+        <span class="entity-num">5.9</span>
         <h3>Cliente</h3>
       </div>
       <p class="entity-desc">Pessoa física ou jurídica que compra da Namiê Brasil, no atacado ou no varejo.</p>
@@ -880,6 +934,11 @@ tbody tr:last-child td{border-bottom:none;}
           <td class="col-regra">Define se o cliente pode comprar a prazo; exclusivo de revendedoras homologadas pela gerência (RN14).</td>
         </tr>
         <tr>
+          <td class="col-attr"><code>limite_credito</code></td>
+          <td>Limite de crédito liberado ao cliente.</td>
+          <td class="col-regra">Definido pela gerência; deve ser maior ou igual a zero (RN14, RO07).</td>
+        </tr>
+        <tr>
           <td class="col-attr"><code>logradouro</code></td>
           <td>Logradouro do endereço.</td>
           <td class="col-regra">Obrigatório (RF04).</td>
@@ -914,13 +973,18 @@ tbody tr:last-child td{border-bottom:none;}
           <td>CEP do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>anonimizado</code></td>
+          <td>Indica se os dados pessoais do cliente foram anonimizados.</td>
+          <td class="col-regra">Quando verdadeiro, os dados identificadores são substituídos, preservando os registros fiscais obrigatórios (RN17, RF27).</td>
+        </tr>
           </tbody>
         </table>
       </div>
     </article>
     <article class="entity" id="pedido" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.9</span>
+        <span class="entity-num">5.10</span>
         <h3>Pedido</h3>
       </div>
       <p class="entity-desc">Venda realizada por um cliente em um canal específico (atacado, varejo, feira ou online).</p>
@@ -961,9 +1025,424 @@ tbody tr:last-child td{border-bottom:none;}
           <td class="col-regra">Deve ser recalculado a partir dos itens (RF07). Deve ser maior ou igual a zero.</td>
         </tr>
         <tr>
+          <td class="col-attr"><code>endereco_entrega</code></td>
+          <td>Endereço de entrega informado no pedido.</td>
+          <td class="col-regra">Obrigatório nas vendas de varejo com envio.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_envio</code></td>
+          <td>Data em que o pedido foi despachado.</td>
+          <td class="col-regra">Preenchida após a expedição.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>codigo_rastreio</code></td>
+          <td>Código de rastreamento do envio.</td>
+          <td class="col-regra">Aplicável às entregas por Correios ou transportadora.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>transportadora</code></td>
+          <td>Transportadora responsável pela entrega.</td>
+          <td class="col-regra">Aplicável às entregas por transportadora.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_entrega</code></td>
+          <td>Data da entrega confirmada ao cliente.</td>
+          <td class="col-regra">Base para o prazo de 7 dias do direito de arrependimento nas vendas online (RN16, RO05).</td>
+        </tr>
+        <tr>
           <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td>
           <td>Identificador do cliente responsável pelo pedido.</td>
           <td class="col-regra">Todo pedido deve estar associado a um cliente.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="pagamento" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.11</span>
+        <h3>Pagamento</h3>
+      </div>
+      <p class="entity-desc">Parcela de pagamento de um pedido, com forma, vencimento e situação.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_pagamento</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do pagamento/parcela.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada parcela.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero_parcela</code></td>
+          <td>Número da parcela dentro do pedido.</td>
+          <td class="col-regra">Vendas parceladas admitem até 3 parcelas (RN14).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_parcela</code></td>
+          <td>Valor da parcela.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>forma_pagamento</code></td>
+          <td>Forma utilizada no pagamento.</td>
+          <td class="col-regra">Deve diferenciar Pix, cartão de crédito, cartão de débito, boleto e dinheiro (RF21).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_vencimento</code></td>
+          <td>Data de vencimento da parcela.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_liquidacao</code></td>
+          <td>Data em que a parcela foi liquidada.</td>
+          <td class="col-regra">Preenchida apenas quando a parcela for paga.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>situacao</code></td>
+          <td>Situação da parcela.</td>
+          <td class="col-regra">Deve representar pendente, pago e cancelado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do pedido pago.</td>
+          <td class="col-regra">Todo pedido deve ter a condição de pagamento registrada. Venda a prazo só é permitida a revendedoras cadastradas com crédito aprovado (RN14).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="nota_fiscal" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.12</span>
+        <h3>Nota Fiscal</h3>
+      </div>
+      <p class="entity-desc">Documento fiscal eletrônico (NF-e/NFC-e) emitido para um pedido faturado.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_nota_fiscal</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da nota fiscal.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada nota.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero</code></td>
+          <td>Número da nota fiscal.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>serie</code></td>
+          <td>Série da nota fiscal.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>chave_acesso</code></td>
+          <td>Chave de acesso da nota.</td>
+          <td class="col-regra">Deve possuir 44 dígitos e ser única (RN15).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_emissao</code></td>
+          <td>Data de emissão da nota.</td>
+          <td class="col-regra">Deve ser anterior à liberação e expedição da mercadoria (RN15).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_fiscal</code></td>
+          <td>Valor total fiscal da nota.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do pedido faturado.</td>
+          <td class="col-regra">Cada nota está associada a um único pedido, e cada pedido faturado possui uma única nota (RN15, RO04).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="devolucao" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.13</span>
+        <h3>Devolução</h3>
+      </div>
+      <p class="entity-desc">Registro de devolução ou troca de itens de um pedido já entregue.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da devolução.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada devolução.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_solicitacao</code></td>
+          <td>Data em que a devolução foi solicitada.</td>
+          <td class="col-regra">Nas vendas online, não pode exceder 7 dias corridos após a data de entrega do pedido (RN16, RO05).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>motivo</code></td>
+          <td>Motivo da devolução.</td>
+          <td class="col-regra">Obrigatório. No atacado e na feira, troca somente com autorização da gerência por defeito de fábrica comprovado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do pedido de origem.</td>
+          <td class="col-regra">Toda devolução deve estar associada a um pedido já entregue.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section class="domain" id="dom-compras">
+    <div class="domain-head">
+      <h2>Compras e Financeiro</h2>
+      <p>Fornecedores, insumos, compras de matéria-prima e as respectivas contas a pagar.</p>
+    </div>
+    
+    <article class="entity" id="fornecedor" data-domain="compras">
+      <div class="entity-head">
+        <span class="entity-num">5.14</span>
+        <h3>Fornecedor</h3>
+      </div>
+      <p class="entity-desc">Parceiro comercial homologado que fornece tecidos, aviamentos, químicos e embalagens.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do fornecedor.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada fornecedor.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>razao_social</code></td>
+          <td>Razão social do fornecedor.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome_fantasia</code></td>
+          <td>Nome fantasia do fornecedor.</td>
+          <td class="col-regra">Opcional.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cnpj</code></td>
+          <td>CNPJ do fornecedor.</td>
+          <td class="col-regra">Deve ser único, validado e regular (RN18, RF24).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>inscricao_estadual</code></td>
+          <td>Inscrição estadual do fornecedor.</td>
+          <td class="col-regra">Informada quando aplicável.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>telefone</code></td>
+          <td>Telefone do fornecedor.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>email</code></td>
+          <td>E-mail do setor comercial do fornecedor.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>contato_representante</code></td>
+          <td>Contato do representante do fornecedor.</td>
+          <td class="col-regra">Opcional.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>categoria_insumo</code></td>
+          <td>Categoria dos insumos fornecidos.</td>
+          <td class="col-regra">Deve diferenciar tecidos, aviamentos, químicos e embalagens.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>logradouro</code></td>
+          <td>Logradouro do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero</code></td>
+          <td>Número do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>complemento</code></td>
+          <td>Complemento do endereço.</td>
+          <td class="col-regra">Opcional.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>bairro</code></td>
+          <td>Bairro do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cidade</code></td>
+          <td>Cidade do endereço.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>uf</code></td>
+          <td>Unidade federativa do endereço.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>cep</code></td>
+          <td>CEP do endereço.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ativo</code></td>
+          <td>Indica se o fornecedor está ativo.</td>
+          <td class="col-regra">Somente fornecedores ativos podem receber compras (RN18).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="insumo" data-domain="compras">
+      <div class="entity-head">
+        <span class="entity-num">5.15</span>
+        <h3>Insumo</h3>
+      </div>
+      <p class="entity-desc">Matéria-prima ou aviamento adquirido para a fabricação (tecidos, botões, zíperes, linhas, etiquetas, embalagens).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_insumo</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do insumo.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada insumo.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>nome</code></td>
+          <td>Nome do insumo.</td>
+          <td class="col-regra">Obrigatório.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tipo</code></td>
+          <td>Classificação do insumo.</td>
+          <td class="col-regra">Deve diferenciar tecido, aviamento, químico de lavanderia e embalagem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>unidade_medida</code></td>
+          <td>Unidade em que o insumo é medido.</td>
+          <td class="col-regra">Obrigatória (ex.: metro, rolo, unidade).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="compra" data-domain="compras">
+      <div class="entity-head">
+        <span class="entity-num">5.16</span>
+        <h3>Compra</h3>
+      </div>
+      <p class="entity-desc">Aquisição de insumos junto a um fornecedor, conferida contra o documento fiscal.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_compra</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único da compra.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada compra.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>numero_documento_fiscal</code></td>
+          <td>Número do documento fiscal do fornecedor.</td>
+          <td class="col-regra">Utilizado na conferência dos materiais recebidos.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_compra</code></td>
+          <td>Data em que a compra foi realizada.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_entrega</code></td>
+          <td>Data de entrega dos materiais na fábrica.</td>
+          <td class="col-regra">Preenchida após o recebimento e a conferência.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_total</code></td>
+          <td>Valor total da compra.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador do fornecedor da compra.</td>
+          <td class="col-regra">Toda compra deve ser vinculada a um fornecedor cadastrado e ativo (RN18).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="conta_pagar" data-domain="compras">
+      <div class="entity-head">
+        <span class="entity-num">5.17</span>
+        <h3>Conta a Pagar</h3>
+      </div>
+      <p class="entity-desc">Título financeiro gerado por uma compra de matéria-prima, com vencimento e situação de pagamento.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_conta_pagar</code><span class="badge badge-pk">PK</span></td>
+          <td>Identificador único do título a pagar.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada título.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor</code></td>
+          <td>Valor da obrigação financeira.</td>
+          <td class="col-regra">Deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_emissao</code></td>
+          <td>Data de emissão do título.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_vencimento</code></td>
+          <td>Data de vencimento do título.</td>
+          <td class="col-regra">Obrigatória.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_pagamento</code></td>
+          <td>Data do pagamento efetivo.</td>
+          <td class="col-regra">Preenchida apenas quando o título for liquidado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>forma_pagamento</code></td>
+          <td>Forma utilizada no pagamento do título.</td>
+          <td class="col-regra">Registrada na quitação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>status</code></td>
+          <td>Situação do título.</td>
+          <td class="col-regra">Deve representar aberto, liquidado e vencido.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_compra</code><span class="badge badge-fk">FK</span></td>
+          <td>Identificador da compra que originou o título.</td>
+          <td class="col-regra">Toda compra gera ao menos um título a pagar (RN19). O fornecedor é obtido pela compra.</td>
         </tr>
           </tbody>
         </table>
@@ -991,7 +1470,7 @@ tbody tr:last-child td{border-bottom:none;}
         <li>
           <span class="rule-num">03</span>
           <div>
-            <strong>Momento da baixa de estoque.</strong> Nenhuma movimentação de saída é gerada enquanto o pedido estiver em rascunho. A saída ocorre na transição do pedido para o estado confirmado, e o cancelamento posterior exige movimentação de estorno.
+            <strong>Momento da baixa de estoque.</strong> A baixa definitiva de estoque ocorre na emissão da nota fiscal do pedido, após pagamento aprovado ou prazo liberado pela gerência. Enquanto não houver nota fiscal, não é gerada movimentação de saída, e o cancelamento posterior exige movimentação de estorno.
           </div>
         </li>
         <li>
@@ -1010,6 +1489,36 @@ tbody tr:last-child td{border-bottom:none;}
           <span class="rule-num">06</span>
           <div>
             <strong>Pedido mínimo no atacado.</strong> Pedidos dos canais de atacado (Feira e WhatsApp) devem respeitar a quantidade mínima total de peças definida pela gerência, condição para aplicação do preço de atacado (RN13).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">07</span>
+          <div>
+            <strong>Condição de pagamento.</strong> Todo pedido deve ter sua condição de pagamento registrada. Vendas online exigem liquidação prévia via gateway; vendas a prazo são permitidas apenas a revendedoras cadastradas com crédito aprovado pela gerência (RN14, RO07).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">08</span>
+          <div>
+            <strong>Nota fiscal obrigatória.</strong> Todo pedido faturado deve ter a nota fiscal emitida antes da liberação e expedição da mercadoria (RN15, RO04).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">09</span>
+          <div>
+            <strong>Devoluções.</strong> Nas vendas online, a devolução pode ser solicitada em até 7 dias corridos após a entrega (RN16, RO05). Peças íntegras retornam ao Estoque Online (RN11); peças com avaria seguem para o Defeitão (RN10).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">10</span>
+          <div>
+            <strong>Compras vinculadas a fornecedor e a contas a pagar.</strong> Toda compra de matéria-prima deve ter fornecedor cadastrado e ativo e gera automaticamente título em contas a pagar (RN18, RN19).
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">11</span>
+          <div>
+            <strong>Proteção de dados pessoais.</strong> Os dados pessoais de clientes são usados somente para pedidos, entrega e obrigações fiscais, e podem ser anonimizados a pedido do titular, preservando os registros fiscais (RN17, RO06).
           </div>
         </li>
       </ol>
@@ -1078,6 +1587,54 @@ tbody tr:last-child td{border-bottom:none;}
           <td class="col-card"><span class="card-badge">N:N</span></td>
           <td>Variação/SKU</td>
           <td>Um pedido pode conter várias variações, e uma variação pode aparecer em vários pedidos. O relacionamento carrega os atributos <code>quantidade</code> e <code>preco_unitario</code> (aplicado no momento da venda, permanecendo inalterado mesmo que o preço vigente seja atualizado depois).</td>
+        </tr>
+        <tr>
+          <td>Usuário</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Movimentação de Estoque</td>
+          <td>Toda movimentação registra o usuário responsável, para auditoria.</td>
+        </tr>
+        <tr>
+          <td>Pedido</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Pagamento</td>
+          <td>Um pedido possui uma ou mais parcelas de pagamento.</td>
+        </tr>
+        <tr>
+          <td>Pedido</td>
+          <td class="col-card"><span class="card-badge">1:1</span></td>
+          <td>Nota Fiscal</td>
+          <td>Cada pedido faturado possui uma única nota fiscal, e cada nota pertence a um único pedido.</td>
+        </tr>
+        <tr>
+          <td>Pedido</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Devolução</td>
+          <td>Um pedido entregue pode originar devoluções.</td>
+        </tr>
+        <tr>
+          <td>Devolução</td>
+          <td class="col-card"><span class="card-badge">N:N</span></td>
+          <td>Variação/SKU</td>
+          <td>Uma devolução pode envolver várias variações, e uma variação pode ser devolvida em várias devoluções. O relacionamento carrega os atributos <code>quantidade</code>, <code>condicao_peca</code> (perfeita ou defeituosa) e <code>estoque_destino</code> (Online ou Defeitão).</td>
+        </tr>
+        <tr>
+          <td>Fornecedor</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Compra</td>
+          <td>Um fornecedor pode receber várias compras; cada compra pertence a um único fornecedor.</td>
+        </tr>
+        <tr>
+          <td>Compra</td>
+          <td class="col-card"><span class="card-badge">N:N</span></td>
+          <td>Insumo</td>
+          <td>Uma compra pode incluir vários insumos, e um insumo pode ser comprado em várias compras. O relacionamento carrega os atributos <code>quantidade</code> e <code>valor_unitario</code>.</td>
+        </tr>
+        <tr>
+          <td>Compra</td>
+          <td class="col-card"><span class="card-badge">1:N</span></td>
+          <td>Conta a Pagar</td>
+          <td>Cada compra gera um ou mais títulos a pagar.</td>
         </tr>
           </tbody>
         </table>
