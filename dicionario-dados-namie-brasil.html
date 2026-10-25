@@ -224,6 +224,14 @@ main{min-width:0;}
 .node-estoque{stroke:var(--teal);}
 .node-comercial{stroke:var(--wine);}
 .node-compras{stroke:var(--teal);}
+.tbl-name{margin-left:12px; font-size:.78rem; color:var(--ink-soft);}
+.col-type code{font-size:.76rem; white-space:nowrap;}
+.col-cons{font-family:var(--mono); font-size:.72rem; color:var(--ink-soft); white-space:nowrap;}
+.idx-title{font-family:var(--serif); font-size:1rem; margin:18px 0 8px;}
+.idx-table code{font-size:.76rem;}
+.matrix th,.matrix td{text-align:center; font-family:var(--mono); font-size:.78rem;}
+.matrix th:first-child,.matrix td:first-child{text-align:left;}
+pre.code{background:var(--paper-soft); border:1px solid var(--line); padding:12px; overflow:auto; font-family:var(--mono); font-size:.78rem;}
 .node-title{
   font-family:var(--serif);
   font-weight:600;
@@ -405,8 +413,9 @@ tbody tr:last-child td{border-bottom:none;}
     <p class="masthead-sub">Namiê Brasil — confecção com produção, controle de estoque e comercialização de produtos.</p>
     <dl class="masthead-meta">
       <div><dt>Autores</dt><dd>Felipe Piazza<br> Lucas Fortes<br> Vinicius Passos</dd></div>
+      <div><dt>Versão</dt><dd>2.0 — 24/10/2026</dd></div>
       <div><dt>Escopo</dt><dd>Catálogo, produção, estoque, vendas, compras e financeiro</dd></div>
-      <div><dt>Nível</dt><dd>Conceitual (independente de SGBD)</dd></div>
+      <div><dt>Nível</dt><dd>Físico (MySQL 8.0 · InnoDB · utf8mb4_0900_ai_ci)</dd></div>
     </dl>
   </div>
 </header>
@@ -418,7 +427,7 @@ tbody tr:last-child td{border-bottom:none;}
       <p class="sidebar-title">Sumário</p>
       <ul class="toc">
         <li><a href="#visao-geral" data-nav>Visão geral</a></li>
-        <li><a href="#convencoes" data-nav>Convenções</a></li>
+        <li><a href="#convencoes" data-nav>Convenções</a></li><li><a href="#padroes" data-nav>Padrões (MySQL)</a></li>
         
         <li class="toc-group">
           <span class="toc-domain">Catálogo</span>
@@ -426,22 +435,26 @@ tbody tr:last-child td{border-bottom:none;}
         </li>
         <li class="toc-group">
           <span class="toc-domain">Produção</span>
-          <ul><li><a href="#ordem_producao" data-nav>Ordem de Produção</a></li></ul>
+          <ul><li><a href="#ordem_producao" data-nav>Ordem de Produção</a></li><li><a href="#ordem_variacao" data-nav>Ordem × Variação</a></li></ul>
         </li>
         <li class="toc-group">
           <span class="toc-domain">Estoque</span>
-          <ul><li><a href="#estoque" data-nav>Estoque</a></li><li><a href="#movimentacao" data-nav>Movimentação de Estoque</a></li><li><a href="#usuario" data-nav>Usuário</a></li></ul>
+          <ul><li><a href="#estoque" data-nav>Estoque</a></li><li><a href="#movimentacao" data-nav>Movimentação de Estoque</a></li><li><a href="#estoque_variacao" data-nav>Estoque × Variação</a></li><li><a href="#usuario" data-nav>Usuário</a></li></ul>
         </li>
         <li class="toc-group">
           <span class="toc-domain">Comercial</span>
-          <ul><li><a href="#cliente" data-nav>Cliente</a></li><li><a href="#pedido" data-nav>Pedido</a></li><li><a href="#pagamento" data-nav>Pagamento</a></li><li><a href="#nota_fiscal" data-nav>Nota Fiscal</a></li><li><a href="#devolucao" data-nav>Devolução</a></li></ul>
+          <ul><li><a href="#cliente" data-nav>Cliente</a></li><li><a href="#pedido" data-nav>Pedido</a></li><li><a href="#pagamento" data-nav>Pagamento</a></li><li><a href="#nota_fiscal" data-nav>Nota Fiscal</a></li><li><a href="#devolucao" data-nav>Devolução</a></li><li><a href="#pedido_variacao" data-nav>Pedido × Variação</a></li><li><a href="#devolucao_variacao" data-nav>Devolução × Variação</a></li></ul>
         </li>
         <li class="toc-group">
           <span class="toc-domain">Compras e Financeiro</span>
-          <ul><li><a href="#fornecedor" data-nav>Fornecedor</a></li><li><a href="#insumo" data-nav>Insumo</a></li><li><a href="#compra" data-nav>Compra</a></li><li><a href="#conta_pagar" data-nav>Conta a Pagar</a></li></ul>
+          <ul><li><a href="#fornecedor" data-nav>Fornecedor</a></li><li><a href="#insumo" data-nav>Insumo</a></li><li><a href="#compra" data-nav>Compra</a></li><li><a href="#conta_pagar" data-nav>Conta a Pagar</a></li><li><a href="#compra_insumo" data-nav>Compra × Insumo</a></li></ul>
+        </li>
+        <li class="toc-group">
+          <span class="toc-domain">Segurança e Auditoria</span>
+          <ul><li><a href="#log_acesso" data-nav>Log de Acesso</a></li></ul>
         </li>
         <li><a href="#regras" data-nav>Regras de negócio gerais</a></li>
-        <li><a href="#relacionamentos" data-nav>Relacionamentos</a></li>
+        <li><a href="#relacionamentos" data-nav>Relacionamentos</a></li><li><a href="#seguranca" data-nav>Segurança, papéis e LGPD</a></li>
       </ul>
     </div>
   </nav>
@@ -454,7 +467,7 @@ tbody tr:last-child td{border-bottom:none;}
 
     <section id="visao-geral" class="section">
       <h2 class="section-title"><span class="section-num">01</span>Visão geral do modelo</h2>
-      <p>O modelo é organizado em cinco domínios que conversam entre si ao longo do ciclo de vida de uma peça: o <strong>catálogo</strong> define o que pode existir; a <strong>produção</strong> e o <strong>catálogo</strong> alimentam o <strong>estoque</strong>; e o estoque sustenta o domínio <strong>comercial</strong>; em paralelo, o domínio de <strong>compras</strong> controla o abastecimento de insumos e as obrigações financeiras com fornecedores.</p>
+      <p>O modelo é organizado em cinco domínios operacionais, mais um domínio transversal de segurança e auditoria, que conversam entre si ao longo do ciclo de vida de uma peça: o <strong>catálogo</strong> define o que pode existir; a <strong>produção</strong> e o <strong>catálogo</strong> alimentam o <strong>estoque</strong>; e o estoque sustenta o domínio <strong>comercial</strong>; em paralelo, o domínio de <strong>compras</strong> controla o abastecimento de insumos e as obrigações financeiras com fornecedores.</p>
       <div class="diagram-card">
         
 <svg viewBox="0 0 960 300" role="img" aria-labelledby="diagTitle diagDesc" class="flow-svg">
@@ -526,14 +539,76 @@ tbody tr:last-child td{border-bottom:none;}
 
     <section id="convencoes" class="section">
       <h2 class="section-title"><span class="section-num">02</span>Convenções do dicionário</h2>
-      <p>Cada entidade é descrita por uma tabela com três colunas — <em>atributo</em>, <em>descrição</em> e <em>regra de negócio associada</em> — na mesma estrutura do dicionário de dados original. Os selos abaixo foram adicionados nesta versão em HTML para tornar as chaves explícitas a partir do que já está descrito em cada regra de negócio:</p>
+      <p>Cada entidade é descrita por uma tabela física com cinco colunas — <em>atributo</em>, <em>tipo (MySQL)</em>, <em>restrições</em>, <em>descrição</em> e <em>regra de negócio associada</em> — seguida das chaves, índices e constraints nomeadas. Os selos abaixo indicam as chaves:</p>
       <div class="legend">
         <div class="legend-item"><span class="badge badge-pk">PK</span> Chave primária — identificador único da própria entidade.</div>
         <div class="legend-item"><span class="badge badge-fk">FK</span> Chave estrangeira obrigatória — referencia outra entidade.</div>
         <div class="legend-item"><span class="badge badge-fk badge-fk-opt">FK opc.</span> Chave estrangeira condicional — obrigatória apenas em certas situações, conforme a regra de negócio.</div>
       </div>
-      <p class="note">Dicionário em nível <strong>conceitual</strong>: propositalmente não define tipos físicos de coluna (varchar, integer etc.), pois essa decisão pertence à etapa de modelagem física, específica do SGBD escolhido.</p>
+      <p class="note">Dicionário em nível <strong>físico (MySQL 8.0)</strong>. SGBD, collation, notação, prefixos e a leitura das expressões estão na seção seguinte.</p>
     </section>
+    <section id="padroes" class="section">
+      <h2 class="section-title"><span class="section-num">03</span>Padrões do banco de dados (MySQL)</h2>
+      <h4 class="idx-title">Ambiente e versão</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Definição</th></tr></thead>
+          <tbody>
+<tr><td>SGBD</td><td>MySQL 8.0 (mínimo 8.0.16, necessário para as constraints <code>CHECK</code>)</td></tr>
+<tr><td>Engine</td><td>InnoDB (transações ACID e integridade referencial — RNF06)</td></tr>
+<tr><td>Character set</td><td><code>utf8mb4</code></td></tr>
+<tr><td>Collation</td><td><code>utf8mb4_0900_ai_ci</code> (padrão do MySQL 8.0; comparação sem distinção de maiúsculas e acentos), aplicada ao banco e a todas as tabelas</td></tr>
+<tr><td>Banco de dados</td><td><code>namie_brasil</code></td></tr>
+<tr><td>Versão do documento</td><td>2.0 — 24/10/2026</td></tr>
+<tr><td>Histórico</td><td>1.0 — dicionário conceitual (sem tipos físicos) · 2.0 — dicionário físico MySQL, com 6 tabelas associativas, <code>tb_log_acesso</code>, índices, papéis e LGPD</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Notação formal</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sigla</th><th>Significado</th></tr></thead>
+          <tbody>
+<tr><td>PK</td><td>Chave primária (<code>PRIMARY KEY</code>)</td></tr>
+<tr><td>AI</td><td>Valor gerado automaticamente (<code>AUTO_INCREMENT</code>)</td></tr>
+<tr><td>FK → tb_x</td><td>Chave estrangeira para a tabela <code>tb_x</code>, sempre com <code>ON UPDATE CASCADE ON DELETE RESTRICT</code></td></tr>
+<tr><td>UQ</td><td>Valor único (<code>UNIQUE</code>)</td></tr>
+<tr><td>NN</td><td>Obrigatório (<code>NOT NULL</code>)</td></tr>
+<tr><td>NULL</td><td>Aceita valor nulo</td></tr>
+<tr><td>DF</td><td>Possui valor padrão (<code>DEFAULT</code>); o valor consta na descrição ou na regra</td></tr>
+<tr><td>CK</td><td>Participa de uma constraint <code>CHECK</code>, detalhada no bloco de constraints da tabela</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Prefixos e nomenclatura</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Prefixo / padrão</th><th>Uso</th><th>Exemplo</th></tr></thead>
+          <tbody>
+<tr><td><code>tb_</code></td><td>Tabela</td><td><code>tb_pedido</code></td></tr>
+<tr><td><code>id_</code></td><td>Coluna identificadora (PK ou FK)</td><td><code>id_cliente</code></td></tr>
+<tr><td><code>fk_</code></td><td>Chave estrangeira, no formato <code>fk_origem_destino</code></td><td><code>fk_pedido_cliente</code></td></tr>
+<tr><td><code>uq_</code></td><td>Índice único</td><td><code>uq_variacao_sku</code></td></tr>
+<tr><td><code>idx_</code></td><td>Índice não único</td><td><code>idx_pedido_data</code></td></tr>
+<tr><td><code>ck_</code></td><td>Constraint <code>CHECK</code></td><td><code>ck_preco_valores</code></td></tr>
+<tr><td><code>r_</code></td><td>Papel (role) do MySQL</td><td><code>r_vendas</code></td></tr>
+<tr><td><code>data_</code> / <code>data_hora</code></td><td>Colunas <code>DATE</code> e <code>DATETIME</code></td><td><code>data_vencimento</code></td></tr>
+<tr><td><code>valor_</code> / <code>preco_</code></td><td>Colunas monetárias (<code>DECIMAL</code>)</td><td><code>valor_total</code></td></tr>
+<tr><td>snake_case</td><td>Nomes de tabelas e colunas em minúsculas, sem acentos nem espaços; valores de <code>ENUM</code> também sem acentos</td><td><code>Cartao_Credito</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Tabelas associativas, que implementam os relacionamentos N:N, são nomeadas <code>tb_entidadeA_entidadeB</code> e usam chave primária composta pelas duas chaves estrangeiras.</p>
+      <h4 class="idx-title">Expressões e leitura</h4>
+      <ul>
+        <li><code>(min,max)</code> ao lado de uma entidade indica em quantas ocorrências do relacionamento cada ocorrência dessa entidade participa: <code>0</code> = participação opcional, <code>1</code> = obrigatória, <code>n</code> = sem limite.</li>
+        <li>Leitura de uma linha da tabela de relacionamentos: <em>Coleção (1,n) possui (1,1) Produto/Modelo</em> = cada coleção possui de 1 a n produtos, e cada produto pertence a exatamente 1 coleção.</li>
+        <li><code>tb_pedido.id_cliente → tb_cliente.id_cliente</code> lê-se: a coluna <code>id_cliente</code> de <code>tb_pedido</code> referencia a chave primária de <code>tb_cliente</code>.</li>
+        <li>Relacionamentos N:N não existem fisicamente: viram uma tabela associativa, e os atributos do relacionamento (quantidade, preço unitário etc.) tornam-se colunas dela.</li>
+        <li>Notação de tipo: <code>VARCHAR(n)</code> texto de até n caracteres; <code>DECIMAL(p,s)</code> número com p dígitos, s deles decimais; <code>ENUM(...)</code> conjunto fechado de valores.</li>
+      </ul>
+    </section>
+
 
     
   <section class="domain" id="dom-catalogo">
@@ -546,39 +621,50 @@ tbody tr:last-child td{border-bottom:none;}
       <div class="entity-head">
         <span class="entity-num">5.1</span>
         <h3>Coleção</h3>
+        <span class="tbl-name"><code>tb_colecao</code></span>
       </div>
       <p class="entity-desc">Agrupa produtos por temporada/linha, permitindo organizar o catálogo cronologicamente.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_colecao</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_colecao</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da coleção.</td>
           <td class="col-regra">Deve identificar exclusivamente cada coleção.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome</code></td>
+          <td class="col-attr"><code>nome</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NN · UQ</td>
           <td>Nome utilizado para identificar a coleção.</td>
           <td class="col-regra">Deve ser informado para permitir a identificação da coleção.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>tipo</code></td>
+          <td class="col-attr"><code>tipo</code></td><td class="col-type"><code>ENUM('Normal','Especial','Linha Permanente')</code></td><td class="col-cons">NN · DF</td>
           <td>Classificação da coleção.</td>
           <td class="col-regra">Pode representar uma coleção normal, especial ou de linha permanente.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>ano_temporada</code></td>
+          <td class="col-attr"><code>ano_temporada</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN</td>
           <td>Ano ou temporada de referência da coleção.</td>
           <td class="col-regra">Deve ser informado para associar a coleção à temporada em que foi desenvolvida (RF03, RN02).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cartela_cores</code></td>
+          <td class="col-attr"><code>cartela_cores</code></td><td class="col-type"><code>VARCHAR(255)</code></td><td class="col-cons">NULL</td>
           <td>Paleta de cores que compõe a coleção.</td>
           <td class="col-regra">Orienta a associação dos produtos à coleção (RF03, RN02).</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_colecao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_colecao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>uq_colecao_nome</code></td><td>UNIQUE</td><td><code>nome</code></td><td>Impede coleções duplicadas.</td></tr>
           </tbody>
         </table>
       </div>
@@ -587,34 +673,46 @@ tbody tr:last-child td{border-bottom:none;}
       <div class="entity-head">
         <span class="entity-num">5.2</span>
         <h3>Produto / Modelo</h3>
+        <span class="tbl-name"><code>tb_produto</code></span>
       </div>
       <p class="entity-desc">Modelo abstrato do produto, antes de sua quebra em variações de cor e tamanho.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_produto</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_produto</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do modelo do produto.</td>
           <td class="col-regra">Deve identificar exclusivamente cada modelo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome</code></td>
+          <td class="col-attr"><code>nome</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NN</td>
           <td>Nome do modelo do produto.</td>
           <td class="col-regra">É obrigatório para identificação do modelo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>descricao</code></td>
+          <td class="col-attr"><code>descricao</code></td><td class="col-type"><code>VARCHAR(500)</code></td><td class="col-cons">NULL</td>
           <td>Descrição geral do produto/modelo.</td>
           <td class="col-regra">Pode ser utilizada para complementar a identificação do modelo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_colecao</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_colecao</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_colecao · NN</td>
           <td>Identificador da coleção à qual o produto pertence.</td>
           <td class="col-regra">Todo produto deve estar associado a uma coleção. Produtos atemporais devem ser vinculados à coleção de linha permanente.</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_produto</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_produto</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_produto_colecao</code></td><td>FOREIGN KEY</td><td><code>id_colecao</code></td><td>→ tb_colecao(id_colecao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_produto_nome</code></td><td>INDEX</td><td><code>nome</code></td><td>Busca de modelos por nome.</td></tr>
           </tbody>
         </table>
       </div>
@@ -623,44 +721,57 @@ tbody tr:last-child td{border-bottom:none;}
       <div class="entity-head">
         <span class="entity-num">5.3</span>
         <h3>Variação / SKU</h3>
+        <span class="tbl-name"><code>tb_variacao</code></span>
       </div>
       <p class="entity-desc">Combinação comercializável de modelo, cor e tamanho — a unidade real de venda e estoque.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_variacao</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da variação do produto.</td>
           <td class="col-regra">Deve identificar exclusivamente cada variação.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>sku</code></td>
+          <td class="col-attr"><code>sku</code></td><td class="col-type"><code>VARCHAR(30)</code></td><td class="col-cons">NN · UQ</td>
           <td>Código utilizado para identificar comercialmente uma variação específica.</td>
           <td class="col-regra">Deve ser único. Cada combinação de modelo, cor e tamanho deve possuir um SKU específico.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cor</code></td>
+          <td class="col-attr"><code>cor</code></td><td class="col-type"><code>VARCHAR(40)</code></td><td class="col-cons">NN</td>
           <td>Cor da peça.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>tamanho</code></td>
+          <td class="col-attr"><code>tamanho</code></td><td class="col-type"><code>VARCHAR(10)</code></td><td class="col-cons">NN</td>
           <td>Tamanho da peça.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_produto</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_produto</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_produto · NN</td>
           <td>Identificador do modelo ao qual a variação pertence.</td>
           <td class="col-regra">Toda variação deve estar associada a um único produto/modelo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>estoque_minimo</code></td>
+          <td class="col-attr"><code>estoque_minimo</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · DF</td>
           <td>Quantidade mínima desejada da variação no Estoque Geral.</td>
           <td class="col-regra">Quando o saldo for menor ou igual ao mínimo, deve ser emitido alerta de reposição (RN12).</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_variacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_variacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_variacao_produto</code></td><td>FOREIGN KEY</td><td><code>id_produto</code></td><td>→ tb_produto(id_produto) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>uq_variacao_sku</code></td><td>UNIQUE</td><td><code>sku</code></td><td>SKU único (RN01).</td></tr>
+            <tr><td><code>uq_variacao_modelo_cor_tam</code></td><td>UNIQUE</td><td><code>id_produto, cor, tamanho</code></td><td>Uma variação por combinação de modelo, cor e tamanho (RN01).</td></tr>
           </tbody>
         </table>
       </div>
@@ -669,34 +780,47 @@ tbody tr:last-child td{border-bottom:none;}
       <div class="entity-head">
         <span class="entity-num">5.4</span>
         <h3>Preço</h3>
+        <span class="tbl-name"><code>tb_preco</code></span>
       </div>
       <p class="entity-desc">Valores de atacado e varejo praticados por produto/modelo.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_preco</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_preco</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do registro de preço.</td>
           <td class="col-regra">Deve identificar exclusivamente cada registro de preço.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>preco_atacado</code></td>
+          <td class="col-attr"><code>preco_atacado</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor praticado nas vendas realizadas no atacado.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>preco_varejo</code></td>
+          <td class="col-attr"><code>preco_varejo</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor praticado nas vendas realizadas no varejo.</td>
           <td class="col-regra">Deve ser maior ou igual ao preço de atacado.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_produto</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_produto</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_produto · NN · UQ</td>
           <td>Identificador do produto/modelo relacionado ao preço.</td>
           <td class="col-regra">Cada registro de preço deve estar associado a um único produto/modelo.</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_preco</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_preco</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_preco_produto</code></td><td>FOREIGN KEY</td><td><code>id_produto</code></td><td>→ tb_produto(id_produto) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>uq_preco_produto</code></td><td>UNIQUE</td><td><code>id_produto</code></td><td>Garante o 1:1 entre produto/modelo e preço.</td></tr>
+            <tr><td><code>ck_preco_valores</code></td><td>CHECK</td><td><code>preco_atacado > 0 AND preco_varejo >= preco_atacado</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
           </tbody>
         </table>
       </div>
@@ -712,39 +836,96 @@ tbody tr:last-child td{border-bottom:none;}
       <div class="entity-head">
         <span class="entity-num">5.5</span>
         <h3>Ordem de Produção</h3>
+        <span class="tbl-name"><code>tb_ordem_producao</code></span>
       </div>
       <p class="entity-desc">Encomenda de fabricação interna que origina entradas em estoque.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_ordem</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_ordem</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da ordem de produção.</td>
           <td class="col-regra">Deve identificar exclusivamente cada ordem.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_inicio</code></td>
+          <td class="col-attr"><code>data_inicio</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NN</td>
           <td>Data em que a produção foi iniciada.</td>
           <td class="col-regra">Deve registrar o início da ordem de produção.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_prevista</code></td>
+          <td class="col-attr"><code>data_prevista</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NULL · CK</td>
           <td>Data prevista para a conclusão da produção.</td>
           <td class="col-regra">Deve permitir o acompanhamento de prazos da ordem (RF12).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_fim</code></td>
+          <td class="col-attr"><code>data_fim</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NULL · CK</td>
           <td>Data em que a produção foi concluída.</td>
           <td class="col-regra">Deve ser preenchida quando a produção for finalizada e não pode ser anterior à data de início.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>status</code></td>
+          <td class="col-attr"><code>status</code></td><td class="col-type"><code>ENUM('Planejada','Em Corte','Em Costura','Em Lavanderia','Em Acabamento','Concluida')</code></td><td class="col-cons">NN · DF</td>
           <td>Situação atual da ordem de produção.</td>
           <td class="col-regra">Deve representar as etapas da ordem: planejada, em corte, em costura, em lavanderia, em acabamento e concluída.</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_ordem_producao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_ordem</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>idx_ordem_status</code></td><td>INDEX</td><td><code>status, data_inicio</code></td><td>Acompanhamento das ordens por etapa.</td></tr>
+            <tr><td><code>ck_ordem_datas</code></td><td>CHECK</td><td><code>(data_prevista IS NULL OR data_prevista >= data_inicio) AND (data_fim IS NULL OR data_fim >= data_inicio)</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="ordem_variacao" data-domain="producao">
+      <div class="entity-head">
+        <span class="entity-num">5.6</span>
+        <h3>Ordem de Produção × Variação</h3>
+        <span class="tbl-name"><code>tb_ordem_variacao</code></span>
+      </div>
+      <p class="entity-desc">Tabela associativa do relacionamento N:N entre ORDEM DE PRODUÇÃO e VARIAÇÃO/SKU: quantidade produzida por variação.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_ordem</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_ordem_producao</td>
+          <td>Identificador da ordem de produção.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_variacao</td>
+          <td>Identificador da variação/SKU produzida.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · CK</td>
+          <td>Quantidade produzida da variação na ordem.</td>
+          <td class="col-regra">Deve ser maior que zero (RN08).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_ordem_variacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_ordem, id_variacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_ordem_variacao_ordem_producao</code></td><td>FOREIGN KEY</td><td><code>id_ordem</code></td><td>→ tb_ordem_producao(id_ordem) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_ordem_variacao_variacao</code></td><td>FOREIGN KEY</td><td><code>id_variacao</code></td><td>→ tb_variacao(id_variacao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_ordem_variacao_id_variacao</code></td><td>INDEX</td><td><code>id_variacao</code></td><td>Apoio ao join e à consulta pelo lado inverso da associação.</td></tr>
+            <tr><td><code>ck_ov_qtd</code></td><td>CHECK</td><td><code>quantidade > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
           </tbody>
         </table>
       </div>
@@ -758,123 +939,220 @@ tbody tr:last-child td{border-bottom:none;}
     
     <article class="entity" id="estoque" data-domain="estoque">
       <div class="entity-head">
-        <span class="entity-num">5.6</span>
+        <span class="entity-num">5.7</span>
         <h3>Estoque</h3>
+        <span class="tbl-name"><code>tb_estoque</code></span>
       </div>
       <p class="entity-desc">Depósito lógico ou físico onde os saldos das variações são mantidos.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_estoque</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_estoque</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do estoque.</td>
           <td class="col-regra">Deve identificar exclusivamente cada estoque.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>localizacao</code></td>
+          <td class="col-attr"><code>localizacao</code></td><td class="col-type"><code>VARCHAR(30)</code></td><td class="col-cons">NN · UQ</td>
           <td>Local ou finalidade do estoque.</td>
           <td class="col-regra">Deve diferenciar, no mínimo, geral, feira, online e defeitão.</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_estoque</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_estoque</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>uq_estoque_localizacao</code></td><td>UNIQUE</td><td><code>localizacao</code></td><td>Um registro por local de estoque.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">A coluna <code>localizacao</code> usa VARCHAR (e não ENUM) para permitir novos locais sem alterar a estrutura. Valores iniciais: Geral, Feira, Online, Defeitao.</p>
     </article>
     <article class="entity" id="movimentacao" data-domain="estoque">
       <div class="entity-head">
-        <span class="entity-num">5.7</span>
+        <span class="entity-num">5.8</span>
         <h3>Movimentação de Estoque</h3>
+        <span class="tbl-name"><code>tb_movimentacao</code></span>
       </div>
       <p class="entity-desc">Registro histórico e auditável de toda entrada, saída ou transferência de estoque.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_movimentacao</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_movimentacao</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da movimentação.</td>
           <td class="col-regra">Deve identificar exclusivamente cada movimentação.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>tipo</code></td>
+          <td class="col-attr"><code>tipo</code></td><td class="col-type"><code>ENUM('Entrada','Saida','Transferencia')</code></td><td class="col-cons">NN</td>
           <td>Indica o tipo de movimentação realizada.</td>
           <td class="col-regra">Deve representar entrada, saída ou transferência.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>quantidade</code></td>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · CK</td>
           <td>Quantidade de unidades movimentadas.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_hora</code></td>
+          <td class="col-attr"><code>data_hora</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NN · DF</td>
           <td>Data e horário em que a movimentação ocorreu.</td>
           <td class="col-regra">Deve registrar o momento da movimentação.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_estoque_origem</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td class="col-attr"><code>id_estoque_origem</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_estoque · NULL · CK</td>
           <td>Identificador do estoque de origem.</td>
           <td class="col-regra">Deve ser informado em operações de saída ou transferência e não informado em operações de entrada.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_estoque_destino</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td>
+          <td class="col-attr"><code>id_estoque_destino</code><span class="badge badge-fk badge-fk-opt">FK opc.</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_estoque · NULL · CK</td>
           <td>Identificador do estoque de destino.</td>
           <td class="col-regra">Deve ser informado em operações de entrada ou transferência e não informado em operações de saída. Em transferências, deve ser diferente do estoque de origem.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_variacao · NN</td>
           <td>Identificador da variação/SKU movimentada.</td>
           <td class="col-regra">Toda movimentação deve estar relacionada a uma variação específica.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>justificativa</code></td>
+          <td class="col-attr"><code>justificativa</code></td><td class="col-type"><code>VARCHAR(255)</code></td><td class="col-cons">NULL</td>
           <td>Motivo ou observação da movimentação.</td>
           <td class="col-regra">Deve ser informada para registrar a justificativa de entradas, saídas e ajustes (RF09).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_usuario · NN</td>
           <td>Identificador do usuário responsável pela movimentação.</td>
           <td class="col-regra">Deve ser registrado para fins de auditoria e rastreabilidade (RNF03).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_movimentacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_movimentacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_movimentacao_estoque_origem</code></td><td>FOREIGN KEY</td><td><code>id_estoque_origem</code></td><td>→ tb_estoque(id_estoque) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_movimentacao_estoque_destino</code></td><td>FOREIGN KEY</td><td><code>id_estoque_destino</code></td><td>→ tb_estoque(id_estoque) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_movimentacao_variacao</code></td><td>FOREIGN KEY</td><td><code>id_variacao</code></td><td>→ tb_variacao(id_variacao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_movimentacao_usuario</code></td><td>FOREIGN KEY</td><td><code>id_usuario</code></td><td>→ tb_usuario(id_usuario) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_mov_variacao_data</code></td><td>INDEX</td><td><code>id_variacao, data_hora</code></td><td>Histórico por SKU e período (RF15).</td></tr>
+            <tr><td><code>idx_mov_data</code></td><td>INDEX</td><td><code>data_hora</code></td><td>Consulta do histórico por período.</td></tr>
+            <tr><td><code>ck_mov_quantidade</code></td><td>CHECK</td><td><code>quantidade > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+            <tr><td><code>ck_mov_estoques</code></td><td>CHECK</td><td><code>(tipo='Entrada' AND id_estoque_origem IS NULL AND id_estoque_destino IS NOT NULL) OR (tipo='Saida' AND id_estoque_origem IS NOT NULL AND id_estoque_destino IS NULL) OR (tipo='Transferencia' AND id_estoque_origem IS NOT NULL AND id_estoque_destino IS NOT NULL AND id_estoque_origem <> id_estoque_destino)</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Tabela imutável (RNF03): não há UPDATE nem DELETE; correções são feitas por movimentação de estorno.</p>
+    </article>
+    <article class="entity" id="estoque_variacao" data-domain="estoque">
+      <div class="entity-head">
+        <span class="entity-num">5.9</span>
+        <h3>Estoque × Variação</h3>
+        <span class="tbl-name"><code>tb_estoque_variacao</code></span>
+      </div>
+      <p class="entity-desc">Tabela associativa do relacionamento N:N entre ESTOQUE e VARIAÇÃO/SKU: saldo de cada variação em cada estoque.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_estoque</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_estoque</td>
+          <td>Identificador do estoque.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_variacao</td>
+          <td>Identificador da variação/SKU.</td>
+          <td class="col-regra">Parte da chave composta; não pode haver mais de um registro por par estoque/variação.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · DF · CK</td>
+          <td>Quantidade disponível da variação naquele estoque.</td>
+          <td class="col-regra">Deve ser maior ou igual a zero e corresponder às entradas menos as saídas (regra geral 02). Atualizada somente pela rotina de movimentação.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_estoque_variacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_estoque, id_variacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_estoque_variacao_estoque</code></td><td>FOREIGN KEY</td><td><code>id_estoque</code></td><td>→ tb_estoque(id_estoque) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_estoque_variacao_variacao</code></td><td>FOREIGN KEY</td><td><code>id_variacao</code></td><td>→ tb_variacao(id_variacao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_estoque_variacao_id_variacao</code></td><td>INDEX</td><td><code>id_variacao</code></td><td>Apoio ao join e à consulta pelo lado inverso da associação.</td></tr>
+            <tr><td><code>ck_ev_saldo</code></td><td>CHECK</td><td><code>quantidade >= 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="usuario" data-domain="estoque">
       <div class="entity-head">
-        <span class="entity-num">5.8</span>
+        <span class="entity-num">5.10</span>
         <h3>Usuário</h3>
+        <span class="tbl-name"><code>tb_usuario</code></span>
       </div>
       <p class="entity-desc">Operador do sistema responsável pelas movimentações de estoque, com perfil de acesso.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_usuario</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do usuário.</td>
           <td class="col-regra">Deve identificar exclusivamente cada usuário.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome</code></td>
+          <td class="col-attr"><code>nome</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NN</td>
           <td>Nome do usuário do sistema.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>perfil</code></td>
+          <td class="col-attr"><code>perfil</code></td><td class="col-type"><code>VARCHAR(30)</code></td><td class="col-cons">NN · CK</td>
           <td>Perfil de acesso do usuário.</td>
           <td class="col-regra">Define as permissões de acesso às informações do sistema (RNF02).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>ativo</code></td>
+          <td class="col-attr"><code>ativo</code></td><td class="col-type"><code>TINYINT(1)</code></td><td class="col-cons">NN · DF</td>
           <td>Indica se o usuário está habilitado.</td>
           <td class="col-regra">Usuários inativos não podem registrar novas operações.</td>
         </tr>
+        <tr>
+          <td class="col-attr"><code>login</code></td><td class="col-type"><code>VARCHAR(60)</code></td><td class="col-cons">NN · UQ</td>
+          <td>Identificador de acesso do usuário ao sistema.</td>
+          <td class="col-regra">Deve ser único (RNF02).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>senha_hash</code></td><td class="col-type"><code>VARCHAR(255)</code></td><td class="col-cons">NN</td>
+          <td>Hash da senha do usuário.</td>
+          <td class="col-regra">Nunca armazenar a senha em texto puro; usar hash com sal (bcrypt/argon2) gerado pela aplicação (RNF02).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_usuario</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_usuario</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>ck_usuario_perfil</code></td><td>CHECK</td><td><code>perfil IN ('Administrador','Vendas','Estoque','Producao','Financeiro')</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
           </tbody>
         </table>
       </div>
@@ -888,315 +1166,489 @@ tbody tr:last-child td{border-bottom:none;}
     
     <article class="entity" id="cliente" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.9</span>
+        <span class="entity-num">5.11</span>
         <h3>Cliente</h3>
+        <span class="tbl-name"><code>tb_cliente</code></span>
       </div>
       <p class="entity-desc">Pessoa física ou jurídica que compra da Namiê Brasil, no atacado ou no varejo.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_cliente</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_cliente</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do cliente.</td>
           <td class="col-regra">Deve identificar exclusivamente cada cliente.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome</code></td>
+          <td class="col-attr"><code>nome</code></td><td class="col-type"><code>VARCHAR(150)</code></td><td class="col-cons">NN</td>
           <td>Nome ou razão social do cliente.</td>
           <td class="col-regra">É obrigatório para identificação do cliente.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>tipo</code></td>
+          <td class="col-attr"><code>tipo</code></td><td class="col-type"><code>ENUM('Consumidor Final','Revendedor')</code></td><td class="col-cons">NN</td>
           <td>Classificação do cliente.</td>
           <td class="col-regra">Deve diferenciar, no mínimo, revendedor/empresa e consumidor final.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>documento</code></td>
+          <td class="col-attr"><code>documento</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN · UQ</td>
           <td>CPF ou CNPJ do cliente.</td>
           <td class="col-regra">Deve ser único e validado (RF04). Sujeito à proteção de dados e anonimização a pedido do titular (RN17).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>telefone</code></td>
+          <td class="col-attr"><code>telefone</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN</td>
           <td>Telefone de contato do cliente.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>email</code></td>
+          <td class="col-attr"><code>email</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NN</td>
           <td>E-mail do cliente.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>status_credito</code></td>
+          <td class="col-attr"><code>status_credito</code></td><td class="col-type"><code>ENUM('Sem Credito','Aprovado','Bloqueado')</code></td><td class="col-cons">NN · DF</td>
           <td>Situação de crédito do cliente.</td>
           <td class="col-regra">Define se o cliente pode comprar a prazo; exclusivo de revendedoras homologadas pela gerência (RN14).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>limite_credito</code></td>
+          <td class="col-attr"><code>limite_credito</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · DF · CK</td>
           <td>Limite de crédito liberado ao cliente.</td>
           <td class="col-regra">Definido pela gerência; deve ser maior ou igual a zero (RN14, RO07).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>logradouro</code></td>
+          <td class="col-attr"><code>logradouro</code></td><td class="col-type"><code>VARCHAR(150)</code></td><td class="col-cons">NN</td>
           <td>Logradouro do endereço.</td>
           <td class="col-regra">Obrigatório (RF04).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>numero</code></td>
+          <td class="col-attr"><code>numero</code></td><td class="col-type"><code>VARCHAR(10)</code></td><td class="col-cons">NN</td>
           <td>Número do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>complemento</code></td>
+          <td class="col-attr"><code>complemento</code></td><td class="col-type"><code>VARCHAR(60)</code></td><td class="col-cons">NULL</td>
           <td>Complemento do endereço.</td>
           <td class="col-regra">Opcional.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>bairro</code></td>
+          <td class="col-attr"><code>bairro</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NN</td>
           <td>Bairro do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cidade</code></td>
+          <td class="col-attr"><code>cidade</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NN</td>
           <td>Cidade do endereço.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>uf</code></td>
+          <td class="col-attr"><code>uf</code></td><td class="col-type"><code>CHAR(2)</code></td><td class="col-cons">NN</td>
           <td>Unidade federativa do endereço.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cep</code></td>
+          <td class="col-attr"><code>cep</code></td><td class="col-type"><code>CHAR(8)</code></td><td class="col-cons">NN</td>
           <td>CEP do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>anonimizado</code></td>
+          <td class="col-attr"><code>anonimizado</code></td><td class="col-type"><code>TINYINT(1)</code></td><td class="col-cons">NN · DF</td>
           <td>Indica se os dados pessoais do cliente foram anonimizados.</td>
           <td class="col-regra">Quando verdadeiro, os dados identificadores são substituídos, preservando os registros fiscais obrigatórios (RN17, RF27).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_cliente</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_cliente</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>idx_cliente_nome</code></td><td>INDEX</td><td><code>nome</code></td><td>Busca de clientes por nome.</td></tr>
+            <tr><td><code>ck_cliente_credito</code></td><td>CHECK</td><td><code>limite_credito >= 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Anonimização (RN17): nome, telefone, e-mail e endereço são substituídos por valores neutros, <code>documento</code> passa a <code>ANON-{id_cliente}</code> e <code>anonimizado</code> = 1. Os registros fiscais em <code>tb_nota_fiscal</code> e <code>tb_pedido_variacao</code> são preservados.</p>
     </article>
     <article class="entity" id="pedido" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.10</span>
+        <span class="entity-num">5.12</span>
         <h3>Pedido</h3>
+        <span class="tbl-name"><code>tb_pedido</code></span>
       </div>
       <p class="entity-desc">Venda realizada por um cliente em um canal específico (atacado, varejo, feira ou online).</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_pedido</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do pedido.</td>
           <td class="col-regra">Deve identificar exclusivamente cada pedido.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_hora</code></td>
+          <td class="col-attr"><code>data_hora</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NN · DF</td>
           <td>Data e horário em que o pedido foi realizado.</td>
           <td class="col-regra">Deve registrar o momento da realização do pedido.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>canal</code></td>
+          <td class="col-attr"><code>canal</code></td><td class="col-type"><code>ENUM('Atacado Feira','Atacado WhatsApp','Site','Marketplace')</code></td><td class="col-cons">NN</td>
           <td>Canal utilizado para realização da venda.</td>
           <td class="col-regra">Deve diferenciar Atacado Feira, Atacado WhatsApp, Site e Marketplace (RF18). Determina se o preço aplicado é o de atacado ou o de varejo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>status</code></td>
+          <td class="col-attr"><code>status</code></td><td class="col-type"><code>ENUM('Aguardando Pagamento','Pago','Faturado','Enviado','Entregue','Cancelado')</code></td><td class="col-cons">NN · DF</td>
           <td>Situação atual do pedido.</td>
-          <td class="col-regra">Permite consultar os pedidos por situação (RF16).</td>
+          <td class="col-regra">Deve representar aguardando pagamento, pago, faturado, enviado, entregue e cancelado; permite consultar os pedidos por situação (RF16).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor_frete</code></td>
+          <td class="col-attr"><code>valor_frete</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · DF · CK</td>
           <td>Valor do frete cobrado no pedido.</td>
           <td class="col-regra">Aplicável às vendas de varejo (RF06). Deve ser maior ou igual a zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor_total</code></td>
+          <td class="col-attr"><code>valor_total</code></td><td class="col-type"><code>DECIMAL(12,2)</code></td><td class="col-cons">NN · DF · CK</td>
           <td>Valor total do pedido.</td>
           <td class="col-regra">Deve ser recalculado a partir dos itens (RF07). Deve ser maior ou igual a zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>endereco_entrega</code></td>
+          <td class="col-attr"><code>endereco_entrega</code></td><td class="col-type"><code>VARCHAR(300)</code></td><td class="col-cons">NULL</td>
           <td>Endereço de entrega informado no pedido.</td>
           <td class="col-regra">Obrigatório nas vendas de varejo com envio.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_envio</code></td>
+          <td class="col-attr"><code>data_envio</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NULL</td>
           <td>Data em que o pedido foi despachado.</td>
           <td class="col-regra">Preenchida após a expedição.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>codigo_rastreio</code></td>
+          <td class="col-attr"><code>codigo_rastreio</code></td><td class="col-type"><code>VARCHAR(40)</code></td><td class="col-cons">NULL</td>
           <td>Código de rastreamento do envio.</td>
           <td class="col-regra">Aplicável às entregas por Correios ou transportadora.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>transportadora</code></td>
+          <td class="col-attr"><code>transportadora</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NULL</td>
           <td>Transportadora responsável pela entrega.</td>
           <td class="col-regra">Aplicável às entregas por transportadora.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_entrega</code></td>
+          <td class="col-attr"><code>data_entrega</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NULL</td>
           <td>Data da entrega confirmada ao cliente.</td>
           <td class="col-regra">Base para o prazo de 7 dias do direito de arrependimento nas vendas online (RN16, RO05).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_cliente</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_cliente · NN</td>
           <td>Identificador do cliente responsável pelo pedido.</td>
           <td class="col-regra">Todo pedido deve estar associado a um cliente.</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_pedido</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_pedido</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_pedido_cliente</code></td><td>FOREIGN KEY</td><td><code>id_cliente</code></td><td>→ tb_cliente(id_cliente) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_pedido_cliente_data</code></td><td>INDEX</td><td><code>id_cliente, data_hora</code></td><td>Pedidos por cliente (RF16).</td></tr>
+            <tr><td><code>idx_pedido_canal_status</code></td><td>INDEX</td><td><code>canal, status</code></td><td>Consulta por canal e situação (RF16, RF18).</td></tr>
+            <tr><td><code>idx_pedido_data</code></td><td>INDEX</td><td><code>data_hora</code></td><td>Consulta por período.</td></tr>
+            <tr><td><code>ck_pedido_valores</code></td><td>CHECK</td><td><code>valor_frete >= 0 AND valor_total >= 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="pagamento" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.11</span>
+        <span class="entity-num">5.13</span>
         <h3>Pagamento</h3>
+        <span class="tbl-name"><code>tb_pagamento</code></span>
       </div>
       <p class="entity-desc">Parcela de pagamento de um pedido, com forma, vencimento e situação.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_pagamento</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_pagamento</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do pagamento/parcela.</td>
           <td class="col-regra">Deve identificar exclusivamente cada parcela.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>numero_parcela</code></td>
+          <td class="col-attr"><code>numero_parcela</code></td><td class="col-type"><code>TINYINT UNSIGNED</code></td><td class="col-cons">NN · DF · CK</td>
           <td>Número da parcela dentro do pedido.</td>
           <td class="col-regra">Vendas parceladas admitem até 3 parcelas (RN14).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor_parcela</code></td>
+          <td class="col-attr"><code>valor_parcela</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor da parcela.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>forma_pagamento</code></td>
+          <td class="col-attr"><code>forma_pagamento</code></td><td class="col-type"><code>ENUM('Pix','Cartao_Credito','Cartao_Debito','Boleto','Dinheiro')</code></td><td class="col-cons">NN</td>
           <td>Forma utilizada no pagamento.</td>
           <td class="col-regra">Deve diferenciar Pix, cartão de crédito, cartão de débito, boleto e dinheiro (RF21).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_vencimento</code></td>
+          <td class="col-attr"><code>data_vencimento</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NN</td>
           <td>Data de vencimento da parcela.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_liquidacao</code></td>
+          <td class="col-attr"><code>data_liquidacao</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NULL</td>
           <td>Data em que a parcela foi liquidada.</td>
           <td class="col-regra">Preenchida apenas quando a parcela for paga.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>situacao</code></td>
+          <td class="col-attr"><code>situacao</code></td><td class="col-type"><code>ENUM('Pendente','Pago','Cancelado')</code></td><td class="col-cons">NN · DF</td>
           <td>Situação da parcela.</td>
           <td class="col-regra">Deve representar pendente, pago e cancelado.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">FK → tb_pedido · NN</td>
           <td>Identificador do pedido pago.</td>
           <td class="col-regra">Todo pedido deve ter a condição de pagamento registrada. Venda a prazo só é permitida a revendedoras cadastradas com crédito aprovado (RN14).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_pagamento</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_pagamento</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_pagamento_pedido</code></td><td>FOREIGN KEY</td><td><code>id_pedido</code></td><td>→ tb_pedido(id_pedido) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>uq_pagamento_parcela</code></td><td>UNIQUE</td><td><code>id_pedido, numero_parcela</code></td><td>Uma linha por parcela do pedido.</td></tr>
+            <tr><td><code>idx_pagamento_venc</code></td><td>INDEX</td><td><code>data_vencimento, situacao</code></td><td>Acompanhamento de vencimentos.</td></tr>
+            <tr><td><code>ck_pagamento_valores</code></td><td>CHECK</td><td><code>numero_parcela BETWEEN 1 AND 3 AND valor_parcela > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="nota_fiscal" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.12</span>
+        <span class="entity-num">5.14</span>
         <h3>Nota Fiscal</h3>
+        <span class="tbl-name"><code>tb_nota_fiscal</code></span>
       </div>
       <p class="entity-desc">Documento fiscal eletrônico (NF-e/NFC-e) emitido para um pedido faturado.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_nota_fiscal</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_nota_fiscal</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da nota fiscal.</td>
           <td class="col-regra">Deve identificar exclusivamente cada nota.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>numero</code></td>
+          <td class="col-attr"><code>numero</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN</td>
           <td>Número da nota fiscal.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>serie</code></td>
+          <td class="col-attr"><code>serie</code></td><td class="col-type"><code>SMALLINT UNSIGNED</code></td><td class="col-cons">NN</td>
           <td>Série da nota fiscal.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>chave_acesso</code></td>
+          <td class="col-attr"><code>chave_acesso</code></td><td class="col-type"><code>CHAR(44)</code></td><td class="col-cons">NN · UQ · CK</td>
           <td>Chave de acesso da nota.</td>
           <td class="col-regra">Deve possuir 44 dígitos e ser única (RN15).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_emissao</code></td>
+          <td class="col-attr"><code>data_emissao</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NN</td>
           <td>Data de emissão da nota.</td>
           <td class="col-regra">Deve ser anterior à liberação e expedição da mercadoria (RN15).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor_fiscal</code></td>
+          <td class="col-attr"><code>valor_fiscal</code></td><td class="col-type"><code>DECIMAL(12,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor total fiscal da nota.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">FK → tb_pedido · NN · UQ</td>
           <td>Identificador do pedido faturado.</td>
           <td class="col-regra">Cada nota está associada a um único pedido, e cada pedido faturado possui uma única nota (RN15, RO04).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_nota_fiscal</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_nota_fiscal</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_nota_fiscal_pedido</code></td><td>FOREIGN KEY</td><td><code>id_pedido</code></td><td>→ tb_pedido(id_pedido) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>uq_nf_pedido</code></td><td>UNIQUE</td><td><code>id_pedido</code></td><td>Garante o 1:1 entre pedido e nota.</td></tr>
+            <tr><td><code>uq_nf_chave</code></td><td>UNIQUE</td><td><code>chave_acesso</code></td><td>Chave de acesso única (RN15).</td></tr>
+            <tr><td><code>uq_nf_serie_numero</code></td><td>UNIQUE</td><td><code>serie, numero</code></td><td>Numeração fiscal única por série.</td></tr>
+            <tr><td><code>ck_nf_valores</code></td><td>CHECK</td><td><code>CHAR_LENGTH(chave_acesso) = 44 AND valor_fiscal > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="devolucao" data-domain="comercial">
       <div class="entity-head">
-        <span class="entity-num">5.13</span>
+        <span class="entity-num">5.15</span>
         <h3>Devolução</h3>
+        <span class="tbl-name"><code>tb_devolucao</code></span>
       </div>
       <p class="entity-desc">Registro de devolução ou troca de itens de um pedido já entregue.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da devolução.</td>
           <td class="col-regra">Deve identificar exclusivamente cada devolução.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_solicitacao</code></td>
+          <td class="col-attr"><code>data_solicitacao</code></td><td class="col-type"><code>DATETIME</code></td><td class="col-cons">NN</td>
           <td>Data em que a devolução foi solicitada.</td>
           <td class="col-regra">Nas vendas online, não pode exceder 7 dias corridos após a data de entrega do pedido (RN16, RO05).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>motivo</code></td>
+          <td class="col-attr"><code>motivo</code></td><td class="col-type"><code>VARCHAR(255)</code></td><td class="col-cons">NN</td>
           <td>Motivo da devolução.</td>
           <td class="col-regra">Obrigatório. No atacado e na feira, troca somente com autorização da gerência por defeito de fábrica comprovado.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">FK → tb_pedido · NN</td>
           <td>Identificador do pedido de origem.</td>
           <td class="col-regra">Toda devolução deve estar associada a um pedido já entregue.</td>
         </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_devolucao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_devolucao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_devolucao_pedido</code></td><td>FOREIGN KEY</td><td><code>id_pedido</code></td><td>→ tb_pedido(id_pedido) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_devolucao_data</code></td><td>INDEX</td><td><code>data_solicitacao</code></td><td>Consulta por período.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="pedido_variacao" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.16</span>
+        <h3>Pedido × Variação</h3>
+        <span class="tbl-name"><code>tb_pedido_variacao</code></span>
+      </div>
+      <p class="entity-desc">Tabela associativa do relacionamento N:N entre PEDIDO e VARIAÇÃO/SKU: itens vendidos, com o preço do momento da venda.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_pedido</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_pedido</td>
+          <td>Identificador do pedido.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_variacao</td>
+          <td>Identificador da variação/SKU vendida.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · CK</td>
+          <td>Quantidade da variação no pedido.</td>
+          <td class="col-regra">Deve ser maior que zero e não exceder o saldo do estoque do canal (RN05).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>preco_unitario</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · CK</td>
+          <td>Preço unitário aplicado no momento da venda.</td>
+          <td class="col-regra">Preço de atacado ou de varejo conforme o canal; permanece inalterado após a venda (RN06, RN07).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_pedido_variacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_pedido, id_variacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_pedido_variacao_pedido</code></td><td>FOREIGN KEY</td><td><code>id_pedido</code></td><td>→ tb_pedido(id_pedido) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_pedido_variacao_variacao</code></td><td>FOREIGN KEY</td><td><code>id_variacao</code></td><td>→ tb_variacao(id_variacao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_pedido_variacao_id_variacao</code></td><td>INDEX</td><td><code>id_variacao</code></td><td>Apoio ao join e à consulta pelo lado inverso da associação.</td></tr>
+            <tr><td><code>ck_pv_valores</code></td><td>CHECK</td><td><code>quantidade > 0 AND preco_unitario > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="devolucao_variacao" data-domain="comercial">
+      <div class="entity-head">
+        <span class="entity-num">5.17</span>
+        <h3>Devolução × Variação</h3>
+        <span class="tbl-name"><code>tb_devolucao_variacao</code></span>
+      </div>
+      <p class="entity-desc">Tabela associativa do relacionamento N:N entre DEVOLUÇÃO e VARIAÇÃO/SKU: o que foi devolvido e para onde retorna.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_devolucao</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_devolucao</td>
+          <td>Identificador da devolução.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_variacao</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_variacao</td>
+          <td>Identificador da variação/SKU devolvida.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">NN · CK</td>
+          <td>Quantidade devolvida.</td>
+          <td class="col-regra">Deve ser maior que zero e não exceder a quantidade vendida no pedido de origem.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>condicao_peca</code></td><td class="col-type"><code>ENUM('Perfeita','Defeituosa')</code></td><td class="col-cons">NN · CK</td>
+          <td>Condição da peça no retorno.</td>
+          <td class="col-regra">Peça perfeita retorna ao Estoque Online (RN11); defeituosa segue ao Defeitão (RN10).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>estoque_destino</code></td><td class="col-type"><code>ENUM('Online','Defeitao')</code></td><td class="col-cons">NN · CK</td>
+          <td>Estoque de destino da peça devolvida.</td>
+          <td class="col-regra">Deve ser coerente com a condição da peça.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_devolucao_variacao</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_devolucao, id_variacao</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_devolucao_variacao_devolucao</code></td><td>FOREIGN KEY</td><td><code>id_devolucao</code></td><td>→ tb_devolucao(id_devolucao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_devolucao_variacao_variacao</code></td><td>FOREIGN KEY</td><td><code>id_variacao</code></td><td>→ tb_variacao(id_variacao) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_devolucao_variacao_id_variacao</code></td><td>INDEX</td><td><code>id_variacao</code></td><td>Apoio ao join e à consulta pelo lado inverso da associação.</td></tr>
+            <tr><td><code>ck_dv_valores</code></td><td>CHECK</td><td><code>quantidade > 0 AND ((condicao_peca='Perfeita' AND estoque_destino='Online') OR (condicao_peca='Defeituosa' AND estoque_destino='Defeitao'))</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
           </tbody>
         </table>
       </div>
@@ -1211,247 +1663,426 @@ tbody tr:last-child td{border-bottom:none;}
     
     <article class="entity" id="fornecedor" data-domain="compras">
       <div class="entity-head">
-        <span class="entity-num">5.14</span>
+        <span class="entity-num">5.18</span>
         <h3>Fornecedor</h3>
+        <span class="tbl-name"><code>tb_fornecedor</code></span>
       </div>
       <p class="entity-desc">Parceiro comercial homologado que fornece tecidos, aviamentos, químicos e embalagens.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do fornecedor.</td>
           <td class="col-regra">Deve identificar exclusivamente cada fornecedor.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>razao_social</code></td>
+          <td class="col-attr"><code>razao_social</code></td><td class="col-type"><code>VARCHAR(150)</code></td><td class="col-cons">NN</td>
           <td>Razão social do fornecedor.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome_fantasia</code></td>
+          <td class="col-attr"><code>nome_fantasia</code></td><td class="col-type"><code>VARCHAR(150)</code></td><td class="col-cons">NULL</td>
           <td>Nome fantasia do fornecedor.</td>
           <td class="col-regra">Opcional.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cnpj</code></td>
+          <td class="col-attr"><code>cnpj</code></td><td class="col-type"><code>CHAR(14)</code></td><td class="col-cons">NN · UQ</td>
           <td>CNPJ do fornecedor.</td>
           <td class="col-regra">Deve ser único, validado e regular (RN18, RF24).</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>inscricao_estadual</code></td>
+          <td class="col-attr"><code>inscricao_estadual</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NULL</td>
           <td>Inscrição estadual do fornecedor.</td>
           <td class="col-regra">Informada quando aplicável.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>telefone</code></td>
+          <td class="col-attr"><code>telefone</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN</td>
           <td>Telefone do fornecedor.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>email</code></td>
+          <td class="col-attr"><code>email</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NN</td>
           <td>E-mail do setor comercial do fornecedor.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>contato_representante</code></td>
+          <td class="col-attr"><code>contato_representante</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NULL</td>
           <td>Contato do representante do fornecedor.</td>
           <td class="col-regra">Opcional.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>categoria_insumo</code></td>
+          <td class="col-attr"><code>categoria_insumo</code></td><td class="col-type"><code>ENUM('Tecido','Aviamento','Quimico','Embalagem')</code></td><td class="col-cons">NN</td>
           <td>Categoria dos insumos fornecidos.</td>
           <td class="col-regra">Deve diferenciar tecidos, aviamentos, químicos e embalagens.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>logradouro</code></td>
+          <td class="col-attr"><code>logradouro</code></td><td class="col-type"><code>VARCHAR(150)</code></td><td class="col-cons">NN</td>
           <td>Logradouro do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>numero</code></td>
+          <td class="col-attr"><code>numero</code></td><td class="col-type"><code>VARCHAR(10)</code></td><td class="col-cons">NN</td>
           <td>Número do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>complemento</code></td>
+          <td class="col-attr"><code>complemento</code></td><td class="col-type"><code>VARCHAR(60)</code></td><td class="col-cons">NULL</td>
           <td>Complemento do endereço.</td>
           <td class="col-regra">Opcional.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>bairro</code></td>
+          <td class="col-attr"><code>bairro</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NN</td>
           <td>Bairro do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cidade</code></td>
+          <td class="col-attr"><code>cidade</code></td><td class="col-type"><code>VARCHAR(80)</code></td><td class="col-cons">NN</td>
           <td>Cidade do endereço.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>uf</code></td>
+          <td class="col-attr"><code>uf</code></td><td class="col-type"><code>CHAR(2)</code></td><td class="col-cons">NN</td>
           <td>Unidade federativa do endereço.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>cep</code></td>
+          <td class="col-attr"><code>cep</code></td><td class="col-type"><code>CHAR(8)</code></td><td class="col-cons">NN</td>
           <td>CEP do endereço.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>ativo</code></td>
+          <td class="col-attr"><code>ativo</code></td><td class="col-type"><code>TINYINT(1)</code></td><td class="col-cons">NN · DF</td>
           <td>Indica se o fornecedor está ativo.</td>
           <td class="col-regra">Somente fornecedores ativos podem receber compras (RN18).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_fornecedor</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_fornecedor</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>uq_fornecedor_cnpj</code></td><td>UNIQUE</td><td><code>cnpj</code></td><td>CNPJ único (RN18).</td></tr>
+            <tr><td><code>idx_fornecedor_razao</code></td><td>INDEX</td><td><code>razao_social</code></td><td>Busca por razão social.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="insumo" data-domain="compras">
       <div class="entity-head">
-        <span class="entity-num">5.15</span>
+        <span class="entity-num">5.19</span>
         <h3>Insumo</h3>
+        <span class="tbl-name"><code>tb_insumo</code></span>
       </div>
       <p class="entity-desc">Matéria-prima ou aviamento adquirido para a fabricação (tecidos, botões, zíperes, linhas, etiquetas, embalagens).</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_insumo</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_insumo</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do insumo.</td>
           <td class="col-regra">Deve identificar exclusivamente cada insumo.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>nome</code></td>
+          <td class="col-attr"><code>nome</code></td><td class="col-type"><code>VARCHAR(120)</code></td><td class="col-cons">NN</td>
           <td>Nome do insumo.</td>
           <td class="col-regra">Obrigatório.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>tipo</code></td>
+          <td class="col-attr"><code>tipo</code></td><td class="col-type"><code>ENUM('Tecido','Aviamento','Quimico','Embalagem')</code></td><td class="col-cons">NN</td>
           <td>Classificação do insumo.</td>
           <td class="col-regra">Deve diferenciar tecido, aviamento, químico de lavanderia e embalagem.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>unidade_medida</code></td>
+          <td class="col-attr"><code>unidade_medida</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN</td>
           <td>Unidade em que o insumo é medido.</td>
           <td class="col-regra">Obrigatória (ex.: metro, rolo, unidade).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_insumo</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_insumo</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>idx_insumo_tipo_nome</code></td><td>INDEX</td><td><code>tipo, nome</code></td><td>Busca de insumos por tipo.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="compra" data-domain="compras">
       <div class="entity-head">
-        <span class="entity-num">5.16</span>
+        <span class="entity-num">5.20</span>
         <h3>Compra</h3>
+        <span class="tbl-name"><code>tb_compra</code></span>
       </div>
       <p class="entity-desc">Aquisição de insumos junto a um fornecedor, conferida contra o documento fiscal.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_compra</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_compra</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único da compra.</td>
           <td class="col-regra">Deve identificar exclusivamente cada compra.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>numero_documento_fiscal</code></td>
+          <td class="col-attr"><code>numero_documento_fiscal</code></td><td class="col-type"><code>VARCHAR(20)</code></td><td class="col-cons">NN</td>
           <td>Número do documento fiscal do fornecedor.</td>
           <td class="col-regra">Utilizado na conferência dos materiais recebidos.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_compra</code></td>
+          <td class="col-attr"><code>data_compra</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NN</td>
           <td>Data em que a compra foi realizada.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_entrega</code></td>
+          <td class="col-attr"><code>data_entrega</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NULL · CK</td>
           <td>Data de entrega dos materiais na fábrica.</td>
           <td class="col-regra">Preenchida após o recebimento e a conferência.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor_total</code></td>
+          <td class="col-attr"><code>valor_total</code></td><td class="col-type"><code>DECIMAL(12,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor total da compra.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_fornecedor</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_fornecedor · NN</td>
           <td>Identificador do fornecedor da compra.</td>
           <td class="col-regra">Toda compra deve ser vinculada a um fornecedor cadastrado e ativo (RN18).</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_compra</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_compra</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_compra_fornecedor</code></td><td>FOREIGN KEY</td><td><code>id_fornecedor</code></td><td>→ tb_fornecedor(id_fornecedor) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_compra_forn_data</code></td><td>INDEX</td><td><code>id_fornecedor, data_compra</code></td><td>Histórico de compras por fornecedor.</td></tr>
+            <tr><td><code>ck_compra_valores</code></td><td>CHECK</td><td><code>valor_total > 0 AND (data_entrega IS NULL OR data_entrega >= data_compra)</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
     </article>
     <article class="entity" id="conta_pagar" data-domain="compras">
       <div class="entity-head">
-        <span class="entity-num">5.17</span>
+        <span class="entity-num">5.21</span>
         <h3>Conta a Pagar</h3>
+        <span class="tbl-name"><code>tb_conta_pagar</code></span>
       </div>
       <p class="entity-desc">Título financeiro gerado por uma compra de matéria-prima, com vencimento e situação de pagamento.</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
           </thead>
           <tbody>
         <tr>
-          <td class="col-attr"><code>id_conta_pagar</code><span class="badge badge-pk">PK</span></td>
+          <td class="col-attr"><code>id_conta_pagar</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
           <td>Identificador único do título a pagar.</td>
           <td class="col-regra">Deve identificar exclusivamente cada título.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>valor</code></td>
+          <td class="col-attr"><code>valor</code></td><td class="col-type"><code>DECIMAL(12,2)</code></td><td class="col-cons">NN · CK</td>
           <td>Valor da obrigação financeira.</td>
           <td class="col-regra">Deve ser maior que zero.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_emissao</code></td>
+          <td class="col-attr"><code>data_emissao</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NN</td>
           <td>Data de emissão do título.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_vencimento</code></td>
+          <td class="col-attr"><code>data_vencimento</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NN · CK</td>
           <td>Data de vencimento do título.</td>
           <td class="col-regra">Obrigatória.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>data_pagamento</code></td>
+          <td class="col-attr"><code>data_pagamento</code></td><td class="col-type"><code>DATE</code></td><td class="col-cons">NULL</td>
           <td>Data do pagamento efetivo.</td>
           <td class="col-regra">Preenchida apenas quando o título for liquidado.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>forma_pagamento</code></td>
+          <td class="col-attr"><code>forma_pagamento</code></td><td class="col-type"><code>ENUM('Pix','Cartao_Credito','Cartao_Debito','Boleto','Dinheiro')</code></td><td class="col-cons">NULL</td>
           <td>Forma utilizada no pagamento do título.</td>
           <td class="col-regra">Registrada na quitação.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>status</code></td>
+          <td class="col-attr"><code>status</code></td><td class="col-type"><code>ENUM('Aberto','Liquidado','Vencido')</code></td><td class="col-cons">NN · DF</td>
           <td>Situação do título.</td>
           <td class="col-regra">Deve representar aberto, liquidado e vencido.</td>
         </tr>
         <tr>
-          <td class="col-attr"><code>id_compra</code><span class="badge badge-fk">FK</span></td>
+          <td class="col-attr"><code>id_compra</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_compra · NN</td>
           <td>Identificador da compra que originou o título.</td>
           <td class="col-regra">Toda compra gera ao menos um título a pagar (RN19). O fornecedor é obtido pela compra.</td>
         </tr>
           </tbody>
         </table>
       </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_conta_pagar</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_conta_pagar</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_conta_pagar_compra</code></td><td>FOREIGN KEY</td><td><code>id_compra</code></td><td>→ tb_compra(id_compra) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_cp_venc</code></td><td>INDEX</td><td><code>data_vencimento, status</code></td><td>Fluxo de caixa e vencimentos.</td></tr>
+            <tr><td><code>ck_cp_valores</code></td><td>CHECK</td><td><code>valor > 0 AND data_vencimento >= data_emissao</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="entity" id="compra_insumo" data-domain="compras">
+      <div class="entity-head">
+        <span class="entity-num">5.22</span>
+        <h3>Compra × Insumo</h3>
+        <span class="tbl-name"><code>tb_compra_insumo</code></span>
+      </div>
+      <p class="entity-desc">Tabela associativa do relacionamento N:N entre COMPRA e INSUMO: itens adquiridos.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_compra</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_compra</td>
+          <td>Identificador da compra.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_insumo</code><span class="badge badge-fk">FK</span><span class="badge badge-pk">PK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">PK · FK → tb_insumo</td>
+          <td>Identificador do insumo.</td>
+          <td class="col-regra">Parte da chave composta.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>quantidade</code></td><td class="col-type"><code>DECIMAL(12,3)</code></td><td class="col-cons">NN · CK</td>
+          <td>Quantidade comprada, na unidade de medida do insumo.</td>
+          <td class="col-regra">Deve ser maior que zero; admite fração (ex.: metros de tecido).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>valor_unitario</code></td><td class="col-type"><code>DECIMAL(10,2)</code></td><td class="col-cons">NN · CK</td>
+          <td>Valor unitário pago pelo insumo.</td>
+          <td class="col-regra">Deve ser maior que zero (RF25).</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_compra_insumo</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_compra, id_insumo</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_compra_insumo_compra</code></td><td>FOREIGN KEY</td><td><code>id_compra</code></td><td>→ tb_compra(id_compra) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>fk_compra_insumo_insumo</code></td><td>FOREIGN KEY</td><td><code>id_insumo</code></td><td>→ tb_insumo(id_insumo) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+            <tr><td><code>idx_compra_insumo_id_insumo</code></td><td>INDEX</td><td><code>id_insumo</code></td><td>Apoio ao join e à consulta pelo lado inverso da associação.</td></tr>
+            <tr><td><code>ck_ci_valores</code></td><td>CHECK</td><td><code>quantidade > 0 AND valor_unitario > 0</code></td><td>Regra de integridade (MySQL ≥ 8.0.16).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section class="domain" id="dom-seguranca">
+    <div class="domain-head">
+      <h2>Segurança e Auditoria</h2>
+      <p>Registro de acessos e operações dos usuários.</p>
+    </div>
+    <article class="entity" id="log_acesso" data-domain="seguranca">
+      <div class="entity-head">
+        <span class="entity-num">5.23</span>
+        <h3>Log de Acesso</h3>
+        <span class="tbl-name"><code>tb_log_acesso</code></span>
+      </div>
+      <p class="entity-desc">Registro imutável de acessos e operações realizadas por usuários, para auditoria e LGPD.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Atributo</th><th>Tipo (MySQL)</th><th>Restrições</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="col-attr"><code>id_log</code><span class="badge badge-pk">PK</span></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">PK · AI</td>
+          <td>Identificador único do registro de log.</td>
+          <td class="col-regra">Deve identificar exclusivamente cada registro.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_usuario</code><span class="badge badge-fk">FK</span></td><td class="col-type"><code>INT UNSIGNED</code></td><td class="col-cons">FK → tb_usuario · NN</td>
+          <td>Usuário que realizou a operação.</td>
+          <td class="col-regra">Todo acesso registrado deve ter um usuário identificado.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>data_hora</code></td><td class="col-type"><code>DATETIME(3)</code></td><td class="col-cons">NN · DF</td>
+          <td>Data e hora da operação, com milissegundos.</td>
+          <td class="col-regra">Preenchida automaticamente pelo banco.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>operacao</code></td><td class="col-type"><code>ENUM('Login','Logout','Consulta','Inclusao','Alteracao','Exclusao','Anonimizacao')</code></td><td class="col-cons">NN</td>
+          <td>Tipo de operação realizada.</td>
+          <td class="col-regra">Consultas a dados pessoais também devem ser registradas.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>tabela_afetada</code></td><td class="col-type"><code>VARCHAR(64)</code></td><td class="col-cons">NULL</td>
+          <td>Tabela acessada ou alterada.</td>
+          <td class="col-regra">Nula em login e logout.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>id_registro</code></td><td class="col-type"><code>BIGINT UNSIGNED</code></td><td class="col-cons">NULL</td>
+          <td>Identificador da linha acessada na tabela afetada.</td>
+          <td class="col-regra">Nulo em login e logout.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>dado_pessoal</code></td><td class="col-type"><code>TINYINT(1)</code></td><td class="col-cons">NN · DF</td>
+          <td>Indica se a operação envolveu dado pessoal.</td>
+          <td class="col-regra">Verdadeiro nas operações sobre colunas marcadas como dado pessoal (LGPD).</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>ip_origem</code></td><td class="col-type"><code>VARCHAR(45)</code></td><td class="col-cons">NN</td>
+          <td>Endereço IP de origem (IPv4 ou IPv6).</td>
+          <td class="col-regra">Obrigatório para rastreabilidade.</td>
+        </tr>
+        <tr>
+          <td class="col-attr"><code>resultado</code></td><td class="col-type"><code>ENUM('Sucesso','Negado')</code></td><td class="col-cons">NN</td>
+          <td>Resultado da tentativa.</td>
+          <td class="col-regra">Tentativas negadas também são registradas.</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Chaves, índices e constraints — <code>tb_log_acesso</code></h4>
+      <div class="table-wrap">
+        <table class="idx-table">
+          <thead><tr><th>Nome</th><th>Tipo</th><th>Colunas / expressão</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id_log</code></td><td>Identificação única da linha.</td></tr>
+            <tr><td><code>fk_log_acesso_usuario</code></td><td>FOREIGN KEY</td><td><code>id_usuario</code></td><td>→ tb_usuario(id_usuario) · ON UPDATE CASCADE · ON DELETE RESTRICT</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Tabela somente de inserção (append-only): nenhum perfil possui UPDATE ou DELETE. Índices auxiliares: <code>idx_log_usuario_data (id_usuario, data_hora)</code>, <code>idx_log_tabela_registro (tabela_afetada, id_registro)</code>, <code>idx_log_data (data_hora)</code>.</p>
     </article>
   </section>
 
     <section id="regras" class="section">
-      <h2 class="section-title"><span class="section-num">03</span>Regras de negócio gerais</h2>
+      <h2 class="section-title"><span class="section-num">04</span>Regras de negócio gerais</h2>
       <p>Além das regras associadas a cada atributo, o modelo considera as seguintes definições de caráter geral:</p>
       <ol class="rules-list">
         
@@ -1525,121 +2156,117 @@ tbody tr:last-child td{border-bottom:none;}
     </section>
 
     <section id="relacionamentos" class="section">
-      <h2 class="section-title"><span class="section-num">04</span>Relacionamento entre os principais dados</h2>
-      <p>A tabela a seguir consolida os relacionamentos descritos entidade a entidade, com a cardinalidade e a regra que a justifica.</p>
+      <h2 class="section-title"><span class="section-num">05</span>Relacionamento entre os principais dados</h2>
+      <p>Cada linha traz a cardinalidade <strong>mínima e máxima</strong> dos dois lados, no formato <code>(min,max)</code> ao lado de cada entidade (como no DER), a leitura em linguagem natural e a implementação física no MySQL.</p>
       <div class="table-wrap">
         <table class="rel-table">
-          <thead>
-            <tr><th>Entidade A</th><th>Cardinalidade</th><th>Entidade B</th><th>Observação</th></tr>
-          </thead>
+          <thead><tr><th>Entidade A</th><th>(min,max) A</th><th>Relacionamento</th><th>(min,max) B</th><th>Entidade B</th><th>Leitura</th><th>Implementação</th></tr></thead>
           <tbody>
-            
-        <tr>
-          <td>Coleção</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Produto/Modelo</td>
-          <td>Cada produto pertence a uma coleção; produtos atemporais usam a coleção de linha permanente.</td>
-        </tr>
-        <tr>
-          <td>Produto/Modelo</td>
-          <td class="col-card"><span class="card-badge">1:1</span></td>
-          <td>Preço</td>
-          <td>Cada produto/modelo possui um único registro de preço, com os valores de atacado e varejo.</td>
-        </tr>
-        <tr>
-          <td>Produto/Modelo</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Variação/SKU</td>
-          <td>Um modelo se desdobra em variações por combinação de cor e tamanho.</td>
-        </tr>
-        <tr>
-          <td>Estoque</td>
-          <td class="col-card"><span class="card-badge">N:N</span></td>
-          <td>Variação/SKU</td>
-          <td>Cada estoque mantém saldo de várias variações, e cada variação pode ter saldo em vários estoques (geral, feira, online, defeitão). O relacionamento carrega o atributo <code>quantidade</code>.</td>
-        </tr>
-        <tr>
-          <td>Estoque</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Movimentação de Estoque</td>
-          <td>Cada movimentação referencia um estoque de origem e/ou de destino, conforme seja entrada, saída ou transferência.</td>
-        </tr>
-        <tr>
-          <td>Variação/SKU</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Movimentação de Estoque</td>
-          <td>Toda entrada, saída ou transferência referencia a variação movimentada.</td>
-        </tr>
-        <tr>
-          <td>Ordem de Produção</td>
-          <td class="col-card"><span class="card-badge">N:N</span></td>
-          <td>Variação/SKU</td>
-          <td>Uma ordem pode produzir várias variações, e uma variação pode ser produzida em várias ordens. O relacionamento carrega o atributo <code>quantidade</code> (produzida).</td>
-        </tr>
-        <tr>
-          <td>Cliente</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Pedido</td>
-          <td>Um cliente pode realizar vários pedidos.</td>
-        </tr>
-        <tr>
-          <td>Pedido</td>
-          <td class="col-card"><span class="card-badge">N:N</span></td>
-          <td>Variação/SKU</td>
-          <td>Um pedido pode conter várias variações, e uma variação pode aparecer em vários pedidos. O relacionamento carrega os atributos <code>quantidade</code> e <code>preco_unitario</code> (aplicado no momento da venda, permanecendo inalterado mesmo que o preço vigente seja atualizado depois).</td>
-        </tr>
-        <tr>
-          <td>Usuário</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Movimentação de Estoque</td>
-          <td>Toda movimentação registra o usuário responsável, para auditoria.</td>
-        </tr>
-        <tr>
-          <td>Pedido</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Pagamento</td>
-          <td>Um pedido possui uma ou mais parcelas de pagamento.</td>
-        </tr>
-        <tr>
-          <td>Pedido</td>
-          <td class="col-card"><span class="card-badge">1:1</span></td>
-          <td>Nota Fiscal</td>
-          <td>Cada pedido faturado possui uma única nota fiscal, e cada nota pertence a um único pedido.</td>
-        </tr>
-        <tr>
-          <td>Pedido</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Devolução</td>
-          <td>Um pedido entregue pode originar devoluções.</td>
-        </tr>
-        <tr>
-          <td>Devolução</td>
-          <td class="col-card"><span class="card-badge">N:N</span></td>
-          <td>Variação/SKU</td>
-          <td>Uma devolução pode envolver várias variações, e uma variação pode ser devolvida em várias devoluções. O relacionamento carrega os atributos <code>quantidade</code>, <code>condicao_peca</code> (perfeita ou defeituosa) e <code>estoque_destino</code> (Online ou Defeitão).</td>
-        </tr>
-        <tr>
-          <td>Fornecedor</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Compra</td>
-          <td>Um fornecedor pode receber várias compras; cada compra pertence a um único fornecedor.</td>
-        </tr>
-        <tr>
-          <td>Compra</td>
-          <td class="col-card"><span class="card-badge">N:N</span></td>
-          <td>Insumo</td>
-          <td>Uma compra pode incluir vários insumos, e um insumo pode ser comprado em várias compras. O relacionamento carrega os atributos <code>quantidade</code> e <code>valor_unitario</code>.</td>
-        </tr>
-        <tr>
-          <td>Compra</td>
-          <td class="col-card"><span class="card-badge">1:N</span></td>
-          <td>Conta a Pagar</td>
-          <td>Cada compra gera um ou mais títulos a pagar.</td>
-        </tr>
+<tr><td>Coleção</td><td><span class="card-badge">(1,n)</span></td><td>possui</td><td><span class="card-badge">(1,1)</span></td><td>Produto/Modelo</td><td>Cada coleção possui de 1 a n produtos; cada produto pertence a 1 coleção.</td><td>FK <code>tb_produto.id_colecao</code></td></tr>
+<tr><td>Produto/Modelo</td><td><span class="card-badge">(1,1)</span></td><td>possui</td><td><span class="card-badge">(1,1)</span></td><td>Preço</td><td>Cada produto tem exatamente 1 registro de preço, e vice-versa.</td><td>FK <code>tb_preco.id_produto</code> + <code>UNIQUE</code></td></tr>
+<tr><td>Produto/Modelo</td><td><span class="card-badge">(1,n)</span></td><td>possui</td><td><span class="card-badge">(1,1)</span></td><td>Variação/SKU</td><td>Cada produto possui de 1 a n variações; cada variação pertence a 1 produto.</td><td>FK <code>tb_variacao.id_produto</code></td></tr>
+<tr><td>Variação/SKU</td><td><span class="card-badge">(0,n)</span></td><td>armazena</td><td><span class="card-badge">(0,n)</span></td><td>Estoque</td><td>Uma variação pode ter saldo em 0 a n estoques, e um estoque pode conter 0 a n variações. Atributo: <code>quantidade</code>.</td><td>Tabela <code>tb_estoque_variacao</code></td></tr>
+<tr><td>Variação/SKU</td><td><span class="card-badge">(0,n)</span></td><td>possui</td><td><span class="card-badge">(1,1)</span></td><td>Movimentação de Estoque</td><td>Uma variação participa de 0 a n movimentações; cada movimentação refere-se a 1 variação.</td><td>FK <code>tb_movimentacao.id_variacao</code></td></tr>
+<tr><td>Estoque</td><td><span class="card-badge">(0,n)</span></td><td>é origem de</td><td><span class="card-badge">(0,1)</span></td><td>Movimentação de Estoque</td><td>Um estoque é origem de 0 a n movimentações; cada movimentação tem no máximo 1 origem (saída e transferência).</td><td>FK <code>tb_movimentacao.id_estoque_origem</code></td></tr>
+<tr><td>Estoque</td><td><span class="card-badge">(0,n)</span></td><td>é destino de</td><td><span class="card-badge">(0,1)</span></td><td>Movimentação de Estoque</td><td>Um estoque é destino de 0 a n movimentações; cada movimentação tem no máximo 1 destino (entrada e transferência).</td><td>FK <code>tb_movimentacao.id_estoque_destino</code></td></tr>
+<tr><td>Usuário</td><td><span class="card-badge">(0,n)</span></td><td>registra</td><td><span class="card-badge">(1,1)</span></td><td>Movimentação de Estoque</td><td>Um usuário registra 0 a n movimentações; cada movimentação tem 1 usuário responsável.</td><td>FK <code>tb_movimentacao.id_usuario</code></td></tr>
+<tr><td>Ordem de Produção</td><td><span class="card-badge">(1,n)</span></td><td>produz</td><td><span class="card-badge">(0,n)</span></td><td>Variação/SKU</td><td>Uma ordem produz de 1 a n variações, e uma variação pode ser produzida em 0 a n ordens. Atributo: <code>quantidade</code>.</td><td>Tabela <code>tb_ordem_variacao</code></td></tr>
+<tr><td>Cliente</td><td><span class="card-badge">(0,n)</span></td><td>realiza</td><td><span class="card-badge">(1,1)</span></td><td>Pedido</td><td>Um cliente realiza 0 a n pedidos; cada pedido pertence a 1 cliente.</td><td>FK <code>tb_pedido.id_cliente</code></td></tr>
+<tr><td>Pedido</td><td><span class="card-badge">(1,n)</span></td><td>contém</td><td><span class="card-badge">(0,n)</span></td><td>Variação/SKU</td><td>Um pedido contém de 1 a n variações, e uma variação aparece em 0 a n pedidos. Atributos: <code>quantidade</code>, <code>preco_unitario</code>.</td><td>Tabela <code>tb_pedido_variacao</code></td></tr>
+<tr><td>Pedido</td><td><span class="card-badge">(1,n)</span></td><td>é pago por</td><td><span class="card-badge">(1,1)</span></td><td>Pagamento</td><td>Um pedido possui de 1 a n parcelas de pagamento; cada parcela pertence a 1 pedido.</td><td>FK <code>tb_pagamento.id_pedido</code></td></tr>
+<tr><td>Pedido</td><td><span class="card-badge">(0,1)</span></td><td>gera</td><td><span class="card-badge">(1,1)</span></td><td>Nota Fiscal</td><td>Um pedido gera 0 ou 1 nota fiscal (só quando faturado); cada nota pertence a 1 pedido.</td><td>FK <code>tb_nota_fiscal.id_pedido</code> + <code>UNIQUE</code></td></tr>
+<tr><td>Pedido</td><td><span class="card-badge">(0,n)</span></td><td>origina</td><td><span class="card-badge">(1,1)</span></td><td>Devolução</td><td>Um pedido origina 0 a n devoluções; cada devolução refere-se a 1 pedido.</td><td>FK <code>tb_devolucao.id_pedido</code></td></tr>
+<tr><td>Devolução</td><td><span class="card-badge">(1,n)</span></td><td>devolve</td><td><span class="card-badge">(0,n)</span></td><td>Variação/SKU</td><td>Uma devolução envolve de 1 a n variações, e uma variação pode ser devolvida em 0 a n devoluções. Atributos: <code>quantidade</code>, <code>condicao_peca</code>, <code>estoque_destino</code>.</td><td>Tabela <code>tb_devolucao_variacao</code></td></tr>
+<tr><td>Fornecedor</td><td><span class="card-badge">(0,n)</span></td><td>fornece</td><td><span class="card-badge">(1,1)</span></td><td>Compra</td><td>Um fornecedor recebe 0 a n compras; cada compra é feita a 1 fornecedor.</td><td>FK <code>tb_compra.id_fornecedor</code></td></tr>
+<tr><td>Compra</td><td><span class="card-badge">(1,n)</span></td><td>inclui</td><td><span class="card-badge">(0,n)</span></td><td>Insumo</td><td>Uma compra inclui de 1 a n insumos, e um insumo pode estar em 0 a n compras. Atributos: <code>quantidade</code>, <code>valor_unitario</code>.</td><td>Tabela <code>tb_compra_insumo</code></td></tr>
+<tr><td>Compra</td><td><span class="card-badge">(1,n)</span></td><td>gera</td><td><span class="card-badge">(1,1)</span></td><td>Conta a Pagar</td><td>Uma compra gera de 1 a n títulos a pagar; cada título pertence a 1 compra.</td><td>FK <code>tb_conta_pagar.id_compra</code></td></tr>
+<tr><td>Usuário</td><td><span class="card-badge">(0,n)</span></td><td>gera</td><td><span class="card-badge">(1,1)</span></td><td>Log de Acesso</td><td>Um usuário gera 0 a n registros de log; cada registro pertence a 1 usuário.</td><td>FK <code>tb_log_acesso.id_usuario</code></td></tr>
           </tbody>
         </table>
       </div>
     </section>
+
+    <section id="seguranca" class="section">
+      <h2 class="section-title"><span class="section-num">06</span>Segurança, papéis e LGPD</h2>
+      <p>O acesso é controlado por perfis (RBAC — RNF02), implementados como <em>roles</em> do MySQL. Todo acesso passa por <code>tb_usuario</code> e é registrado em <code>tb_log_acesso</code>.</p>
+      <h4 class="idx-title">Papéis (roles)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role MySQL</th><th>Perfil</th><th>Setor / responsabilidade</th></tr></thead>
+          <tbody>
+<tr><td><code>r_administrador</code></td><td>Administrador (ADM)</td><td>Diretoria e gerência: cadastros mestres, auditoria e anonimização</td></tr>
+<tr><td><code>r_vendas</code></td><td>Vendas (VEN)</td><td>Pontos de venda, atendimento do atacado e e-commerce</td></tr>
+<tr><td><code>r_estoque</code></td><td>Estoque (EST)</td><td>Expedição, almoxarifado, separação, transferências e recebimento de insumos</td></tr>
+<tr><td><code>r_producao</code></td><td>Produção (PRO)</td><td>Ordens de produção (corte, costura, lavanderia e acabamento)</td></tr>
+<tr><td><code>r_financeiro</code></td><td>Financeiro (FIN)</td><td>Pagamentos, notas fiscais, fornecedores e contas a pagar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Permissões por operação (C = inserir · R = consultar · U = alterar · D = excluir)</h4>
+      <div class="table-wrap">
+        <table class="matrix">
+          <thead><tr><th>Tabela</th><th>ADM</th><th>VEN</th><th>EST</th><th>PRO</th><th>FIN</th><th>Dado pessoal (LGPD)</th></tr></thead>
+          <tbody>
+<tr><td><code>tb_colecao</code></td><td>CRUD</td><td>R</td><td>R</td><td>R</td><td>—</td><td>Não</td></tr>
+<tr><td><code>tb_produto</code></td><td>CRUD</td><td>R</td><td>R</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_variacao</code></td><td>CRUD</td><td>R</td><td>CRU</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_preco</code></td><td>CRUD</td><td>R</td><td>—</td><td>—</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_ordem_producao</code></td><td>CRU</td><td>—</td><td>R</td><td>CRU</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_ordem_variacao</code></td><td>CRU</td><td>—</td><td>R</td><td>CRU</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_estoque</code></td><td>CRU</td><td>R</td><td>R</td><td>R</td><td>—</td><td>Não</td></tr>
+<tr><td><code>tb_estoque_variacao</code></td><td>R</td><td>R</td><td>RU</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_movimentacao</code></td><td>R</td><td>—</td><td>CR</td><td>—</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_usuario</code></td><td>CRU</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Sim</td></tr>
+<tr><td><code>tb_cliente</code></td><td>CRU</td><td>CRU</td><td>—</td><td>—</td><td>R</td><td>Sim</td></tr>
+<tr><td><code>tb_pedido</code></td><td>CRU</td><td>CRU</td><td>RU</td><td>—</td><td>R</td><td>Sim</td></tr>
+<tr><td><code>tb_pedido_variacao</code></td><td>CRU</td><td>CRU</td><td>R</td><td>—</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_pagamento</code></td><td>CRU</td><td>CR</td><td>—</td><td>—</td><td>CRU</td><td>Não</td></tr>
+<tr><td><code>tb_nota_fiscal</code></td><td>R</td><td>R</td><td>R</td><td>—</td><td>CR</td><td>Não</td></tr>
+<tr><td><code>tb_devolucao</code></td><td>CRU</td><td>CR</td><td>CRU</td><td>—</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_devolucao_variacao</code></td><td>CRU</td><td>CR</td><td>CRU</td><td>—</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_fornecedor</code></td><td>CRU</td><td>—</td><td>R</td><td>R</td><td>CRU</td><td>Sim</td></tr>
+<tr><td><code>tb_insumo</code></td><td>CRUD</td><td>—</td><td>CRU</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_compra</code></td><td>CRU</td><td>—</td><td>CRU</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_compra_insumo</code></td><td>CRU</td><td>—</td><td>CRU</td><td>R</td><td>R</td><td>Não</td></tr>
+<tr><td><code>tb_conta_pagar</code></td><td>CRU</td><td>—</td><td>—</td><td>—</td><td>CRU</td><td>Não</td></tr>
+<tr><td><code>tb_log_acesso</code></td><td>R</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Sim</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li>A exclusão (D) é permitida apenas em cadastros mestres e somente quando não há registros dependentes (<code>ON DELETE RESTRICT</code>). Clientes, usuários e fornecedores nunca são excluídos: são anonimizados ou desativados (<code>ativo</code> = 0).</li>
+        <li><code>tb_movimentacao</code> e <code>tb_log_acesso</code> são imutáveis: nenhum perfil altera ou exclui linhas. Correções de estoque são feitas por movimentação de estorno.</li>
+        <li>O saldo em <code>tb_estoque_variacao</code> é atualizado apenas pela rotina de movimentação; o <code>U</code> do perfil Estoque vale para essa rotina.</li>
+        <li>Exemplo de implementação: <code>GRANT SELECT, INSERT ON namie_brasil.tb_movimentacao TO 'r_estoque';</code></li>
+      </ul>
+      <h4 class="idx-title">Dados pessoais (LGPD)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tabela</th><th>Colunas</th><th>Natureza</th><th>Finalidade</th><th>Tratamento</th></tr></thead>
+          <tbody>
+<tr><td><code>tb_cliente</code></td><td><code>nome, documento, telefone, email, logradouro, numero, complemento, bairro, cidade, uf, cep</code></td><td>Identificação e contato do titular</td><td>Processar pedidos, entrega e obrigações fiscais (RN17)</td><td>Acesso restrito por perfil; anonimização a pedido do titular (<code>anonimizado</code> = 1); registros fiscais preservados</td></tr>
+<tr><td><code>tb_pedido</code></td><td><code>endereco_entrega</code></td><td>Localização do titular</td><td>Entrega do pedido</td><td>Acesso restrito; consulta registrada em log</td></tr>
+<tr><td><code>tb_fornecedor</code></td><td><code>contato_representante, telefone, email</code></td><td>Contato de pessoa que representa o fornecedor</td><td>Relacionamento comercial e compras</td><td>Acesso restrito a Financeiro, Estoque e Produção (leitura)</td></tr>
+<tr><td><code>tb_usuario</code></td><td><code>nome, login, senha_hash</code></td><td>Identificação e credencial do operador</td><td>Controle de acesso (RNF02)</td><td><code>senha_hash</code> com bcrypt/argon2, nunca em texto puro; leitura só pelo Administrador</td></tr>
+<tr><td><code>tb_log_acesso</code></td><td><code>id_usuario, ip_origem</code></td><td>Rastreabilidade de quem acessou o dado</td><td>Segurança e auditoria (RNF03)</td><td>Tabela imutável; leitura só pelo Administrador; retenção pelo prazo legal aplicável</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="idx-title">Política de tratamento e anonimização (RN17, RO06)</h4>
+      <ul>
+        <li><strong>Finalidade e minimização:</strong> dados pessoais são coletados apenas para pedidos, entrega, cobrança e obrigações fiscais.</li>
+        <li><strong>Anonimização a pedido do titular:</strong> o Administrador executa a rotina que substitui os dados identificadores e marca <code>anonimizado</code> = 1; a operação é registrada em <code>tb_log_acesso</code> com <code>operacao</code> = 'Anonimizacao'.</li>
+        <li><strong>Retenção fiscal:</strong> notas fiscais, valores e itens de pedidos já faturados são mantidos pelo prazo legal, sem identificar o titular após a anonimização.</li>
+        <li><strong>Segurança:</strong> senhas armazenadas apenas como hash; acesso por perfil; backup periódico (RNF05).</li>
+      </ul>
+      <h4 class="idx-title">Log de acesso</h4>
+      <ul>
+        <li><strong>O que é registrado:</strong> login e logout; inclusão, alteração e exclusão de dados; e toda consulta a tabelas com dados pessoais (<code>dado_pessoal</code> = 1).</li>
+        <li><strong>Campos:</strong> usuário, data e hora (milissegundos), operação, tabela e linha afetadas, IP de origem e resultado (sucesso ou negado).</li>
+        <li><strong>Integridade:</strong> tabela somente de inserção, preenchida pela aplicação; leitura restrita ao Administrador.</li>
+      </ul>
+    </section>
+
 
     <footer class="page-footer">
       <p>Dicionário de dados conceitual — Namiê Brasil. Documento produzido para fins acadêmicos, a partir do dicionário de dados original do projeto.</p>
