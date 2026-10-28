@@ -145,11 +145,11 @@ namiebrasil@gmail.com
     - *Dados envolvidos:* ID da movimentação, SKU, quantidade avariada, motivo do defeito, data de descarte/segregação e estoque destino ('Defeitão').
   
 - **Fluxogramas:** 
-### 2.1 Produção de peças
+### 2.5 Fluxogramas dos processos
 
 Os fluxogramas representam os processos observados durante o levantamento e a forma como esses processos poderão ser organizados e controlados pelo sistema proposto.
 
-#### 2.1 Produção de Peças
+#### 2.5.1 Produção de Peças
 ```mermaid
 flowchart TD
     A([Início]) --> B[Definição de modelo e coleção pela diretoria]
@@ -170,7 +170,7 @@ flowchart TD
     N --> O([Fim])
 ```
 
-#### 2.2 Abastecimento e Transferência de Estoque
+#### 2.5.2 Abastecimento e Transferência de Estoque
 ```mermaid
 flowchart TD
     A([Início]) --> B[Entrada de peças acabadas no Estoque Geral]
@@ -185,7 +185,7 @@ flowchart TD
     H --> Z
 ```
 
-#### 2.3 Tratamento de Defeitos e Peças Não Conformes ("Defeitão")
+#### 2.5.3 Tratamento de Defeitos e Peças Não Conformes ("Defeitão")
 ```mermaid
 flowchart TD
     A([Início]) --> B[Identificação de peça com defeito/avaria/mostruário]
@@ -200,7 +200,7 @@ flowchart TD
     H --> I([Fim])
 ```
 
-#### 2.4 Venda no Atacado (Feira e WhatsApp)
+#### 2.5.4 Venda no Atacado (Feira e WhatsApp)
 ```mermaid
 flowchart TD
     A([Início]) --> B[Revendedora/Lojista solicita pedido]
@@ -218,7 +218,7 @@ flowchart TD
     K --> Z
 ```
 
-#### 2.5 Venda no Varejo (Site e Marketplaces)
+#### 2.5.5 Venda no Varejo (Site e Marketplaces)
 ```mermaid
 flowchart TD
     A([Início]) --> B[Cliente realiza pedido na loja virtual ou marketplace]
@@ -233,7 +233,7 @@ flowchart TD
     I --> Z
 ```
 
-#### 2.6 Cadastro de Clientes e Revendedoras
+#### 2.5.6 Cadastro de Clientes e Revendedoras
 ```mermaid
 flowchart TD
     A([Início]) --> B[Cliente solicita cadastro para compra]
@@ -250,7 +250,7 @@ flowchart TD
     J --> K([Fim])
 ```
 
-#### 2.7 Recebimento e Pagamento das Vendas
+#### 2.5.7 Recebimento e Pagamento das Vendas
 ```mermaid
 flowchart TD
     A([Início]) --> B[Pedido de Venda Registrado]
@@ -273,7 +273,7 @@ flowchart TD
     N --> Z
 ```
 
-#### 2.8 Separação, Emissão de Nota Fiscal e Expedição
+#### 2.5.8 Separação, Emissão de Nota Fiscal e Expedição
 ```mermaid
 flowchart TD
     A([Início]) --> B[Pedido com pagamento aprovado ou faturado]
@@ -289,7 +289,7 @@ flowchart TD
     J --> K([Fim])
 ```
 
-#### 2.9 Devoluções e Direito de Arrependimento (CDC)
+#### 2.5.9 Devoluções e Direito de Arrependimento (CDC)
 ```mermaid
 flowchart TD
     A([Início]) --> B[Cliente solicita devolução ou troca]
@@ -309,7 +309,7 @@ flowchart TD
     L --> M([Fim])
 ```
 
-#### 2.10 Cadastro e Gestão de Fornecedores
+#### 2.5.10 Cadastro e Gestão de Fornecedores
 ```mermaid
 flowchart TD
     A([Início]) --> B[Necessidade de homologação de fornecedor]
@@ -322,7 +322,7 @@ flowchart TD
     G --> H([Fim])
 ```
 
-#### 2.11 Compra de Matéria-Prima (Tecidos e Aviamentos)
+#### 2.5.11 Compra de Matéria-Prima (Tecidos e Aviamentos)
 ```mermaid
 flowchart TD
     A([Início]) --> B[Alerta de estoque baixo de insumos ou demanda de nova OP]
@@ -338,7 +338,7 @@ flowchart TD
     J --> K([Fim])
 ```
 
-#### 2.12 Gestão de Contas a Pagar
+#### 2.5.12 Gestão de Contas a Pagar
 ```mermaid
 flowchart TD
     A([Início]) --> B[Título a pagar gerado pela compra de matéria-prima]
@@ -481,105 +481,235 @@ Para cada entidade identificada, liste:
 **Atenção à privacidade:** se forem usados exemplos de valores para ilustrar os atributos, esses exemplos devem ser **fictícios** — não utilize dados reais de clientes, fiéis, beneficiários, doadores ou funcionários da organização (nomes, CPFs, contatos etc.), mesmo que tenham sido observados durante a pesquisa de campo. Os exemplos devem apenas ser **coerentes com as operações reais** observadas.
 
 **COLEÇÃO**
-| Atributo   | Descrição                | Regra de negócio associada                  |
-| ---------- | ------------------------ | -------------------------------------------- |
-| id_colecao | Identificador da coleção | Deve identificar unicamente cada coleção    |
-| nome       | Nome da coleção          | Deve permitir identificar a coleção         |
-| tipo       | Classificação da coleção | Pode representar coleção normal ou especial |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_colecao | Identificador da coleção | Deve identificar unicamente cada coleção |
+| nome | Nome da coleção | Deve permitir identificar a coleção |
+| tipo | Classificação da coleção | Pode representar coleção normal, especial ou de linha permanente |
+| ano_temporada | Ano ou temporada de referência | Associa a coleção à temporada em que foi desenvolvida (RF03, RN02) |
+| cartela_cores | Paleta de cores da coleção | Orienta a associação dos produtos à coleção (RF03, RN02) |
 
 **PRODUTO/MODELO**
-| Atributo   | Descrição                            | Regra de negócio associada                   |
-| ---------- | ------------------------------------ | -------------------------------------------- |
-| id_produto | Identificador do modelo do produto   | Deve identificar unicamente cada modelo      |
-| nome       | Nome do modelo do produto            | Obrigatório                                  |
-| descricao  | Descrição do modelo                  | Pode ser utilizada para detalhar o produto   |
-| id_colecao | Identificação da coleção relacionada | O produto deve estar associado a uma coleção |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_produto | Identificador do modelo do produto | Deve identificar unicamente cada modelo |
+| nome | Nome do modelo do produto | Obrigatório |
+| descricao | Descrição do modelo | Pode ser utilizada para detalhar o produto |
+| id_colecao | Coleção relacionada | O produto deve estar associado a uma coleção |
 
 **VARIAÇÃO/SKU**
-| Atributo    | Descrição                           | Regra de negócio associada                                        |
-| ----------- | ------------------------------------ | ----------------------------------------------------------------- |
-| id_variacao | Identificador da variação           | Deve identificar unicamente a variação                            |
-| sku         | Código de identificação da variação | Cada combinação de modelo, cor e tamanho possui um SKU específico |
-| cor         | Cor da peça                         | Obrigatória                                                       |
-| tamanho     | Tamanho da peça                     | Obrigatório                                                       |
-| id_produto  | Produto/modelo ao qual pertence     | Toda variação deve pertencer a um modelo                          |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_variacao | Identificador da variação | Deve identificar unicamente a variação |
+| sku | Código de identificação da variação | Cada combinação de modelo, cor e tamanho possui um SKU único |
+| cor | Cor da peça | Obrigatória |
+| tamanho | Tamanho da peça | Obrigatório |
+| estoque_minimo | Quantidade mínima desejada no Estoque Geral | Saldo menor ou igual ao mínimo gera alerta de reposição (RN12) |
+| id_produto | Produto/modelo ao qual pertence | Toda variação deve pertencer a um modelo |
 
 **PREÇO**
-
-| Atributo      | Descrição                             | Regra de negócio associada                                      |
-| ------------- | -------------------------------------- | ------------------------------------------------------------------ |
-| id_preco      | Identificador do preço                | Deve identificar unicamente o registro de preço                 |
-| preco_atacado | Preço praticado nas vendas de atacado | Deve representar o valor utilizado para vendas de atacado       |
-| preco_varejo  | Preço praticado nas vendas de varejo  | Deve representar o valor utilizado para vendas de varejo        |
-| id_produto    | Modelo relacionado                    | Cada registro de preço deve estar associado a um produto/modelo |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_preco | Identificador do preço | Deve identificar unicamente o registro de preço |
+| preco_atacado | Preço praticado no atacado | Valor utilizado nas vendas de atacado |
+| preco_varejo | Preço praticado no varejo | Valor utilizado nas vendas de varejo; maior ou igual ao de atacado |
+| id_produto | Modelo relacionado | Cada registro de preço está associado a um único produto/modelo |
 
 **ESTOQUE**
-| Atributo    | Descrição                      | Regra de negócio associada                                    |
-| ----------- | ------------------------------- | -------------------------------------------------------------- |
-| id_estoque  | Identificador do estoque       | Deve identificar unicamente cada estoque                       |
-| localização | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira, online e defeitão   |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_estoque | Identificador do estoque | Deve identificar unicamente cada estoque |
+| localizacao | Local ou finalidade do estoque | Deve diferenciar, no mínimo, geral, feira, online e defeitão |
 
 **Relacionamento VARIAÇÃO/SKU ↔ ESTOQUE (N:N)**
 
-Uma variação pode ter saldo em vários estoques, e um estoque pode conter várias variações. O relacionamento carrega o seguinte atributo:
+Uma variação pode ter saldo em vários estoques, e um estoque pode conter várias variações. O relacionamento carrega o atributo:
 
-| Atributo   | Descrição                                          | Regra de negócio associada     |
-| ---------- | ---------------------------------------------------- | -------------------------------- |
-| quantidade | Quantidade disponível da variação naquele estoque   | Deve ser maior ou igual a zero |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| quantidade | Quantidade disponível da variação naquele estoque | Maior ou igual a zero |
 
 **MOVIMENTAÇÃO DE ESTOQUE**
-| Atributo           | Descrição                          | Regra de negócio associada                                                   |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
-| id_movimentacao    | Identificador da movimentação      | Deve identificar unicamente cada movimentação                                |
-| tipo               | Tipo da movimentação               | Deve indicar entrada, saída ou transferência                                 |
-| quantidade         | Quantidade movimentada             | Deve ser maior que zero                                                      |
-| data_hora          | Data e horário da movimentação     | Deve registrar quando a movimentação ocorreu                                 |
-| id_estoque_origem  | Estoque de origem da movimentação  | Deve referenciar o estoque de origem quando houver saída ou transferência    |
-| id_estoque_destino | Estoque de destino da movimentação | Deve referenciar o estoque de destino quando houver entrada ou transferência |
-| id_variacao        | Variação movimentada               | Toda movimentação deve estar relacionada a uma variação/SKU                  |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_movimentacao | Identificador da movimentação | Deve identificar unicamente cada movimentação |
+| tipo | Tipo da movimentação | Entrada, saída ou transferência |
+| quantidade | Quantidade movimentada | Maior que zero |
+| data_hora | Data e horário da movimentação | Registra quando a movimentação ocorreu |
+| justificativa | Motivo da movimentação | Registra a justificativa de entradas, saídas e ajustes (RF09) |
+| id_estoque_origem | Estoque de origem | Informado em saídas e transferências |
+| id_estoque_destino | Estoque de destino | Informado em entradas e transferências |
+| id_variacao | Variação movimentada | Toda movimentação se refere a uma variação/SKU |
+| id_usuario | Usuário responsável | Registrado para auditoria (RNF03) |
+
+**USUÁRIO**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_usuario | Identificador do usuário | Deve identificar unicamente cada usuário |
+| nome | Nome do usuário | Obrigatório |
+| perfil | Perfil de acesso | Define as permissões de acesso (RNF02) |
+| ativo | Indica se o usuário está habilitado | Usuários inativos não registram novas operações |
+| login | Identificador de acesso | Único |
+| senha_hash | Hash da senha | Nunca armazenar a senha em texto puro |
 
 **ORDEM DE PRODUÇÃO**
-| Atributo    | Descrição                          | Regra de negócio associada                          |
-| ----------- | ------------------------------------ | ------------------------------------------------------ |
-| id_ordem    | Identificador da ordem de produção | Deve identificar unicamente cada ordem              |
-| data_inicio | Data de início da produção         | Registra o início da ordem                          |
-| data_fim    | Data de conclusão da produção      | Deve ser preenchida quando a produção for concluída |
-| status      | Situação da ordem                  | Deve representar a situação atual da produção       |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_ordem | Identificador da ordem de produção | Deve identificar unicamente cada ordem |
+| data_inicio | Data de início da produção | Registra o início da ordem |
+| data_prevista | Data prevista de conclusão | Permite acompanhar prazos (RF12) |
+| data_fim | Data de conclusão da produção | Preenchida quando a produção for concluída |
+| status | Situação da ordem | Planejada, em corte, em costura, em lavanderia, em acabamento ou concluída |
 
 **Relacionamento VARIAÇÃO/SKU ↔ ORDEM DE PRODUÇÃO (N:N)**
 
-Uma ordem pode produzir várias variações, e uma variação pode ser produzida em várias ordens. O relacionamento carrega o seguinte atributo:
+Uma ordem pode produzir várias variações, e uma variação pode ser produzida em várias ordens. O relacionamento carrega o atributo:
 
-| Atributo   | Descrição             | Regra de negócio associada |
-| ---------- | ----------------------- | ----------------------------- |
-| quantidade | Quantidade produzida   | Deve ser maior que zero      |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| quantidade | Quantidade produzida | Maior que zero (RN08) |
 
 **CLIENTE**
-| Atributo   | Descrição                | Regra de negócio associada                                         |
-| ---------- | -------------------------- | ---------------------------------------------------------------------- |
-| id_cliente | Identificador do cliente | Deve identificar unicamente cada cliente                           |
-| nome       | Nome do cliente          | Obrigatório                                                        |
-| tipo       | Tipo de cliente          | Deve diferenciar, no mínimo, revendedor/empresa e consumidor final |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_cliente | Identificador do cliente | Deve identificar unicamente cada cliente |
+| nome | Nome ou razão social | Obrigatório |
+| tipo | Tipo de cliente | Consumidor final ou revendedor |
+| documento | CPF ou CNPJ | Único e validado (RF04) |
+| telefone | Telefone de contato | Obrigatório |
+| email | E-mail do cliente | Obrigatório |
+| status_credito | Situação de crédito | Venda a prazo somente a revendedoras homologadas (RN14) |
+| limite_credito | Limite de crédito liberado | Definido pela gerência (RO07) |
+| logradouro, numero, complemento, bairro, cidade, uf, cep | Endereço completo do cliente | Obrigatório, exceto complemento (RF04) |
+| anonimizado | Indica se os dados foram anonimizados | Atende ao direito de anonimização (RN17, RF27) |
 
 **PEDIDO**
-| Atributo   | Descrição                | Regra de negócio associada                    |
-| ---------- | -------------------------- | -------------------------------------------------- |
-| id_pedido  | Identificador do pedido  | Deve identificar unicamente cada pedido       |
-| data_hora  | Data e horário do pedido | Registra quando o pedido foi realizado        |
-| canal      | Canal de venda           | Deve diferenciar atacado e varejo             |
-| id_cliente | Cliente relacionado      | Todo pedido deve estar associado a um cliente |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_pedido | Identificador do pedido | Deve identificar unicamente cada pedido |
+| data_hora | Data e horário do pedido | Registra quando o pedido foi realizado |
+| canal | Canal de venda | Atacado Feira, Atacado WhatsApp, Site ou Marketplace (RF18) |
+| status | Situação do pedido | Permite consultar pedidos por situação (RF16) |
+| valor_frete | Valor do frete | Aplicável ao varejo (RF06) |
+| valor_total | Valor total do pedido | Recalculado a partir dos itens (RF07) |
+| endereco_entrega | Endereço de entrega | Obrigatório nas vendas de varejo com envio |
+| data_envio, codigo_rastreio, transportadora | Dados da expedição | Preenchidos após o envio |
+| data_entrega | Data da entrega confirmada | Base do prazo de 7 dias para devolução (RN16, RO05) |
+| id_cliente | Cliente relacionado | Todo pedido deve estar associado a um cliente |
 
 **Relacionamento VARIAÇÃO/SKU ↔ PEDIDO (N:N)**
 
-Um pedido pode conter várias variações, e uma variação pode aparecer em vários pedidos. O relacionamento carrega os seguintes atributos:
+Um pedido pode conter várias variações, e uma variação pode aparecer em vários pedidos. O relacionamento carrega os atributos:
 
-| Atributo       | Descrição                | Regra de negócio associada                                              |
-| -------------- | --------------------------- | ---------------------------------------------------------------------------- |
-| quantidade     | Quantidade solicitada    | Deve ser maior que zero                                                 |
-| preco_unitario | Preço unitário aplicado  | Deve considerar o tipo de venda e permanecer inalterado após a venda   |
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| quantidade | Quantidade solicitada | Maior que zero (RN05) |
+| preco_unitario | Preço unitário aplicado | Considera o tipo de venda e permanece inalterado após a venda (RN07) |
+
+**PAGAMENTO**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_pagamento | Identificador do pagamento/parcela | Deve identificar unicamente cada parcela |
+| numero_parcela | Número da parcela | Até 3 parcelas (RN14) |
+| valor_parcela | Valor da parcela | Maior que zero |
+| forma_pagamento | Forma de pagamento | Pix, cartão de crédito, cartão de débito, boleto ou dinheiro (RF21) |
+| data_vencimento | Data de vencimento | Obrigatória |
+| data_liquidacao | Data de liquidação | Preenchida quando a parcela for paga |
+| situacao | Situação da parcela | Pendente, pago ou cancelado |
+| id_pedido | Pedido pago | Todo pedido tem condição de pagamento registrada (RN14) |
+
+**NOTA FISCAL**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_nota_fiscal | Identificador da nota fiscal | Deve identificar unicamente cada nota |
+| numero, serie | Número e série da nota | Obrigatórios |
+| chave_acesso | Chave de acesso | 44 dígitos e única (RN15) |
+| data_emissao | Data de emissão | Anterior à expedição da mercadoria (RN15) |
+| valor_fiscal | Valor total fiscal | Maior que zero |
+| id_pedido | Pedido faturado | Uma nota por pedido faturado (RO04) |
+
+**DEVOLUÇÃO**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_devolucao | Identificador da devolução | Deve identificar unicamente cada devolução |
+| data_solicitacao | Data da solicitação | Até 7 dias após a entrega nas vendas online (RN16) |
+| motivo | Motivo da devolução | Obrigatório |
+| id_pedido | Pedido de origem | Toda devolução se refere a um pedido já entregue |
+
+**Relacionamento VARIAÇÃO/SKU ↔ DEVOLUÇÃO (N:N)**
+
+Uma devolução pode envolver várias variações, e uma variação pode ser devolvida em várias devoluções. O relacionamento carrega os atributos:
+
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| quantidade | Quantidade devolvida | Maior que zero; não excede a quantidade vendida |
+| condicao_peca | Condição da peça | Perfeita ou defeituosa |
+| estoque_destino | Estoque para onde a peça retorna | Online (perfeita, RN11) ou Defeitão (defeituosa, RN10) |
+
+**FORNECEDOR**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_fornecedor | Identificador do fornecedor | Deve identificar unicamente cada fornecedor |
+| razao_social, nome_fantasia | Identificação do fornecedor | Razão social obrigatória |
+| cnpj | CNPJ do fornecedor | Único e validado (RN18, RF24) |
+| inscricao_estadual | Inscrição estadual | Quando aplicável |
+| telefone, email, contato_representante | Contatos do fornecedor | Telefone e e-mail obrigatórios |
+| categoria_insumo | Categoria dos insumos fornecidos | Tecidos, aviamentos, químicos ou embalagens |
+| logradouro, numero, complemento, bairro, cidade, uf, cep | Endereço do fornecedor | Obrigatório, exceto complemento |
+| ativo | Indica se o fornecedor está ativo | Só fornecedores ativos recebem compras (RN18) |
+
+**INSUMO**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_insumo | Identificador do insumo | Deve identificar unicamente cada insumo |
+| nome | Nome do insumo | Obrigatório |
+| tipo | Classificação do insumo | Tecido, aviamento, químico ou embalagem |
+| unidade_medida | Unidade de medida | Obrigatória |
+
+**COMPRA**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_compra | Identificador da compra | Deve identificar unicamente cada compra |
+| numero_documento_fiscal | Número do documento fiscal do fornecedor | Usado na conferência do recebimento |
+| data_compra | Data da compra | Obrigatória |
+| data_entrega | Data de entrega dos materiais | Preenchida após o recebimento |
+| valor_total | Valor total da compra | Maior que zero |
+| id_fornecedor | Fornecedor da compra | Fornecedor cadastrado e ativo (RN18) |
+
+**Relacionamento COMPRA ↔ INSUMO (N:N)**
+
+Uma compra pode incluir vários insumos, e um insumo pode estar em várias compras. O relacionamento carrega os atributos:
+
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| quantidade | Quantidade comprada | Maior que zero; admite fração |
+| valor_unitario | Valor unitário pago | Maior que zero (RF25) |
+
+**CONTA A PAGAR**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_conta_pagar | Identificador do título | Deve identificar unicamente cada título |
+| valor | Valor da obrigação | Maior que zero |
+| data_emissao, data_vencimento | Datas do título | Vencimento não anterior à emissão |
+| data_pagamento | Data do pagamento efetivo | Preenchida na liquidação |
+| forma_pagamento | Forma de pagamento do título | Registrada na quitação |
+| status | Situação do título | Aberto, liquidado ou vencido |
+| id_compra | Compra que originou o título | Toda compra gera ao menos um título (RN19) |
+
+**LOG DE ACESSO**
+| Atributo | Descrição | Regra de negócio associada |
+| --- | --- | --- |
+| id_log | Identificador do registro | Deve identificar unicamente cada registro |
+| id_usuario | Usuário que realizou a operação | Obrigatório |
+| data_hora | Data e hora da operação | Preenchida automaticamente |
+| operacao | Tipo de operação | Login, logout, consulta, inclusão, alteração, exclusão ou anonimização |
+| tabela_afetada, id_registro | Tabela e linha acessadas | Nulos em login e logout |
+| dado_pessoal | Indica operação sobre dado pessoal | Base da auditoria LGPD (RO06) |
+| ip_origem, resultado | Origem e resultado do acesso | Tentativas negadas também são registradas |
+
+O dicionário completo, com tipos físicos (MySQL), restrições, índices, cardinalidades mínimas e máximas, papéis por operação, LGPD e log de acesso, está em [`dicionario-dados-namie-brasil.html`](dicionario-dados-namie-brasil.html).
 
 ---
-
 
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
 <!-- *(vale 7,5% na dimensão conceitual)* -->
@@ -588,25 +718,17 @@ Um pedido pode conter várias variações, e uma variação pode aparecer em vá
 - **Relacionamentos pertinentes:** *como as entidades se conectam.*
 - **Restrições e políticas organizacionais aplicadas ao modelo.**
 
-O modelo conceitual proposto para a Namiê Brasil representa os principais dados envolvidos nos processos de produção, controle de estoque e comercialização de produtos.
+O modelo conceitual proposto para a Namiê Brasil representa os dados envolvidos nos processos de produção, controle de estoque, comercialização, pagamento, faturamento, devolução, compras de matéria-prima, contas a pagar e controle de acesso. Ele é composto por 18 entidades. Os relacionamentos N:N não geram entidades "item": os dados de cada associação (quantidade, preço unitário etc.) ficam como atributos do próprio relacionamento.
 
-## 6.1 Entidades e relacionamentos
+## 6.1 Catálogo
 
 **COLEÇÃO ↔ PRODUTO/MODELO**
 
-Uma coleção pode possuir um ou vários produtos/modelos.
-
-Cada produto/modelo pertence obrigatoriamente a uma única coleção.
-
-Essa relação representa a organização dos modelos de produtos dentro das coleções utilizadas pela empresa.
+Uma coleção possui um ou vários produtos/modelos, e cada produto/modelo pertence obrigatoriamente a uma única coleção.
 
 **PRODUTO/MODELO ↔ VARIAÇÃO/SKU**
 
-Um produto/modelo pode possuir uma ou várias variações.
-
-Cada variação/SKU pertence a um único produto/modelo.
-
-A variação representa uma combinação específica de cor e tamanho e possui um SKU próprio para sua identificação.
+Um produto/modelo possui uma ou várias variações, e cada variação/SKU pertence a um único produto/modelo. A variação representa uma combinação específica de cor e tamanho e possui um SKU próprio.
 
 Exemplo:
 
@@ -615,148 +737,127 @@ Exemplo:
 > ├── Off White / M
 > └── Off White / G
 
-Essa estrutura permite representar diferentes variações de um mesmo modelo sem duplicar as informações gerais do produto.
-
 **PRODUTO/MODELO ↔ PREÇO**
 
-Cada produto/modelo possui um único registro de preço.
-
-Cada registro de preço está relacionado a um único produto/modelo.
-
-A entidade PREÇO armazena os valores praticados nas vendas de atacado e varejo, permitindo diferenciar os preços de acordo com o tipo de venda.
+Cada produto/modelo possui um único registro de preço, e cada registro de preço pertence a um único produto/modelo. A entidade PREÇO armazena os valores de atacado e de varejo.
 
 ## 6.2 Produtos e estoques
 
 **VARIAÇÃO/SKU ↔ ESTOQUE**
 
-Uma variação/SKU pode estar presente em nenhum, um ou vários estoques.
+Uma variação/SKU pode estar presente em nenhum, um ou vários estoques, e um estoque pode conter nenhuma, uma ou várias variações. A relação é do tipo N:N e carrega o atributo quantidade, que representa o saldo da variação naquele estoque.
 
-Um estoque pode conter nenhuma, uma ou várias variações/SKU.
-
-Essa relação é do tipo N:N e carrega o atributo quantidade, representando o saldo daquela variação especificamente naquele estoque.
-
-Os estoques considerados no modelo são:
-
-* Geral
-* Feira
-* Online
-* Defeitão
+Os estoques considerados no modelo são Geral, Feira, Online e Defeitão.
 
 Exemplo:
 
 > SKU X → Estoque Geral → 20 unidades
 > SKU X → Estoque Feira → 5 unidades
 
-Dessa forma, a quantidade de uma mesma variação pode ser controlada separadamente em diferentes estoques.
-
 ## 6.3 Movimentação de estoque
 
 **VARIAÇÃO/SKU ↔ MOVIMENTAÇÃO DE ESTOQUE**
 
-Uma variação/SKU pode participar de nenhuma ou várias movimentações de estoque.
+Uma variação/SKU participa de nenhuma ou várias movimentações, e cada movimentação refere-se a uma única variação.
 
-Cada movimentação de estoque está relacionada a uma única variação/SKU.
+**ESTOQUE ↔ MOVIMENTAÇÃO DE ESTOQUE (origem e destino)**
 
-A movimentação registra informações como tipo, quantidade e data e horário da operação.
+A relação entre estoque e movimentação é representada por dois relacionamentos: "é origem de" e "é destino de". Um estoque pode ser origem de nenhuma ou várias movimentações e destino de nenhuma ou várias movimentações, e cada movimentação tem no máximo uma origem e no máximo um destino.
 
-**MOVIMENTAÇÃO DE ESTOQUE ↔ ESTOQUE**
-
-Uma movimentação pode estar relacionada a nenhum ou um estoque.
-
-Um estoque pode estar relacionado a nenhuma ou várias movimentações.
-
-A relação permite registrar as alterações realizadas nos estoques, considerando a movimentação de produtos.
-
-As movimentações podem representar:
-
-* Entrada de produtos;
-* Saída de produtos;
-* Transferência de produtos entre estoques.
+Dessa forma, uma entrada possui apenas destino, uma saída possui apenas origem, e uma transferência possui origem e destino ao mesmo tempo.
 
 Exemplo:
 
-> 20 unidades do SKU X | Estoque Geral → Estoque Feira
+> 20 unidades do SKU X | Estoque Geral (origem) → Estoque Feira (destino)
 
-Nesse caso, a movimentação registra a alteração da quantidade do SKU X relacionada ao estoque.
+**USUÁRIO ↔ MOVIMENTAÇÃO DE ESTOQUE**
+
+Um usuário registra nenhuma ou várias movimentações, e cada movimentação possui um único usuário responsável, garantindo rastreabilidade (RNF03).
 
 ## 6.4 Produção
 
 **VARIAÇÃO/SKU ↔ ORDEM DE PRODUÇÃO**
 
-Uma variação/SKU pode ser produzida em nenhuma, uma ou várias ordens de produção.
+Uma ordem de produção produz uma ou várias variações/SKU, e uma variação pode ser produzida em nenhuma ou várias ordens. A relação é do tipo N:N e carrega o atributo quantidade, que representa a quantidade produzida da variação naquela ordem.
 
-Uma ordem de produção pode produzir uma ou várias variações/SKU.
+## 6.5 Clientes, pedidos, pagamentos, notas fiscais e devoluções
 
-Essa relação é do tipo N:N e carrega o atributo quantidade, representando a quantidade produzida daquela variação naquela ordem.
+**CLIENTE ↔ PEDIDO**
 
-Portanto:
-
-> ORDEM DE PRODUÇÃO ↔ VARIAÇÃO/SKU (relação N:N, com a quantidade produzida registrada no próprio relacionamento)
-
-## 6.5 Clientes e pedidos
+Um cliente realiza nenhum ou vários pedidos, e cada pedido pertence a um único cliente.
 
 **VARIAÇÃO/SKU ↔ PEDIDO**
 
-Uma variação/SKU pode aparecer em nenhum ou vários pedidos.
+Um pedido contém uma ou várias variações, e uma variação pode aparecer em nenhum ou vários pedidos. A relação é do tipo N:N e carrega os atributos quantidade e preço unitário aplicado na venda, preservando o valor praticado no momento da venda.
 
-Um pedido pode conter uma ou várias variações/SKU.
+**PEDIDO ↔ PAGAMENTO**
 
-Essa relação é do tipo N:N e carrega os atributos quantidade e preço unitário aplicado na venda, permitindo que um mesmo pedido contenha diferentes produtos e quantidades, com o preço praticado no momento da venda preservado mesmo que o cadastro de preços seja atualizado posteriormente.
+Um pedido possui uma ou várias parcelas de pagamento, e cada parcela pertence a um único pedido (RN14).
 
-**PEDIDO ↔ CLIENTE**
+**PEDIDO ↔ NOTA FISCAL**
 
-Cada pedido pertence a um único cliente.
+Um pedido gera nenhuma ou uma nota fiscal (somente quando faturado), e cada nota fiscal pertence a um único pedido (RN15).
 
-Um cliente pode possuir nenhum ou vários pedidos.
+**PEDIDO ↔ DEVOLUÇÃO**
 
-Essa relação permite manter o histórico de compras de cada cliente e associar cada pedido ao respectivo comprador.
+Um pedido pode originar nenhuma ou várias devoluções, e cada devolução refere-se a um único pedido (RN16).
+
+**DEVOLUÇÃO ↔ VARIAÇÃO/SKU**
+
+Uma devolução envolve uma ou várias variações, e uma variação pode ser devolvida em nenhuma ou várias devoluções. A relação é do tipo N:N e carrega os atributos quantidade, condição da peça e estoque de destino.
 
 Assim:
 
-> CLIENTE → PEDIDO ↔ VARIAÇÃO/SKU (relação N:N)
+> CLIENTE → PEDIDO → PAGAMENTO · NOTA FISCAL · DEVOLUÇÃO
+> PEDIDO ↔ VARIAÇÃO/SKU (N:N)
 
-Exemplo:
+## 6.6 Compras e financeiro
 
-> Cliente X
-> Pedido 001
-> ├── 5 × Calça modelo A / 38
-> ├── 3 × Calça modelo A / 40
-> └── 2 × Cropped modelo B / M
+**FORNECEDOR ↔ COMPRA**
 
-## 6.6 Estrutura conceitual
+Um fornecedor recebe nenhuma ou várias compras, e cada compra é feita a um único fornecedor cadastrado e ativo (RN18).
 
-A estrutura apresentada no DER relaciona as entidades da seguinte forma:
+**COMPRA ↔ INSUMO**
 
-```
-                         COLEÇÃO
-                            │
-                          1:N
-                            │
-                            ▼
-                     PRODUTO/MODELO
-                           │         \ 
-                          1:N         1:1
-                           │           │
-                           ▼           ▼
-                      VARIAÇÃO/SKU    PREÇO
-                    /    │    │    \
-                  0:N   N:N  N:N   N:N
-                 /       │    │       \
-                ▼        ▼    ▼        ▼
-      MOVIMENTAÇÃO   ESTOQUE ORDEM DE  PEDIDO
-          DE                 PRODUÇÃO     │
-        ESTOQUE                          1:N
-           \                              │
-            0:1                          ▼
-                \                     CLIENTE
-                  ▶ ESTOQUE
-```
+Uma compra inclui um ou vários insumos, e um insumo pode estar em nenhuma ou várias compras. A relação é do tipo N:N e carrega os atributos quantidade e valor unitário.
 
-O modelo separa os dados de produtos, variações, preços, estoques, movimentações, produção e vendas, permitindo representar os principais processos identificados na organização.
+**COMPRA ↔ CONTA A PAGAR**
 
-As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode não possuir registros relacionados ou pode possuir vários deles. O `1:N` representa uma relação em que uma ocorrência obrigatoriamente se relaciona com uma ou várias ocorrências da outra entidade. Já o `1:1` representa uma relação em que cada ocorrência está associada a uma única ocorrência da outra entidade, conforme definido no modelo.
+Uma compra gera um ou vários títulos a pagar, e cada título pertence a uma única compra (RN19).
 
-A estrutura também permite a expansão do sistema nas próximas etapas do projeto, mantendo separadas as informações de modelos, suas variações, estoques, movimentações, produção, clientes e pedidos.
+## 6.7 Segurança e auditoria
+
+**USUÁRIO ↔ LOG DE ACESSO**
+
+Um usuário gera nenhum ou vários registros de log, e cada registro pertence a um único usuário. O log é imutável e registra acessos e operações, inclusive consultas a dados pessoais (RNF02, RNF03, RO06).
+
+## 6.8 Estrutura conceitual
+
+As relações do DER, com a cardinalidade mínima e máxima de cada lado, são:
+
+| Entidade A | (min,max) | Relacionamento | (min,max) | Entidade B |
+| --- | --- | --- | --- | --- |
+| COLEÇÃO | (1,n) | possui | (1,1) | PRODUTO/MODELO |
+| PRODUTO/MODELO | (1,1) | possui | (1,1) | PREÇO |
+| PRODUTO/MODELO | (1,n) | possui | (1,1) | VARIAÇÃO/SKU |
+| VARIAÇÃO/SKU | (0,n) | armazena | (0,n) | ESTOQUE |
+| VARIAÇÃO/SKU | (0,n) | possui | (1,1) | MOVIMENTAÇÃO DE ESTOQUE |
+| ESTOQUE | (0,n) | é origem de | (0,1) | MOVIMENTAÇÃO DE ESTOQUE |
+| ESTOQUE | (0,n) | é destino de | (0,1) | MOVIMENTAÇÃO DE ESTOQUE |
+| USUÁRIO | (0,n) | registra | (1,1) | MOVIMENTAÇÃO DE ESTOQUE |
+| ORDEM DE PRODUÇÃO | (1,n) | produz | (0,n) | VARIAÇÃO/SKU |
+| CLIENTE | (0,n) | realiza | (1,1) | PEDIDO |
+| PEDIDO | (1,n) | contém | (0,n) | VARIAÇÃO/SKU |
+| PEDIDO | (1,n) | é pago por | (1,1) | PAGAMENTO |
+| PEDIDO | (0,1) | gera | (1,1) | NOTA FISCAL |
+| PEDIDO | (0,n) | origina | (1,1) | DEVOLUÇÃO |
+| DEVOLUÇÃO | (1,n) | devolve | (0,n) | VARIAÇÃO/SKU |
+| FORNECEDOR | (0,n) | fornece | (1,1) | COMPRA |
+| COMPRA | (1,n) | inclui | (0,n) | INSUMO |
+| COMPRA | (1,n) | gera | (1,1) | CONTA A PAGAR |
+| USUÁRIO | (0,n) | gera | (1,1) | LOG DE ACESSO |
+
+O `(min,max)` fica ao lado de cada entidade e indica em quantas ocorrências do relacionamento cada ocorrência dessa entidade participa: `0` indica participação opcional, `1` obrigatória e `n` sem limite. O modelo separa os dados de catálogo, estoque, produção, vendas, financeiro, compras e segurança, permitindo representar os principais processos identificados na organização e sendo expansível nas próximas etapas do projeto.
 
 ---
 
@@ -780,28 +881,25 @@ A estrutura também permite a expansão do sistema nas próximas etapas do proje
 
 <!-- *Explique e defenda as decisões de abstração e modelagem tomadas: por que essas entidades, esses atributos, esses relacionamentos e essas cardinalidades — e não outras alternativas possíveis?* -->
 
-O modelo conceitual foi elaborado com base nos processos de produção, controle de estoque e comercialização identificados durante o levantamento realizado na Namiê Brasil. As entidades foram definidas buscando representar os principais dados necessários para o funcionamento dos processos analisados, evitando concentrar informações distintas em uma única entidade.
+O modelo conceitual foi elaborado com base nos processos de produção, controle de estoque, comercialização, financeiro e compras identificados durante o levantamento realizado na Namiê Brasil. As entidades foram definidas para representar os dados necessários a cada processo, evitando concentrar informações distintas em uma única entidade.
 
-A entidade **COLEÇÃO** foi utilizada para representar a organização dos produtos em diferentes coleções. A relação com **PRODUTO/MODELO** permite representar a associação dos modelos às coleções identificadas pela organização.
+**Catálogo.** A entidade **COLEÇÃO** organiza os produtos por temporada e paleta de cores (RN02). **PRODUTO/MODELO** representa o modelo comercial da peça, e a relação `1:N` com **VARIAÇÃO/SKU** existe porque um modelo possui várias combinações de cor e tamanho, enquanto cada variação pertence a um único modelo (RN01). **PREÇO** foi separada do modelo para guardar os valores de atacado e de varejo (RN06), e a relação `1:1` foi adotada porque cada modelo possui um único registro de preço.
 
-A entidade **PRODUTO/MODELO** representa o modelo comercial da peça e funciona como referência para suas diferentes variações. A relação `1:N` com **VARIAÇÃO/SKU** foi definida porque um modelo pode possuir várias combinações de cor e tamanho, enquanto cada variação pertence a um único modelo. Dessa forma, diferentes SKUs podem ser representados sem duplicar as informações gerais do modelo.
+**Estoque.** Foi adotado um relacionamento `N:N` entre **VARIAÇÃO/SKU** e **ESTOQUE**, com a quantidade como atributo do relacionamento. Assim, uma mesma variação mantém saldos independentes em Geral, Feira, Online e Defeitão (RN03, RO01), sem concentrar uma quantidade única na entidade ESTOQUE. **MOVIMENTAÇÃO DE ESTOQUE** registra entradas, saídas e transferências e mantém o histórico (RN04, RF15). A ligação com ESTOQUE foi modelada como dois relacionamentos, origem e destino, porque uma transferência precisa dos dois estoques ao mesmo tempo, e cada movimentação possui no máximo uma origem e um destino.
 
-A entidade **PREÇO** foi separada de **PRODUTO/MODELO** para representar os valores de venda de atacado e varejo. A relação `1:1` foi adotada porque, no modelo proposto, cada produto/modelo possui um registro de preço com os valores correspondentes aos diferentes tipos de venda.
+**Produção.** Entre **ORDEM DE PRODUÇÃO** e **VARIAÇÃO/SKU** foi adotado um relacionamento `N:N` com a quantidade produzida como atributo, pois uma ordem envolve várias variações e uma variação pode ser produzida em várias ordens (RN08). A produção é interna, e por isso não há entidade de terceirização (RO03).
 
-Para o controle de estoque, foi adotado um relacionamento `N:N` entre **VARIAÇÃO/SKU** e **ESTOQUE**. Essa escolha permite que uma mesma variação seja armazenada em diferentes estoques, como geral, feira, online e defeitão, mantendo quantidades independentes para cada local. A quantidade disponível é armazenada como atributo do próprio relacionamento, evitando concentrar uma única quantidade na entidade ESTOQUE, o que não representaria corretamente a situação observada na organização.
+**Vendas.** **CLIENTE** e **PEDIDO** têm relação `1:N`: um cliente realiza nenhum ou vários pedidos, e cada pedido pertence a um único cliente (RN07). Pedido e variação formam um `N:N` cujos atributos, quantidade e preço unitário, ficam no relacionamento. O preço unitário preservado evita que mudanças futuras no cadastro de preços alterem pedidos já realizados. O endereço foi mantido como atributos de CLIENTE e de PEDIDO (entrega) por não possuir ciclo de vida próprio no levantamento.
 
-A entidade **MOVIMENTAÇÃO DE ESTOQUE** foi criada para registrar alterações nas quantidades armazenadas. Ela está relacionada às variações/SKUs e aos estoques, permitindo representar entradas, saídas e transferências de produtos. Essa estrutura também possibilita manter um histórico das movimentações realizadas.
+**Pagamento, nota fiscal e devolução.** **PAGAMENTO** é uma entidade própria porque um pedido pode ter várias parcelas, com forma, vencimento e situação (RN14, RF21). **NOTA FISCAL** tem relação `1:1` opcional com o pedido, já que só pedidos faturados possuem nota (RN15, RO04). **DEVOLUÇÃO** é ligada ao pedido de origem e relaciona-se `N:N` com a variação, com quantidade, condição da peça e estoque de destino, o que permite direcionar a peça ao estoque Online ou ao Defeitão (RN10, RN11, RN16).
 
-Na produção, foi adotado um relacionamento `N:N` entre **ORDEM DE PRODUÇÃO** e **VARIAÇÃO/SKU**, porque uma mesma ordem pode envolver diferentes variações de produtos e respectivas quantidades, e uma mesma variação pode ser produzida em mais de uma ordem. A quantidade produzida é armazenada como atributo do próprio relacionamento, permitindo registrar, em uma única ordem, diferentes combinações de modelo, cor e tamanho.
+**Compras e financeiro.** **FORNECEDOR**, **INSUMO**, **COMPRA** e **CONTA A PAGAR** representam o abastecimento de matéria-prima (RN18, RN19). Compra e insumo formam um `N:N` com quantidade e valor unitário como atributos. Cada compra gera títulos a pagar, e o fornecedor do título é obtido pela compra, evitando redundância.
 
-Para as vendas, foram utilizadas as entidades **CLIENTE** e **PEDIDO**, relacionadas a **VARIAÇÃO/SKU** por um relacionamento `N:N`. Um cliente pode realizar nenhum ou vários pedidos, enquanto cada pedido está associado a um único cliente. Um pedido pode conter várias variações, e uma mesma variação pode aparecer em vários pedidos; a quantidade solicitada é armazenada como atributo do próprio relacionamento entre PEDIDO e VARIAÇÃO/SKU, permitindo registrar diferentes produtos dentro de uma mesma venda.
+**Segurança e auditoria.** **USUÁRIO** identifica quem realiza cada movimentação e acesso, sustentando o controle por perfis (RNF02). **LOG DE ACESSO** guarda um histórico imutável de acessos e operações, inclusive consultas a dados pessoais, atendendo à rastreabilidade (RNF03) e à LGPD (RN17, RO06).
 
-O relacionamento entre **PEDIDO** e **VARIAÇÃO/SKU** também armazena o preço unitário aplicado no momento da venda. Essa decisão evita que alterações futuras no cadastro de preços modifiquem o valor histórico de pedidos já realizados.
+**Cardinalidades.** As cardinalidades foram definidas pela participação mínima e máxima de cada entidade nos relacionamentos. O `(0,n)` representa participação opcional e ilimitada, o `(1,n)` participação obrigatória e ilimitada, o `(0,1)` participação opcional limitada a uma ocorrência e o `(1,1)` participação obrigatória limitada a uma ocorrência. O `N:N` foi usado onde ambas as entidades se associam a várias ocorrências da outra, com os dados da associação guardados no próprio relacionamento.
 
-As cardinalidades foram definidas de acordo com a participação mínima e máxima de cada entidade nos relacionamentos. O uso de `0:N` representa situações em que uma entidade pode existir sem ainda possuir registros relacionados, enquanto `1:N` representa uma relação obrigatória com possibilidade de múltiplos registros. O `N:N` foi utilizado entre VARIAÇÃO/SKU e ESTOQUE, ORDEM DE PRODUÇÃO e PEDIDO, situações em que ambas as entidades podem se associar a várias ocorrências da outra, com os dados específicos de cada associação armazenados no próprio relacionamento. As cardinalidades `1:1` foram utilizadas quando cada ocorrência de uma entidade está diretamente relacionada a uma única ocorrência da outra entidade, conforme as regras identificadas no levantamento.
-
-O modelo também foi estruturado considerando a possibilidade de expansão do sistema nas próximas etapas do projeto. A separação entre modelos, variações, estoques, movimentações, produção, clientes e pedidos reduz a duplicação de informações e permite que novos registros sejam incorporados sem alterar a estrutura básica das entidades existentes.
-
+**Escalabilidade.** O modelo separa catálogo, estoque, produção, vendas, financeiro, compras e segurança, o que reduz duplicação e permite incorporar novos registros, locais de estoque ou canais de venda sem alterar a estrutura das entidades existentes.
 
 ---
 
