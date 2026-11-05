@@ -603,7 +603,7 @@ WHERE p.status IN ('Faturado','Enviado','Entregue')
           p.data_envio IS NOT NULL
           AND nf.data_emissao > p.data_envio
       )
-  )
+  );
 
 -- A04 — Existe venda a prazo (boleto parcelado ou com vencimento acima de 7 dias) para cliente sem crédito aprovado?
 -- Verifica: RN14 (prazo só para revendedora com crédito aprovado; boleto de 1 parcela com vencimento curto é à vista)
