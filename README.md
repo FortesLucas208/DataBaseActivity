@@ -635,3 +635,82 @@ O desenvolvimento do projeto foi acompanhado pelo histórico de commits do GitHu
 O histórico de alterações pode ser acessado em [Commits do repositório](https://github.com/FortesLucas208/DataBaseActivity/commits/main). A participação dos integrantes também pode ser consultada no [gráfico de contribuidores](https://github.com/FortesLucas208/DataBaseActivity/graphs/contributors).
 
 Os integrantes e suas respectivas contas do GitHub estão identificados na tabela apresentada no início deste README. A utilização do controle de versão permite acompanhar a evolução do projeto, manter os arquivos centralizados e fornecer rastreabilidade das contribuições realizadas ao longo do desenvolvimento.
+
+---
+
+
+## 6. Uso de Inteligência Artificial
+
+Durante o desenvolvimento do projeto, foram utilizadas ferramentas de Inteligência Artificial como apoio à revisão de documentos, auditoria de consultas SQL e elaboração do relatório técnico. As ferramentas auxiliaram em diferentes etapas, mas as informações, sugestões e resultados foram analisados pelos integrantes e confrontados com os materiais do projeto antes de serem aproveitados.
+
+### 6.1. Claude Anthropic — Sonnet 5.5 (versão gratuita)
+
+**Etapa de utilização:** auditoria de documentos e organização do projeto.
+
+**Motivação:** utilizar uma ferramenta de IA como segunda revisão dos materiais produzidos, buscando identificar problemas de organização, inconsistências entre documentos, informações redundantes e oportunidades de melhoria na estrutura da documentação.
+
+**Prompt utilizado (reconstrução aproximada):**
+
+> Analise os documentos do projeto e faça uma auditoria da organização e da consistência das informações. Identifique possíveis divergências, redundâncias, lacunas e problemas de estrutura. Considere a relação entre o relatório técnico, a modelagem do banco de dados e os demais documentos do projeto. Apresente sugestões de melhoria sem inventar informações que não estejam nos materiais fornecidos.
+
+**Resposta recebida:** foram utilizados os apontamentos e as sugestões da ferramenta como apoio à revisão e à organização dos documentos, servindo como uma avaliação complementar do material produzido pelo grupo.
+
+**Fontes consultadas e verificadas:** documentos do próprio projeto, informações do levantamento organizacional, diagramas e documentação do banco de dados. As sugestões foram confrontadas com os materiais originais antes de serem incorporadas.
+
+**Trechos rejeitados ou corrigidos:** sugestões que não correspondiam aos processos levantados, que apresentavam interpretações diferentes das decisões de modelagem ou que acrescentavam informações sem comprovação foram desconsideradas ou ajustadas.
+
+**Justificativa da escolha final:** o Claude foi utilizado como ferramenta de revisão complementar. Suas recomendações foram consideradas conforme sua compatibilidade com os documentos e com as decisões tomadas pelo grupo.
+
+**Reflexão crítica:** a ferramenta pode interpretar incorretamente informações distribuídas em documentos diferentes ou sugerir alterações que parecem adequadas textualmente, mas não correspondem à realidade dos processos organizacionais. Por isso, suas sugestões não foram consideradas automaticamente corretas.
+
+### 6.2. OpenAI ChatGPT — GPT-6 (versão gratuita)
+
+**Etapa de utilização:** auditoria do script SQL e análise das consultas gerenciais e de auditoria.
+
+**Motivação:** auxiliar na revisão da lógica das consultas SQL, verificar sua relação com os problemas organizacionais identificados e analisar se os resultados obtidos na massa de dados eram coerentes com os objetivos das consultas.
+
+**Prompt utilizado (reconstrução aproximada):**
+
+> Analise o script SQL e a massa de dados do projeto. Verifique as consultas gerenciais e de auditoria, identificando possíveis problemas de lógica, inconsistências nos critérios utilizados e oportunidades de melhoria. Considere os problemas organizacionais P1 a P5, as regras de negócio e os resultados esperados de cada consulta. Aponte possíveis correções e explique os motivos.
+
+**Resposta recebida:** a ferramenta realizou uma revisão da estrutura e da lógica das consultas, relacionando-as aos problemas e às regras de negócio. Entre os pontos analisados estavam a identificação de divergências de estoque, a detecção de saldos negativos, a consideração de pedidos cancelados em indicadores e a precisão dos cálculos de tempo entre operações.
+
+Também foram apontados cuidados específicos, como diferenciar uma movimentação que efetivamente provoca saldo negativo de outras movimentações realizadas enquanto o saldo já está negativo.
+
+**Fontes consultadas e verificadas:** script SQL, massa de dados, modelo lógico e informações do relatório técnico, especialmente os problemas P1 a P5 e as regras de negócio relacionadas a estoque, vendas, faturamento e devoluções.
+
+**Trechos rejeitados ou corrigidos:** sugestões de alteração foram avaliadas conforme a estrutura real das tabelas e o comportamento esperado das consultas. Recomendações que dependiam de interpretações não confirmadas foram tratadas com cautela, evitando modificar a lógica do projeto sem justificativa.
+
+**Justificativa da escolha final:** o ChatGPT foi utilizado como apoio à auditoria técnica, contribuindo para identificar possíveis falhas e aprimorar a clareza das consultas. A definição final da lógica e das alterações permaneceu sob responsabilidade dos integrantes.
+
+**Reflexão crítica:** a análise de código realizada por IA não equivale à execução do script em um ambiente MySQL. Uma consulta pode parecer correta em sua estrutura e ainda apresentar erros de execução ou resultados inesperados. Por isso, as sugestões precisavam ser confrontadas com o esquema, a massa de dados e os resultados efetivamente obtidos no banco.
+
+### 6.3. IBM Bob
+
+**Etapa de utilização:** elaboração e organização do Relatório Técnico.
+
+**Motivação:** utilizar a ferramenta como apoio à transformação das informações levantadas durante o projeto em uma documentação técnica organizada, com linguagem adequada e estrutura compatível com os requisitos da entrega.
+
+**Prompt utilizado (reconstrução aproximada):**
+
+> Com base nas informações e nos documentos fornecidos sobre o projeto da Namiê Brasil, elabore e organize o relatório técnico. Preserve as informações do levantamento, os processos organizacionais, os requisitos, as regras de negócio e as decisões de modelagem. Utilize linguagem técnica e mantenha coerência entre as seções, sem acrescentar informações não fornecidas.
+
+**Resposta recebida:** a ferramenta foi utilizada como apoio à confecção do relatório técnico, auxiliando na organização das informações e na elaboração dos textos que compõem a documentação do projeto.
+
+**Fontes consultadas e verificadas:** informações do levantamento organizacional, documentos de modelagem, requisitos, regras de negócio e demais materiais disponibilizados para a elaboração do relatório.
+
+**Trechos rejeitados ou corrigidos:** textos que não refletiam fielmente o levantamento, que apresentavam divergências em relação ao modelo de dados ou que continham informações sem sustentação nos documentos foram revisados manualmente.
+
+**Justificativa da escolha final:** o IBM Bob foi utilizado como ferramenta de apoio à elaboração da documentação, permitindo organizar o conteúdo técnico. A versão final foi ajustada pelos integrantes para manter a fidelidade às informações levantadas e às decisões do projeto.
+
+**Reflexão crítica:** ferramentas generativas podem produzir textos tecnicamente convincentes, mas com informações incorretas, generalizações ou interpretações que não correspondem ao contexto estudado. Dessa forma, a redação gerada não substituiu a conferência dos documentos e dos dados do projeto.
+
+### 6.4. Considerações sobre o uso de IA
+
+As ferramentas de Inteligência Artificial foram utilizadas como apoio, e não como substitutas da pesquisa, do levantamento organizacional ou das decisões técnicas do grupo.
+
+As informações relacionadas à Namiê Brasil foram confrontadas com os materiais do levantamento, enquanto as decisões sobre a estrutura do banco de dados foram verificadas em relação ao DER, ao modelo lógico e ao dicionário de dados.
+
+Da mesma forma, as sugestões aplicadas ao script SQL foram avaliadas considerando as regras de negócio e os resultados esperados das consultas.
+
+A utilização dessas ferramentas permitiu otimizar atividades de revisão, organização e documentação, mas também exigiu análise crítica para evitar a incorporação de informações incorretas ou incompatíveis com o projeto.
