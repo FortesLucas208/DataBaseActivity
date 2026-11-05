@@ -9,7 +9,7 @@
 | Lucas Fortes de Melo | 46761977 | FortesLucas208 |
 | Vinicius Passos Macedo | 47116871 | viniciusravini-hub |
 
-**Arquivos do projeto:** · [DER](imagens/DEER.png) · [Modelo Lógico](imagens/mdl.png) · [Dicionário de dados](dicionario-dados-namie-brasil.html) 
+**Arquivos do projeto:** · [DER](imagens/DER.png) · [Modelo Lógico](imagens/mdl.png) · [Dicionário de dados](dicionario-dados-namie-brasil.html) 
 
 ---
 
@@ -213,9 +213,9 @@ Regras vigentes, mantendo os códigos da Entrega 1.
 
 ### Notação do DER conceitual
 
-O DER e o modelo lógico foram feitos no BRModelo. O DER está em [`imagens/DEER.png`](imagens/DEER.png). Ele mostra as 18 entidades, os relacionamentos em losango, a cardinalidade (mín, máx) dos dois lados, e os atributos dos relacionamentos N:N (quantidade, preco_unitario etc.) ligados ao losango. Não há chaves estrangeiras no DER.
+O DER e o modelo lógico foram feitos no BRModelo. O DER está em [`imagens/DER.png`](imagens/DER.png). Ele mostra as 18 entidades, os relacionamentos em losango, a cardinalidade (mín, máx) dos dois lados, e os atributos dos relacionamentos N:N (quantidade, preco_unitario etc.) ligados ao losango. Não há chaves estrangeiras no DER.
 
-![DER](imagens/DEER.png)
+![DER](imagens/DER.png)
 
 ### Caso A — mesma organização da Entrega 1
 
