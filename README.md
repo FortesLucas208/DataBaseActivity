@@ -581,3 +581,57 @@ Os registros também estão distribuídos ao longo de seis meses, permitindo an�
 A massa deve ser executada após o script de criação do banco de dados e das tabelas, pois depende da estrutura previamente implementada. O arquivo utiliza o banco `namie_brasil` e contém os comandos de inserção dos registros nas respectivas tabelas.
 
 Dessa forma, a amostra de controle de estoque, juntamente com os dados complementares, permite demonstrar o funcionamento do modelo relacional e executar as consultas gerenciais e de auditoria apresentadas na seção 3.
+
+
+---
+
+## 5. Repositório GitHub
+
+O projeto está hospedado no GitHub, em um repositório público utilizado para centralizar os arquivos, documentar o desenvolvimento e manter o histórico de alterações realizadas durante a elaboração do banco de dados.
+
+**Repositório:** [github.com/FortesLucas208/DataBaseActivity](https://github.com/FortesLucas208/DataBaseActivity)
+
+### Estrutura do repositório
+
+A organização dos arquivos está dividida em três partes principais: documentação, scripts SQL e materiais visuais. Na raiz também estão o relatório técnico e o dicionário de dados.
+
+```text
+DataBaseActivity/
+│
+├── docs/
+│   ├── script.sql
+│   └── massa_de_dados.sql
+│
+├── imagens/
+│   ├── DER.png
+│   ├── mdl.png
+│   ├── foto1.jpeg
+│   ├── foto2.jpeg
+│   ├── foto3.jpeg
+│   ├── foto4.jpeg
+│   ├── foto5.jpeg
+│   └── foto6.jpeg
+│
+├── README.md
+└── dicionario-dados-namie-brasil.html
+```
+
+### Descrição dos arquivos e diretórios
+
+- **`README.md`** — documento principal do projeto, contendo o relatório técnico, a caracterização da organização, o levantamento dos requisitos, as regras de negócio, a modelagem e a documentação da implementação.
+- **`dicionario-dados-namie-brasil.html`** — dicionário de dados em um único arquivo HTML, contendo a documentação das tabelas, colunas, tipos físicos e restrições de integridade.
+- **`imagens/DER.png`** — diagrama entidade-relacionamento revisado, representando o modelo conceitual.
+- **`imagens/mdl.png`** — representação visual do modelo lógico relacional.
+- **`imagens/foto1.jpeg` a `foto6.jpeg`** — evidências fotográficas do levantamento realizado na organização, incluindo registros da entrevista e das instalações.
+- **`docs/script.sql`** — script principal de implementação do banco de dados, desenvolvido para MySQL 8.0. Contém a criação do banco, definição das 23 tabelas e suas restrições de integridade, além das consultas utilizadas no projeto.
+- **`docs/massa_de_dados.sql`** — arquivo separado responsável pela inserção da massa de dados utilizada para popular o banco e permitir a execução dos testes.
+
+As consultas gerenciais **G01 a G12** e as consultas de auditoria **A01 a A11** foram incorporadas ao final do próprio `script.sql`, mantendo a criação do banco, a estruturação e as consultas em um único arquivo principal de implementação. Essa organização evita a manutenção de um arquivo SQL adicional exclusivamente para consultas.
+
+### Histórico de desenvolvimento e colaboração
+
+O desenvolvimento do projeto foi acompanhado pelo histórico de commits do GitHub, que permite consultar as alterações realizadas nos arquivos e identificar os responsáveis por cada contribuição.
+
+O histórico de alterações pode ser acessado em [Commits do repositório](https://github.com/FortesLucas208/DataBaseActivity/commits/main). A participação dos integrantes também pode ser consultada no [gráfico de contribuidores](https://github.com/FortesLucas208/DataBaseActivity/graphs/contributors).
+
+Os integrantes e suas respectivas contas do GitHub estão identificados na tabela apresentada no início deste README. A utilização do controle de versão permite acompanhar a evolução do projeto, manter os arquivos centralizados e fornecer rastreabilidade das contribuições realizadas ao longo do desenvolvimento.
