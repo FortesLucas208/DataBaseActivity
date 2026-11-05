@@ -441,6 +441,8 @@ O modelo lógico relacional apresentado a seguir foi desenvolvido e modelado uti
 
 ![MODELO LÓGICO](imagens/mdl.png)
 
+---
+
 ## 3. Script SQL Completo
 
 O script SQL do projeto foi desenvolvido para o **MySQL 8.0**, contemplando a criação e estruturação do banco de dados relacional da Namiê Brasil Ltda., a implementação das restrições de integridade, a inserção da massa de dados e a execução de consultas para análise gerencial e auditoria.
@@ -497,3 +499,85 @@ Para executar o projeto, deve-se utilizar uma instalação compatível com MySQL
 A massa de dados utiliza registros fictícios e contém algumas inconsistências inseridas propositalmente para permitir a demonstração das consultas de auditoria. Os resultados esperados estão documentados na seção 1.6 do relatório técnico.
 
 As consultas gerenciais e de auditoria também são utilizadas como base para a demonstração prática do banco de dados durante a apresentação final.
+
+---
+
+## 4. Massa de Dados
+
+A massa de dados utilizada no projeto tem como base uma **amostra da base de dados real de controle de estoque da Namiê Brasil**. Essa amostra serviu como referência para reproduzir as características da operação da empresa, especialmente em relação aos produtos, às variações de SKU, aos estoques e às movimentações.
+
+A partir dessa referência, a massa foi organizada e complementada para contemplar as demais áreas abrangidas pelo modelo relacional, como produção, vendas, pagamentos, notas fiscais, devoluções, compras e financeiro. Dessa forma, o conjunto de dados permite representar os processos organizacionais levantados, mesmo quando eles não estão presentes diretamente na amostra original.
+
+Para respeitar a privacidade e a confidencialidade das informações, dados pessoais e identificadores sensíveis não devem ser expostos na versão disponibilizada para avaliação. Os registros complementares utilizados para representar processos não contemplados pela amostra são simulados, mantendo coerência com as regras de negócio da organização.
+
+O arquivo contém **17.109 registros distribuídos pelas 23 tabelas do banco de dados**, abrangendo o período de **01/04/2026 a 30/09/2026**.
+
+O arquivo está disponível em [`docs/massa_de_dados.sql`](docs/massa_de_dados.sql).
+
+### Distribuição dos registros
+
+| Tabela | Registros |
+|---|---:|
+| `tb_colecao` | 8 |
+| `tb_produto` | 94 |
+| `tb_variacao` | 391 |
+| `tb_preco` | 94 |
+| `tb_estoque` | 4 |
+| `tb_estoque_variacao` | 818 |
+| `tb_movimentacao` | 3.893 |
+| `tb_ordem_producao` | 54 |
+| `tb_ordem_variacao` | 211 |
+| `tb_cliente` | 1.000 |
+| `tb_pedido` | 1.826 |
+| `tb_pedido_variacao` | 2.996 |
+| `tb_pagamento` | 2.307 |
+| `tb_nota_fiscal` | 1.701 |
+| `tb_devolucao` | 23 |
+| `tb_devolucao_variacao` | 23 |
+| `tb_fornecedor` | 14 |
+| `tb_insumo` | 68 |
+| `tb_compra` | 90 |
+| `tb_compra_insumo` | 221 |
+| `tb_conta_pagar` | 182 |
+| `tb_usuario` | 12 |
+| `tb_log_acesso` | 1.079 |
+| **Total** | **17.109** |
+
+### Justificativa dos volumes
+
+A distribuição dos registros considera a amostra do controle de estoque e as características operacionais levantadas durante o estudo da organização. A Namiê Brasil possui aproximadamente 50 colaboradores, três lojas físicas, vendas por feira, WhatsApp, site e marketplaces, produção própria e quatro locais de estoque: Geral, Feira, Online e Defeitão.
+
+O catálogo conta com **8 coleções, 94 produtos e 391 variações**, permitindo representar diferentes modelos, cores e tamanhos. Os 94 registros de preço correspondem aos produtos cadastrados, enquanto os quatro registros de estoque representam os locais utilizados pela empresa. As 818 associações entre estoques e variações permitem acompanhar os saldos dos SKUs em cada local.
+
+Na produção e no controle de estoque, foram incluídas **54 ordens de produção, 211 associações entre ordens e variações e 3.893 movimentações**. Esses registros permitem acompanhar entradas, saídas e transferências de mercadorias, além de comparar os saldos registrados com o histórico de movimentações.
+
+Na operação comercial, foram utilizados **1.000 registros de clientes e 1.826 pedidos**, distribuídos entre os canais de venda considerados no projeto. Os 2.996 itens associados aos pedidos, 2.307 registros de pagamento e 1.701 notas fiscais possibilitam testar consultas de faturamento, ticket médio, formas de pagamento e situação dos pedidos. Também foram incluídas 23 devoluções e seus respectivos itens.
+
+O processo de compras e financeiro conta com **14 fornecedores, 68 insumos, 90 compras, 221 associações entre compras e insumos e 182 contas a pagar**. Esses registros permitem representar as aquisições de matéria-prima e o acompanhamento das obrigações financeiras.
+
+Por fim, foram incluídos **12 usuários e 1.079 registros de log de acesso**, permitindo demonstrar o controle de acesso e o acompanhamento das operações realizadas no sistema.
+
+Os quantitativos das tabelas complementares foram dimensionados para representar os processos previstos no modelo e possibilitar a execução das consultas. Assim, não devem ser interpretados como números exatos do movimento comercial ou financeiro da empresa. A referência à realidade operacional está principalmente na amostra de controle de estoque e nas características levantadas durante o estudo da organização.
+
+### Variedade e consistência dos dados
+
+Além dos registros que representam as operações comuns, a massa contempla situações específicas para permitir a validação das regras de negócio e das consultas gerenciais e de auditoria. Entre elas estão:
+
+- Pedidos cancelados e pedidos sem itens associados.
+- Pedidos faturados sem nota fiscal vinculada.
+- Divergências entre o valor total do pedido e a soma de seus itens.
+- Devoluções solicitadas após o prazo de sete dias previsto para compras online.
+- Divergências entre os saldos registrados no estoque e as movimentações realizadas.
+- Compras sem o respectivo registro de conta a pagar.
+- Produtos com saldo igual ou inferior ao estoque mínimo.
+- Movimentações que resultam em saldo negativo.
+
+Essas situações permitem testar tanto os cenários esperados quanto as exceções que as consultas de auditoria devem identificar. As inconsistências foram incluídas intencionalmente para demonstrar a capacidade do banco de apontar possíveis falhas nos processos.
+
+Os registros também estão distribuídos ao longo de seis meses, permitindo análises por período, canal de venda, situação dos pedidos, estoque e movimentações.
+
+### Execução
+
+A massa deve ser executada após o script de criação do banco de dados e das tabelas, pois depende da estrutura previamente implementada. O arquivo utiliza o banco `namie_brasil` e contém os comandos de inserção dos registros nas respectivas tabelas.
+
+Dessa forma, a amostra de controle de estoque, juntamente com os dados complementares, permite demonstrar o funcionamento do modelo relacional e executar as consultas gerenciais e de auditoria apresentadas na seção 3.
