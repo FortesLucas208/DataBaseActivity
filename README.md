@@ -1,7 +1,5 @@
 # Relatório Técnico Final — Namiê Brasil Ltda.
-### Entrega 2 — Tópico 1: Integrantes e seções 1.1 a 1.6
-
-> Versão de trabalho do grupo. Cobre apenas o tópico 1 do esqueleto da Entrega 2.
+### Entrega 2 — Tópico 1: 
 
 ## Integrantes
 
@@ -67,7 +65,6 @@
   - *Nas respostas do entrevistado:* como a produção funciona (a diretoria define modelo e tecido, a fábrica compra a matéria-prima quando falta, e faz corte, costura, lavanderia e acabamento); os canais de venda e o público de cada um; o uso de Omiê, planilhas e Bling; a falta de estoque mínimo; as vendas sem checagem de saldo; a baixa da feira imediata ou posterior.
   - *Na observação no local:* o grupo viu planilhas impressas e anotações sobre a mesa de reunião e o controle da fábrica por câmeras, o que confirma o uso de papel e planilha no dia a dia.
   - *Mudanças em relação à Entrega 1:* não houve nova visita para esta etapa; foram mantidos os processos e as regras já levantados.
-- O texto completo está em [`levantamento/processos_e_fluxogramas.md`](levantamento/processos_e_fluxogramas.md), com os 12 processos e os fluxogramas.
 
 ### Nível de detalhe
 
@@ -436,3 +433,11 @@ Consultas sem resultado (A04, A05, A09 e A10) são esperadas. Em A09 e A10 o ban
 - G03 olha o saldo das movimentações, porque a baixa de estoque acontece na emissão da nota fiscal. A05 usa o pedido mínimo de 12 peças da RN13.
 - G12 usa 30/09/2026 como data de referência, que é o último dia da massa de dados.
 - A04 considera venda a prazo o boleto parcelado ou com vencimento acima de 7 dias. Boleto de uma parcela com vencimento curto é tratado como à vista.
+
+---
+
+## 2. Modelo Lógico Relacional
+O modelo lógico relacional apresentado a seguir foi desenvolvido e modelado utilizando o aplicativo brModelo Web. Ele traduz o modelo conceitual em estruturas tabulares, definindo claramente as tabelas, colunas, tipos de dados, chaves primárias (PK), chaves estrangeiras (FK) e suas respectivas cardinalidades.
+
+![MODELO LÓGICO](imagens/mdl.png)
+
