@@ -441,3 +441,59 @@ O modelo lógico relacional apresentado a seguir foi desenvolvido e modelado uti
 
 ![MODELO LÓGICO](imagens/mdl.png)
 
+## 3. Script SQL Completo
+
+O script SQL do projeto foi desenvolvido para o **MySQL 8.0**, contemplando a criação e estruturação do banco de dados relacional da Namiê Brasil Ltda., a implementação das restrições de integridade, a inserção da massa de dados e a execução de consultas para análise gerencial e auditoria.
+
+**SGBD utilizado:** MySQL 8.0.
+
+**Arquivo principal:** [`docs/script.sql`](docs/script.sql)
+
+**Massa de dados:** [`docs/massa_de_dados.sql`](docs/massa_de_dados.sql)
+
+### Organização do script
+
+O script está estruturado em etapas, seguindo a ordem lógica de execução:
+
+1. **Criação do banco de dados:** utilização de `CREATE DATABASE` para criação do banco `namie_brasil` e seleção por meio de `USE`.
+
+2. **Criação das tabelas:** utilização de `CREATE TABLE` para estruturar as 23 tabelas definidas no modelo lógico, com seus respectivos atributos e tipos de dados.
+
+3. **Restrições de integridade:** implementação de chaves primárias e estrangeiras, campos obrigatórios (`NOT NULL`), restrições de unicidade (`UNIQUE`), verificações de valores (`CHECK`) e valores padrão (`DEFAULT`), conforme as regras de negócio documentadas.
+
+4. **Inserção da massa de dados:** utilização de `INSERT INTO` para popular as tabelas com dados fictícios, contemplando o período simulado de 01/04/2026 a 30/09/2026.
+
+5. **Consultas de relacionamento:** utilização de comandos `SELECT` com `JOIN` para demonstrar o relacionamento entre as tabelas e a recuperação de informações distribuídas pelo banco de dados.
+
+6. **Manipulação dos registros:** demonstração dos comandos `UPDATE` e `DELETE` para atualização e exclusão de registros.
+
+7. **Consultas gerenciais:** consultas identificadas pelos códigos G01 a G12, destinadas a responder aos problemas P1 a P5 e calcular os indicadores K1 a K9 definidos na seção 1.6.
+
+8. **Consultas de auditoria:** consultas identificadas pelos códigos A01 a A11, destinadas a verificar a integridade dos dados e a conformidade com as regras de negócio (RN) estabelecidas no projeto.
+
+### Consultas gerenciais e de auditoria
+
+As consultas gerenciais permitem acompanhar informações relevantes para a administração da empresa, incluindo:
+
+- Saldo de produtos por SKU e localização de estoque.
+- Divergências entre saldos registrados e movimentações.
+- Identificação de baixas que resultaram em estoque negativo.
+- Tempo entre o registro do pedido e a baixa de estoque.
+- Produtos com saldo igual ou inferior ao estoque mínimo.
+- Faturamento e ticket médio por canal e período.
+- Taxa de cancelamento e devolução de pedidos.
+- Quantidade de peças e SKUs no estoque Defeitão.
+- Percentual de ordens de produção concluídas dentro do prazo.
+- Valores de contas a pagar vencidas e não quitadas.
+
+As consultas de auditoria verificam situações como pedidos sem itens, ausência de notas fiscais, vendas a prazo sem crédito aprovado, compras sem títulos financeiros, aquisições de fornecedores inativos, inconsistências nas devoluções e movimentações de estoque e divergências nos valores dos pedidos.
+
+Cada consulta possui um cabeçalho em comentário com seu código de identificação, a pergunta correspondente e o problema, KPI ou regra de negócio atendida, conforme solicitado no roteiro da entrega.
+
+### Execução
+
+Para executar o projeto, deve-se utilizar uma instalação compatível com MySQL 8.0. O grupo utilizou para teste, o Xampp 8.2.12. A estrutura do banco deve ser criada antes da carga da massa de dados, respeitando as dependências entre as tabelas e suas chaves estrangeiras.
+
+A massa de dados utiliza registros fictícios e contém algumas inconsistências inseridas propositalmente para permitir a demonstração das consultas de auditoria. Os resultados esperados estão documentados na seção 1.6 do relatório técnico.
+
+As consultas gerenciais e de auditoria também são utilizadas como base para a demonstração prática do banco de dados durante a apresentação final.
