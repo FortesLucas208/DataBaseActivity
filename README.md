@@ -74,18 +74,18 @@ Nos processos, requisitos e regras abaixo, cada item cita os dados envolvidos (c
 
 | # | Processo | Dados envolvidos | Regras |
 |---|---|---|---|
-| 1 | Venda no atacado (feira e WhatsApp) | pedido (data_hora, canal, status, valor_total); itens (SKU, quantidade, preco_unitario de atacado); cliente | RN05, RN06, RN07, RN13 |
-| 2 | Venda no varejo (site e marketplaces) | pedido (canal, valor_frete, endereco_entrega); itens (SKU, quantidade, preco_unitario de varejo) | RN05, RN06, RN07 |
-| 3 | Cadastro de clientes e revendedoras | nome, tipo, documento, telefone, email, status_credito, limite_credito, endereço, anonimizado | RN14, RN17 |
-| 4 | Recebimento e pagamento das vendas | numero_parcela, valor_parcela, forma_pagamento, data_vencimento, data_liquidacao, situacao | RN14 |
-| 5 | Nota fiscal, separação e expedição | numero, serie, chave_acesso, data_emissao, valor_fiscal; data_envio, codigo_rastreio, transportadora | RN15 |
-| 6 | Devoluções e trocas | data_solicitacao, motivo; SKU, quantidade, condicao_peca, estoque_destino | RN10, RN11, RN16 |
-| 7 | Compra de matéria-prima | numero_documento_fiscal, data_compra, data_entrega, valor_total; insumo, quantidade, valor_unitario | RN18, RN19 |
-| 8 | Cadastro de fornecedores | razao_social, cnpj, inscricao_estadual, contatos, categoria_insumo, endereço, ativo | RN18 |
-| 9 | Contas a pagar | valor, data_emissao, data_vencimento, data_pagamento, forma_pagamento, status | RN19 |
-| 10 | Produção própria | data_inicio, data_prevista, data_fim, status; SKU e quantidade produzida | RN08, RN09 |
-| 11 | Controle de estoque e transferências | saldo por SKU e estoque; tipo, quantidade, data_hora, origem, destino, justificativa, usuário; estoque_minimo | RN03, RN04, RN12 |
-| 12 | Tratamento de defeitos ("Defeitão") | SKU, quantidade, motivo, estoque de destino | RN10 |
+| **PN01** | Venda no atacado (feira e WhatsApp) | pedido (data_hora, canal, status, valor_total); itens (SKU, quantidade, preco_unitario de atacado); cliente | RN05, RN06, RN07, RN13 |
+| **PN02** | Venda no varejo (site e marketplaces) | pedido (canal, valor_frete, endereco_entrega); itens (SKU, quantidade, preco_unitario de varejo) | RN05, RN06, RN07 |
+| **PN03** | Cadastro de clientes e revendedoras | nome, tipo, documento, telefone, email, status_credito, limite_credito, endereço, anonimizado | RN14, RN17 |
+| **PN04** | Recebimento e pagamento das vendas | numero_parcela, valor_parcela, forma_pagamento, data_vencimento, data_liquidacao, situacao | RN14 |
+| **PN05** | Nota fiscal, separação e expedição | numero, serie, chave_acesso, data_emissao, valor_fiscal; data_envio, codigo_rastreio, transportadora | RN15 |
+| **PN06** | Devoluções e trocas | data_solicitacao, motivo; SKU, quantidade, condicao_peca, estoque_destino | RN10, RN11, RN16 |
+| **PN07** | Compra de matéria-prima | numero_documento_fiscal, data_compra, data_entrega, valor_total; insumo, quantidade, valor_unitario | RN18, RN19 |
+| **PN08** | Cadastro de fornecedores | razao_social, cnpj, inscricao_estadual, contatos, categoria_insumo, endereço, ativo | RN18 |
+| **PN09** | Contas a pagar | valor, data_emissao, data_vencimento, data_pagamento, forma_pagamento, status | RN19 |
+| **PN10** | Produção própria | data_inicio, data_prevista, data_fim, status; SKU e quantidade produzida | RN08, RN09 |
+| **PN11** | Controle de estoque e transferências | saldo por SKU e estoque; tipo, quantidade, data_hora, origem, destino, justificativa, usuário; estoque_minimo | RN03, RN04, RN12 |
+| **PN12** | Tratamento de defeitos ("Defeitão") | SKU, quantidade, motivo, estoque de destino | RN10 |
 
 **Processos comuns que ficaram de fora e por quê:**
 - *Terceirização da produção (facção):* a empresa faz corte, costura, lavanderia e acabamento por conta própria (RO03).
