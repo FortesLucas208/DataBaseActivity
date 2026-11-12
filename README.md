@@ -392,7 +392,7 @@ Algumas regras o banco não impõe sozinho e são conferidas por consulta de aud
 - Sugestão de reposição do Estoque Geral para Feira e Online.
 - Classificação de revendedoras por frequência e valor de compra, para apoiar a concessão de crédito (RO07).
 
-**Rastreabilidade.** Cada problema declarado (P1 a P5) e cada KPI (K1 a K9) está ligado às tabelas que o sustentam e à consulta do script SQL que o responde. Os códigos são os mesmos usados no cabeçalho de cada consulta (arquivo [`consultas_G_A.sql`](consultas_G_A.sql)). A última coluna mostra o que a consulta devolve na massa de dados fictícia (abril a setembro de 2026).
+**Rastreabilidade.** Cada problema declarado (P1 a P5) e cada KPI (K1 a K9) está ligado às tabelas que o sustentam e à consulta do script SQL que o responde. Os códigos são os mesmos usados no cabeçalho de cada consulta ( script das consultas de auditoria foi incorporado ao final do script de criação do banco de dados, no arquivo (arquivo [`script.sql`](docs/script.sql)) a partir da linha 360. A última coluna mostra o que a consulta devolve na massa de dados fictícia (abril a setembro de 2026).
 
 | Problema ou KPI | Tabelas envolvidas | Consulta | Pergunta que responde | Resultado na massa |
 |---|---|---|---|---|
